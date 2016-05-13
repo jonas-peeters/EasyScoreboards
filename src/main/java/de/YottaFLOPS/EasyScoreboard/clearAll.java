@@ -27,6 +27,10 @@ class clearAll implements CommandExecutor {
             p.setScoreboard(plugin.makeScoreboard(p));
         }
         plugin.handleConfig(new String[]{"save"});
+
+        plugin.usedPlayerCount = false;
+        plugin.bufferable = true;
+
         return CommandResult.success();
     }
 }

@@ -36,7 +36,7 @@ class setLine implements CommandExecutor {
                     plugin.scoreboardText[line] = newText;
                     src.sendMessage(Text.of(TextColors.DARK_GRAY, "Setting line " + line + " to: " + newText));
                 } else {
-                    src.sendMessage(Text.of(TextColors.RED, "The lenght of one line is limited to 38!"));
+                    src.sendMessage(Text.of(TextColors.RED, "The length of one line is limited to 38!"));
                 }
             } else {
                 src.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
@@ -45,9 +45,22 @@ class setLine implements CommandExecutor {
             e.printStackTrace();
         }
 
-        for (Player p : Sponge.getServer().getOnlinePlayers()) {
-            p.setScoreboard(plugin.makeScoreboard(p));
+        plugin.setBufferable(plugin.checkIfBufferable());
+        plugin.usedPlayerCount = plugin.checkIfUsedPlayerCount();
+
+        Player player = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
+
+        if(plugin.isBufferable()) {
+            plugin.bufferedScoreboard = plugin.makeScoreboard(player);
+            for (Player p : Sponge.getServer().getOnlinePlayers()) {
+                p.setScoreboard(plugin.bufferedScoreboard);
+            }
+        } else {
+            for (Player p : Sponge.getServer().getOnlinePlayers()) {
+                p.setScoreboard(plugin.makeScoreboard(p));
+            }
         }
+
         plugin.handleConfig(new String[]{"save"});
         return CommandResult.success();
     }

@@ -8,6 +8,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
@@ -27,15 +28,18 @@ import java.util.Collections;
 import java.util.List;
 
 
-@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.0", description = "A plugin to easily create scoreboards for lobbys")
+@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.1", description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
     private File configFile = null;
     String[] scoreboardText = new String[]{" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
-    private String[] colorStrings = new String[]{"DARK_AQUA","DARK_BLUE","DARK_GREEN","DARK_RED","DARK_PURPLE","LIGHT_PURPLE","DARK_GRAY","GRAY","WHITE","BLACK","AQUA","BLUE","GOLD","GREEN","YELLOW","RED"};
-    private TextColor[] colors = new TextColor[]{TextColors.DARK_AQUA,TextColors.DARK_BLUE,TextColors.DARK_GREEN,TextColors.DARK_RED,TextColors.DARK_PURPLE,TextColors.LIGHT_PURPLE,TextColors.DARK_GRAY,TextColors.GRAY,TextColors.WHITE,TextColors.BLACK,TextColors.AQUA,TextColors.BLUE,TextColors.GOLD,TextColors.GREEN,TextColors.YELLOW,TextColors.RED};
-    private String[] styleStrings = new String[]{"BOLD","OBFUSCATED","ITALIC","STRIKETHROUGH","UNDERLINE"};
-    private TextStyle[] styles = new TextStyle[]{TextStyles.BOLD,TextStyles.OBFUSCATED,TextStyles.ITALIC,TextStyles.STRIKETHROUGH,TextStyles.UNDERLINE};
+    private final String[] colorStrings = new String[]{"DARK_AQUA","DARK_BLUE","DARK_GREEN","DARK_RED","DARK_PURPLE","LIGHT_PURPLE","DARK_GRAY","GRAY","WHITE","BLACK","AQUA","BLUE","GOLD","GREEN","YELLOW","RED"};
+    private final TextColor[] colors = new TextColor[]{TextColors.DARK_AQUA,TextColors.DARK_BLUE,TextColors.DARK_GREEN,TextColors.DARK_RED,TextColors.DARK_PURPLE,TextColors.LIGHT_PURPLE,TextColors.DARK_GRAY,TextColors.GRAY,TextColors.WHITE,TextColors.BLACK,TextColors.AQUA,TextColors.BLUE,TextColors.GOLD,TextColors.GREEN,TextColors.YELLOW,TextColors.RED};
+    private final String[] styleStrings = new String[]{"BOLD","OBFUSCATED","ITALIC","STRIKETHROUGH","UNDERLINE"};
+    private final TextStyle[] styles = new TextStyle[]{TextStyles.BOLD,TextStyles.OBFUSCATED,TextStyles.ITALIC,TextStyles.STRIKETHROUGH,TextStyles.UNDERLINE};
+    boolean bufferable = true;
+    boolean usedPlayerCount = false;
+    Scoreboard bufferedScoreboard;
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -60,12 +64,49 @@ public class Main {
 
         handleConfig(new String[]{"init"});
         handleConfig(new String[]{"load"});
+        bufferable = checkIfBufferable();
+        usedPlayerCount = checkIfUsedPlayerCount();
     }
 
     @Listener
     public void onPlayerJoin(ClientConnectionEvent.Join event) {
-        event.getTargetEntity().setScoreboard(makeScoreboard(event.getTargetEntity()));
+        if(isBufferable()) {
+            if(Sponge.getServer().getOnlinePlayers().size() == 1) {
+                bufferedScoreboard = makeScoreboard(event.getTargetEntity());
+            }
+            event.getTargetEntity().setScoreboard(bufferedScoreboard);
+        } else {
+            event.getTargetEntity().setScoreboard(makeScoreboard(event.getTargetEntity()));
+        }
+        if(usedPlayerCount) {
+
+            for(Player player : Sponge.getServer().getOnlinePlayers()) {
+                if(bufferable) {
+                    player.setScoreboard(bufferedScoreboard);
+                } else {
+                    player.setScoreboard(makeScoreboard(player));
+                }
+            }
+        }
     }
+
+    @Listener
+    public void onPlayerLeave(ClientConnectionEvent.Disconnect event) {
+        Task.Builder taskBuilder = Sponge.getScheduler().createTaskBuilder();
+        taskBuilder.execute(new Runnable() {
+            @Override
+            public void run() {
+                for(Player player : Sponge.getServer().getOnlinePlayers()) {
+                    if(bufferable) {
+                        player.setScoreboard(bufferedScoreboard);
+                    } else {
+                        player.setScoreboard(makeScoreboard(player));
+                    }
+                }
+            }
+        }).delayTicks(10).submit(this);
+    }
+
 
     void handleConfig(String[] args) {
         byte[] exampleContent = "Example\nThis is an example\ncontent for your\nscoreboard\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n".getBytes(Charset.defaultCharset());
@@ -129,6 +170,9 @@ public class Main {
         Objective obj;
 
         for(int i = 0; i < loadedData.length; i++) {
+            if(loadedData[i].contains("ONLINECOUNT")) {
+                loadedData[i] = loadedData[i].replace("ONLINECOUNT", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
+            }
             if(loadedData[i].contains("PLAYER")) {
                 loadedData[i] = loadedData[i].replace("PLAYER", player.getName());
             }
@@ -198,5 +242,31 @@ public class Main {
             }
         }
         return text;
+    }
+
+    boolean checkIfBufferable() {
+        for(String s : scoreboardText) {
+            if(s.contains("PLAYER")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean checkIfUsedPlayerCount() {
+        for(String s : scoreboardText) {
+            if(s.contains("ONLINECOUNT")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    boolean isBufferable() {
+        return bufferable;
+    }
+
+    void setBufferable(boolean bufferable) {
+        this.bufferable = bufferable;
     }
 }
