@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Easy Scoreboards by byYottaFLOPS</title>
+    <title>Easyscoreboards by byYottaFLOPS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -11,27 +11,30 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Easy Scoreboards</h1>
+      <h1 class="project-name">Easyscoreboards</h1>
       <h2 class="project-tagline">A Sponge plugin to create easily scoreboards for things such as lobbys</h2>
       <a href="https://github.com/byYottaFLOPS/EasyScoreboards" class="btn">View on GitHub</a>
-      <a href="https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest" class="btn">Download plugin</a>
-      <a href="https://github.com/byYottaFLOPS/EasyScoreboards/zipball/master" class="btn">Download Source</a>
+      <a href="https://github.com/byYottaFLOPS/EasyScoreboards/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/byYottaFLOPS/EasyScoreboards/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
     <section class="main-content">
       <h1>
-<a id="easy-scoreboard" class="anchor" href="#easy-scoreboard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Easy Scoreboards</h1>
+<a id="easy-scoreboard" class="anchor" href="#easy-scoreboard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Easy Scoreboard</h1>
 
 <p>A Sponge plugin to create easily scoreboards
 for things such as lobbys.</p>
 
 <h2>
-<a id="freatures" class="anchor" href="#freatures" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Freatures</h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
 
 <ol>
-<li>Easy Setup</li>
+<li>Easy setup</li>
 <li>Change the scoreboard texts by commands OR by config</li>
 <li>Use colors</li>
+<li>Use styles</li>
+<li>Use the players name</li>
+<li>Use the number of online players</li>
 </ol>
 
 <h2>
@@ -45,6 +48,15 @@ of you Sponge server</li>
 </ol>
 
 <h2>
+<a id="links-download" class="anchor" href="#links-download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Links (Download)</h2>
+
+<p>Lastest Release (Download): <a href="https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest">https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest</a></p>
+
+<p>This guide: <a href="http://byyottaflops.github.io/EasyScoreboards/">http://byyottaflops.github.io/EasyScoreboards/</a></p>
+
+<p>Github page: <a href="https://github.com/byYottaFLOPS/EasyScoreboards">https://github.com/byYottaFLOPS/EasyScoreboards</a></p>
+
+<h2>
 <a id="commands" class="anchor" href="#commands" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Commands</h2>
 
 <pre><code>!!Changes are instantly applied for all players!!
@@ -52,13 +64,12 @@ of you Sponge server</li>
 
 <p><code>/setscoreboard &lt;Line&gt; &lt;Text&gt;</code></p>
 
-<p><code>&lt;Line&gt;</code> is the line of the scoreboard and
-can be anything between 0 and 15. The line
-0 is the title of the scoreboard.</p>
+<p><code>&lt;Line&gt;</code> is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.</p>
 
-<p><code>&lt;Text&gt;</code> Is the text the line will contain.
-To use spaces the hole text must be in
-quotation marks (see examples).</p>
+<p><code>&lt;Text&gt;</code> Is the text the line will contain. To use spaces the hole text must be in quotation marks (see examples).</p>
+
+<pre><code>!!You can only use one color and one style per line!!
+</code></pre>
 
 <p><code>/clearscoreboard</code> will clear the scoreboard and remove
 it from every player.</p>
@@ -106,6 +117,13 @@ be replaced.</p>
 <p><code>PLAYER</code> will be replaced with the name of the player
 who sees the scoreboard</p>
 
+<p><code>ONLINECOUNT</code> will be replaced with the number of online players</p>
+
+<pre><code>Using "PLAYER" and "ONLINECOUNT" together is not recommended
+because it is computationally intensive at a large number
+of concurrent players
+</code></pre>
+
 <h2>
 <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
 
@@ -119,7 +137,8 @@ who sees the scoreboard</p>
 
 <p><code>/setscoreboard 1 " server.com"</code></p>
 
-<p><img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot1.png?raw=true" alt="Result"></p>
+<p>Result:
+<img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot1.png?raw=true" alt="Result"></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/byYottaFLOPS/EasyScoreboards">Easyscoreboards</a> is maintained by <a href="https://github.com/byYottaFLOPS">byYottaFLOPS</a>.</span>
