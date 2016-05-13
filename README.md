@@ -14,7 +14,7 @@ of you Sponge server
 3. Edit the text by commands
 
 ##Commands
-    !!Changes are instant for all players!!
+    !!Changes are instantly applied for all players!!
 
 `/setscoreboard <Line> <Text>`
 
