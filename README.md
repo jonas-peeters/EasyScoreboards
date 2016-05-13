@@ -3,9 +3,10 @@ A Sponge plugin to create easily scoreboards
 for things such as lobbys.
 
 ##Freatures
-1. Easy Setup
+1. Easy setup
 2. Change the scoreboard texts by commands OR by config
 3. Use colors
+4. Use styles
 
 ##Setup
 1. Place the plugin file in the mods folder
@@ -53,6 +54,12 @@ be replaced.
 
 These will be replaced with the equivalent color.
 
+###Styles
+`BOLD`
+`OBFUSCATED`
+`ITALIC`
+`STRIKETHROUGH`
+`UNDERLINE`
 ###Other
 `PLAYER` will be replaced with the name of the player
 who sees the scoreboard
