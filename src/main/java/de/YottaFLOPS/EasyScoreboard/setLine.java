@@ -32,8 +32,12 @@ class setLine implements CommandExecutor {
         }
         try {
             if(line < 16 && line >= 0) {
-                plugin.scoreboardText[line] = newText;
-                src.sendMessage(Text.of(TextColors.DARK_GRAY, "Setting line " + line + " to: " + newText));
+                if(plugin.removeStyleAndColor(newText).length() <= 38) {
+                    plugin.scoreboardText[line] = newText;
+                    src.sendMessage(Text.of(TextColors.DARK_GRAY, "Setting line " + line + " to: " + newText));
+                } else {
+                    src.sendMessage(Text.of(TextColors.RED, "The lenght of one line is limited to 38!"));
+                }
             } else {
                 src.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
             }

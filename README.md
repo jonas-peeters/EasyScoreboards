@@ -60,6 +60,7 @@ These will be replaced with the equivalent color.
 `ITALIC`
 `STRIKETHROUGH`
 `UNDERLINE`
+
 ###Other
 `PLAYER` will be replaced with the name of the player
 who sees the scoreboard

@@ -186,7 +186,7 @@ public class Main {
         return TextStyles.NONE;
     }
 
-    private String removeStyleAndColor(String text) {
+    String removeStyleAndColor(String text) {
         for(int i = 0; i < 16; i++) {
             if(text.contains(colorStrings[i])){
                 text = text.replace(colorStrings[i],"");
