@@ -22,46 +22,53 @@ class setLine implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        int line = 0;
-        try {
-            line = Integer.valueOf(args.<Integer>getOne("Line").toString().replace("Optional[", "").replace("]", ""));
-        } catch (Exception ignored) {}
-        String newText = args.<String>getOne("New Text").toString().replace("Optional[", "").replace("]", "");
-        if(newText.equals("")) {
-            newText = " ";
-        }
-        try {
-            if(line < 16 && line >= 0) {
-                if(plugin.removeStyleAndColor(newText).length() <= 38) {
-                    plugin.scoreboardText[line] = newText;
-                    src.sendMessage(Text.of(TextColors.DARK_GRAY, "Setting line " + line + " to: " + newText));
-                } else {
-                    src.sendMessage(Text.of(TextColors.RED, "The length of one line is limited to 38!"));
+        if(args.<Integer>getOne("Line").isPresent()) {
+            int line = args.<Integer>getOne("Line").get();
+            if (args.<String>getOne("New Text").isPresent()) {
+                String newText = args.<String>getOne("New Text").get();
+                Player player = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
+
+                if (newText.equals("")) {
+                    newText = " ";
                 }
+                try {
+                    if (line < 16 && line >= 0) {
+                        if (plugin.replacePlaceholders(newText, player).length() < 30) {
+                            plugin.scoreboardText[line] = newText;
+                            src.sendMessage(Text.of(TextColors.GRAY, "Setting line " + line + " to: " + newText));
+                        } else {
+                            src.sendMessage(Text.of(TextColors.RED, "The length of one line is limited to 30 characters!"));
+                        }
+                    } else {
+                        src.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                plugin.setBufferable(plugin.checkIfBufferable());
+                plugin.usedPlayerCount = plugin.checkIfUsedPlayerCount();
+
+
+
+                if (plugin.bufferable) {
+                    plugin.bufferedScoreboard = plugin.makeScoreboard(player);
+                    for (Player p : Sponge.getServer().getOnlinePlayers()) {
+                        p.setScoreboard(plugin.bufferedScoreboard);
+                    }
+                } else {
+                    for (Player p : Sponge.getServer().getOnlinePlayers()) {
+                        p.setScoreboard(plugin.makeScoreboard(p));
+                    }
+                }
+
+                plugin.handleConfig("save");
             } else {
-                src.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        plugin.setBufferable(plugin.checkIfBufferable());
-        plugin.usedPlayerCount = plugin.checkIfUsedPlayerCount();
-
-        Player player = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
-
-        if(plugin.isBufferable()) {
-            plugin.bufferedScoreboard = plugin.makeScoreboard(player);
-            for (Player p : Sponge.getServer().getOnlinePlayers()) {
-                p.setScoreboard(plugin.bufferedScoreboard);
+                src.sendMessage(Text.of(TextColors.RED, "Missing text"));
             }
         } else {
-            for (Player p : Sponge.getServer().getOnlinePlayers()) {
-                p.setScoreboard(plugin.makeScoreboard(p));
-            }
+            src.sendMessage(Text.of(TextColors.RED, "Missing line"));
         }
-
-        plugin.handleConfig(new String[]{"save"});
         return CommandResult.success();
     }
 }

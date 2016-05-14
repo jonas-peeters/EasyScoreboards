@@ -22,11 +22,11 @@ class clearAll implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         plugin.scoreboardText = new String[]{" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
-        src.sendMessage(Text.of(TextColors.DARK_GRAY, "Cleared scoreboard"));
+        src.sendMessage(Text.of(TextColors.GRAY, "Cleared scoreboard"));
         for (Player p : Sponge.getServer().getOnlinePlayers()) {
             p.setScoreboard(plugin.makeScoreboard(p));
         }
-        plugin.handleConfig(new String[]{"save"});
+        plugin.handleConfig("save");
 
         plugin.usedPlayerCount = false;
         plugin.bufferable = true;

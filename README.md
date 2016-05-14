@@ -1,6 +1,5 @@
 #Easy Scoreboard
-A Sponge plugin to create easily scoreboards
-for things such as lobbys.
+A Sponge plugin to create easily dynamic scoreboards
 
 ##Features
 1. Easy setup
@@ -9,6 +8,9 @@ for things such as lobbys.
 4. Use styles
 5. Use the players name
 6. Use the number of online players
+7. Use the player balance of economy plugins
+8. Dynamically changes its size to be as small as possible
+9. See changes immediately
 
 ##Setup
 1. Place the plugin file in the mods folder
@@ -68,25 +70,33 @@ These will be replaced with the equivalent color.
 `UNDERLINE`
 
 ###Other
-`PLAYER` will be replaced with the name of the player
+`PLAYERNAME` will be replaced with the name of the player
 who sees the scoreboard
+
+`PLAYERBALANCE` will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API
 
 `ONLINECOUNT` will be replaced with the number of online players
 
-    Using "PLAYER" and "ONLINECOUNT" together is not recommended
-    because it is computationally intensive at a large number
-    of concurrent players
+    Using "PLAYERNAME"/"PLAYERBALANCE" together with "ONLINECOUNT"
+    is not recommended for large server because it has to compute
+    a new scoreboard for every player if a player leaves or joines
 
 ##Examples
-`/setscoreboard 0 "BOLDGREENHello PLAYER"`
+`/setscoreboard 0 "BOLDGREENHello PLAYERNAME"`
 
-`/setscoreboard 1 "REDWelcome to the server"`
+`/setscoreboard 2 "DARK_PURPLEWelcome to the server"`
 
-`/setscoreboard 1 "YELLOWYou are currently in lobby 1"`
+`/setscoreboard 4 "-------------------"`
 
-`/setscoreboard 1 "GREENWebsite:"`
+`/setscoreboard 6 "GREENMoney:"`
 
-`/setscoreboard 1 " server.com"`
+`/setscoreboard 7 " PLAYERBALANCE"`
+
+`/setscoreboard 9 "-------------------"`
+
+`/setscoreboard 11 "GREENPlayers Online:"`
+
+`/setscoreboard 12 " ONLINECOUNT"`
 
 Result:
 ![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot1.png?raw=true)
