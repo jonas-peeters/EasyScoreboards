@@ -22,8 +22,7 @@
       <h1>
 <a id="easy-scoreboard" class="anchor" href="#easy-scoreboard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Easy Scoreboard</h1>
 
-<p>A Sponge plugin to create easily scoreboards
-for things such as lobbys.</p>
+<p>A Sponge plugin to create easily dynamic scoreboards</p>
 
 <h2>
 <a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
@@ -35,6 +34,9 @@ for things such as lobbys.</p>
 <li>Use styles</li>
 <li>Use the players name</li>
 <li>Use the number of online players</li>
+<li>Use the player balance of economy plugins</li>
+<li>Dynamically changes its size to be as small as possible</li>
+<li>See changes immediately</li>
 </ol>
 
 <h2>
@@ -114,28 +116,36 @@ be replaced.</p>
 <h3>
 <a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
 
-<p><code>PLAYER</code> will be replaced with the name of the player
+<p><code>PLAYERNAME</code> will be replaced with the name of the player
 who sees the scoreboard</p>
+
+<p><code>PLAYERBALANCE</code> will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API</p>
 
 <p><code>ONLINECOUNT</code> will be replaced with the number of online players</p>
 
-<pre><code>Using "PLAYER" and "ONLINECOUNT" together is not recommended
-because it is computationally intensive at a large number
-of concurrent players
+<pre><code>Using "PLAYERNAME"/"PLAYERBALANCE" together with "ONLINECOUNT"
+is not recommended for large server because it has to compute
+a new scoreboard for every player if a player leaves or joines
 </code></pre>
 
 <h2>
 <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
 
-<p><code>/setscoreboard 0 "BOLDGREENHello PLAYER"</code></p>
+<p><code>/setscoreboard 0 "BOLDGREENHello PLAYERNAME"</code></p>
 
-<p><code>/setscoreboard 1 "REDWelcome to the server"</code></p>
+<p><code>/setscoreboard 2 "DARK_PURPLEWelcome to the server"</code></p>
 
-<p><code>/setscoreboard 1 "YELLOWYou are currently in lobby 1"</code></p>
+<p><code>/setscoreboard 4 "-------------------"</code></p>
 
-<p><code>/setscoreboard 1 "GREENWebsite:"</code></p>
+<p><code>/setscoreboard 6 "GREENMoney:"</code></p>
 
-<p><code>/setscoreboard 1 " server.com"</code></p>
+<p><code>/setscoreboard 7 " PLAYERBALANCE"</code></p>
+
+<p><code>/setscoreboard 9 "-------------------"</code></p>
+
+<p><code>/setscoreboard 11 "GREENPlayers Online:"</code></p>
+
+<p><code>/setscoreboard 12 " ONLINECOUNT"</code></p>
 
 <p>Result:
 <img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot1.png?raw=true" alt="Result"></p>
