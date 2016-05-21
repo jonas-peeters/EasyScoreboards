@@ -49,8 +49,7 @@ If this is not possible just write it into the comments below or send me a PM he
 <a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
 
 <ol>
-<li>Place the plugin file in the mods folder
-of you Sponge server</li>
+<li>Place the plugin file in the mods folder of you Sponge server</li>
 <li>Start the server</li>
 <li>Edit the text by commands</li>
 </ol>
@@ -73,7 +72,7 @@ of you Sponge server</li>
 <h3>
 <a id="scoreboard" class="anchor" href="#scoreboard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoreboard</h3>
 
-<p><code>/setscoreboard set &lt;Line&gt; &lt;Text&gt;</code></p>
+<p><code>/easyscoreboard set &lt;Line&gt; &lt;Text&gt;</code></p>
 
 <p><code>&lt;Line&gt;</code> is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.</p>
 
@@ -82,27 +81,27 @@ of you Sponge server</li>
 <pre><code>!!You can only use one color and one style per line!!
 </code></pre>
 
-<p><code>/scoreboard clear</code> will clear the scoreboard and remove it from every player.</p>
+<p><code>/easyscoreboard clear</code> will clear the scoreboard and remove it from every player.</p>
 
 <h3>
 <a id="countdown" class="anchor" href="#countdown" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Countdown</h3>
 
-<p><code>/scoreboard countdown set &lt;Seconds&gt; &lt;Command&gt;</code></p>
+<p><code>/easyscoreboard countdown set &lt;Seconds&gt; &lt;Command&gt;</code></p>
 
 <pre><code>The `&lt;Command&gt;` will be executed after the countdown is over.
 If you want to use quotation marks (") in the command, just replace them with
 single quotation marks (')
 </code></pre>
 
-<p><code>/scoreboard countdown xp &lt;true/false&gt;</code> Choose if the countdown should be shown in the experience bar of the players.</p>
+<p><code>/easyscoreboard countdown xp &lt;true/false&gt;</code> Choose if the countdown should be shown in the experience bar of the players.</p>
 
 <pre><code>Using the XP countdown is not recommended for countdowns larger than a few 
 minutes as this countdown wont be seperated in hours, minutes and seconds.
 </code></pre>
 
-<p><code>/scoreboard countdown chat &lt;true/false&gt;</code> Choose if there should be a countdown in the chat.</p>
+<p><code>/easyscoreboard countdown chat &lt;true/false&gt;</code> Choose if there should be a countdown in the chat.</p>
 
-<p><code>/scoreboard countdown title &lt;true/false&gt;</code> Choose if there should be a countdown in the form of titles.</p>
+<p><code>/easyscoreboard countdown title &lt;true/false&gt;</code> Choose if there should be a countdown in the form of titles.</p>
 
 <pre><code>The countdown in the title and in the chat will be shown like this:
 
@@ -113,16 +112,16 @@ Notification for every 10 seconds if the remaining time is beetwen 10 and 60 sec
 Notification for every seconds if the remaining time is smaller than 5 seconds
 </code></pre>
 
-<p><code>/scoreboard countdown start</code> starts the countdown.</p>
+<p><code>/easyscoreboard countdown start</code> starts the countdown.</p>
 
-<p><code>/scoreboard countdown stop</code> stops the countdown. If you run start afterwards it will continue.</p>
+<p><code>/easyscoreboard countdown stop</code> stops the countdown. If you run start afterwards it will continue.</p>
 
-<p><code>/scoreboard countdown reset</code> resets the countdown to the time defined.</p>
+<p><code>/easyscoreboard countdown reset</code> resets the countdown to the time defined.</p>
 
 <h3>
 <a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
 
-<p><code>/scoreboard reload</code> reloads the config file. If you made any changes in it these will be applied instantly.</p>
+<p><code>/easyscoreboard reload</code> reloads the config file. If you made any changes in it these will be applied instantly.</p>
 
 <h2>
 <a id="replacements" class="anchor" href="#replacements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Replacements</h2>
@@ -169,39 +168,46 @@ who sees the scoreboard</p>
 
 <p><code>PLAYERBALANCE</code> will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API</p>
 
+<pre><code>Please note that  `PLAYERBALANCE` will give you an error in the 
+console on 1.8 because the economy API is not implemented
+in this version
+</code></pre>
+
 <p><code>ONLINECOUNT</code> will be replaced with the number of online players</p>
 
 <pre><code>Using "PLAYERNAME"/"PLAYERBALANCE" together with "ONLINECOUNT"
-is not recommended for large server because it has to compute
+is not recommended for large servers because it has to compute
 a new scoreboard for every player if a player leaves or joines
 </code></pre>
 
+<p><code>COUNTDOWN</code> will be replaced with the time left of the countdown. This will be wrapped into hours, minutes and seconds.</p>
+
 <h2>
-<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h2>
 
-<p><code>/scoreboard set 0 "BOLDGREENHello PLAYERNAME"</code></p>
+<p><code>/easyscoreboard set 0 "BOLDGREENHello PLAYERNAME"</code></p>
 
-<p><code>/scoreboard set 1 "DARK_PURPLEWelcome to the server"</code></p>
+<p><code>/easyscoreboard set 1 "DARK_PURPLEWelcome to the server"</code></p>
 
-<p><code>/scoreboard set 2 "--------------------"</code></p>
+<p><code>/easyscoreboard set 2 "--------------------"</code></p>
 
-<p><code>/scoreboard set 3 "GREENMoney:"</code></p>
+<p><code>/easyscoreboard set 3 "GREENMoney:"</code></p>
 
-<p><code>/scoreboard set 4 " PLAYERBALANCE"</code></p>
+<p><code>/easyscoreboard set 4 " PLAYERBALANCE"</code></p>
 
-<p><code>/scoreboard set 5 "--------------------"</code></p>
+<p><code>/easyscoreboard set 5 "--------------------"</code></p>
 
-<p><code>/scoreboard set 6 "GREENPlayers Online:"</code></p>
+<p><code>/easyscoreboard set 6 "GREENPlayers Online:"</code></p>
 
-<p><code>/scoreboard set 7 " ONLINECOUNT"</code></p>
+<p><code>/easyscoreboard set 7 " ONLINECOUNT"</code></p>
 
-<p><code>/scoreboard set 8 "--------------------"</code></p>
+<p><code>/easyscoreboard set 8 "--------------------"</code></p>
 
-<p><code>/scoreboard set 9 "GREENCountdown:"</code></p>
+<p><code>/easyscoreboard set 9 "GREENCountdown:"</code></p>
 
-<p><code>/scoreboard set 10 " COUNTDOWN"</code></p>
+<p><code>/easyscoreboard set 10 " COUNTDOWN"</code></p>
 
-<p><code>/scoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"</code></p>
+<p><code>/easyscoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"</code></p>
 
 <p>Result:
 <img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot.png?raw=true" alt="Result"></p>
