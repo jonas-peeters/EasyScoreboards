@@ -9,6 +9,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.DefaultConfig;
@@ -34,12 +35,10 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
-@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.1", description = "A plugin to easily create scoreboards for lobbys")
+@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.3", description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
     String[] scoreboardText = new String[]{" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
@@ -50,34 +49,109 @@ public class Main {
     private final String[] placeholders = new String[]{"ONLINECOUNT", "PLAYERNAME", "PLAYERBALANCE"};
     boolean bufferable = true;
     boolean usedPlayerCount = false;
-    Scoreboard bufferedScoreboard;
+    private Scoreboard bufferedScoreboard;
     private ConfigurationLoader<CommentedConfigurationNode> configLoader;
     private ConfigurationNode node;
     private Logger logger;
     private EconomyService economyService;
+    int countdownTime = 60;
+    int countdownTimeUse = 0;
+    String countdownCommand = "";
+    Task countdownTask;
+    boolean countdownChat;
+    boolean countdownXP;
+    boolean countdownTitle;
+
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
-        logger = LoggerFactory.getLogger(Main.class);
+        logger = LoggerFactory.getLogger("EasyScoreboards");
 
-        CommandSpec setLine = CommandSpec.builder()
-                .description(Text.of("Change the Scoreboard Text"))
-                .permission("easyscoreboard.command.setscoreboard")
+        HashMap<List<String>, CommandSpec> subcommands = new HashMap<>();
+        HashMap<List<String>, CommandSpec> subcommandsCountdown = new HashMap<>();
+
+        subcommandsCountdown.put(Collections.singletonList("set"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.set")
+                .description(Text.of("Set the countdown time in seconds"))
+                .arguments(
+                        GenericArguments.onlyOne(GenericArguments.integer(Text.of("Seconds"))),
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("Command"))))
+                .executor(new countdownSet(this))
+                .build());
+
+        subcommandsCountdown.put(Collections.singletonList("start"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.start")
+                .description(Text.of("Starts the countdown"))
+                .executor(new countdownStart(this))
+                .build());
+
+        subcommandsCountdown.put(Collections.singletonList("stop"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.stop")
+                .description(Text.of("Stops the countdown"))
+                .executor(new countdownStop(this))
+                .build());
+
+        subcommandsCountdown.put(Collections.singletonList("reset"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.reset")
+                .description(Text.of("Resets the countdown"))
+                .executor(new countdownReset(this))
+                .build());
+
+        subcommandsCountdown.put(Collections.singletonList("xp"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.xp")
+                .description(Text.of("Set if there should be a XP countdown"))
+                .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
+                .executor(new countdownXP(this))
+                .build());
+
+        subcommandsCountdown.put(Collections.singletonList("chat"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.chat")
+                .description(Text.of("Set if there should be a chat countdown"))
+                .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
+                .executor(new countdownChat(this))
+                .build());
+
+        subcommandsCountdown.put(Collections.singletonList("title"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.title")
+                .description(Text.of("Set if there should be a title countdown"))
+                .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
+                .executor(new countdownTitle(this))
+                .build());
+
+        subcommands.put(Collections.singletonList("set"), CommandSpec.builder()
+                .permission("easyscoreboards.set")
+                .description(Text.of("Change the scoreboard text"))
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("Line"))),
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("New Text"))))
                 .executor(new setLine(this))
-                .build();
+                .build());
 
-        Sponge.getCommandManager().register(this, setLine, "setscoreboard");
-
-        CommandSpec clearAll = CommandSpec.builder()
-                .description(Text.of("Clear the complete Scoreboard"))
-                .permission("easyscoreboard.command.clearscoreboard")
+        subcommands.put(Collections.singletonList("clear"), CommandSpec.builder()
+                .permission("easyscoreboards.clear")
+                .description(Text.of("Clear the complete scoreboard"))
                 .executor(new clearAll(this))
+                .build());
+
+        subcommands.put(Collections.singletonList("reload"), CommandSpec.builder()
+                .permission("easyscoreboards.reload")
+                .description(Text.of("Reloads the config file"))
+                .executor(new reload(this))
+                .build());
+
+        subcommands.put(Collections.singletonList("countdown"), CommandSpec.builder()
+                .permission("easyscoreboards.countdown.use")
+                .description(Text.of("Edit the countdown"))
+                .children(subcommandsCountdown)
+                .build());
+
+        CommandSpec easyscoreboardsCommandSpec = CommandSpec.builder()
+                .extendedDescription(Text.of("Scoreboard Commands"))
+                .permission("easyscoreboards.use")
+                .children(subcommands)
                 .build();
 
-        Sponge.getCommandManager().register(this, clearAll, "clearscoreboard");
+        Sponge.getCommandManager().register(this, easyscoreboardsCommandSpec, "scoreboard");
 
         handleConfig("init");
         handleConfig("load");
@@ -126,7 +200,7 @@ public class Main {
     }
 
     @Listener
-    public void onChangeServieProvider(ChangeServiceProviderEvent event) {
+    public void onChangeServiceProvider(ChangeServiceProviderEvent event) {
         if(event.getService().equals(EconomyService.class)) {
             economyService = (EconomyService) event.getNewProviderRegistration().getProvider();
         }
@@ -154,12 +228,12 @@ public class Main {
                 File config = new File(defaultConfig.toString());
 
                 if(!config.exists()) {
-                    logger.warn("[EasyScoreboards]: Could not find config");
+                    logger.warn("Could not find config");
                     try {
                         config.createNewFile();
-                        logger.info("[EasyScoreboards]: Created config file");
+                        logger.info("Created config file");
                     } catch (IOException e) {
-                        logger.error("[EasyScoreboards]: There was an error creating the config file");
+                        logger.error("There was an error creating the config file");
                     }
 
                     configLoader = HoconConfigurationLoader.builder().setPath(defaultConfig).build();
@@ -183,6 +257,12 @@ public class Main {
                     newNode.getNode("14").setValue(" ");
                     newNode.getNode("15").setValue(" ");
 
+                    node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(0);
+                    node.getNode("scoreboard").getNode("countdown").getNode("command").setValue("say The countdown is over");
+                    node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(false);
+                    node.getNode("scoreboard").getNode("countdown").getNode("xp").setValue(false);
+                    node.getNode("scoreboard").getNode("countdown").getNode("title").setValue(false);
+
                     try {
                         configLoader.save(node);
                     } catch (IOException e) {
@@ -193,9 +273,6 @@ public class Main {
                     configLoader = HoconConfigurationLoader.builder().setPath(defaultConfig).build();
                     node = configLoader.createEmptyNode(ConfigurationOptions.defaults());
                 }
-
-
-
                 break;
             case "load":
                 try {
@@ -205,22 +282,34 @@ public class Main {
                         scoreboardText[i] = node.getNode("scoreboard", "line", String.valueOf(i)).getString();
                     }
 
-                    logger.info("[EasyScoreboards]: Loaded config");
+                    countdownTime = node.getNode("scoreboard").getNode("countdown").getNode("time").getInt();
+                    countdownCommand = node.getNode("scoreboard").getNode("countdown").getNode("command").getString();
+                    countdownChat = node.getNode("scoreboard").getNode("countdown").getNode("chat").getBoolean();
+                    countdownXP = node.getNode("scoreboard").getNode("countdown").getNode("xp").getBoolean();
+                    countdownTitle = node.getNode("scoreboard").getNode("countdown").getNode("title").getBoolean();
+                    countdownTimeUse = countdownTime;
+
+                    logger.info("Loaded config");
                 } catch (Exception e) {
-                    logger.error("[EasyScoreboards]: There was an error reading the config file");
+                    logger.error("There was an error reading the config file");
                 }
                 break;
             case "save":
                 try {
-
-
                     for(int i = 0; i < 16; i++) {
                         node.getNode("scoreboard", "line", String.valueOf(i)).setValue(scoreboardText[i]);
                     }
+
+                    node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(countdownTime);
+                    node.getNode("scoreboard").getNode("countdown").getNode("command").setValue(countdownCommand);
+                    node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(countdownChat);
+                    node.getNode("scoreboard").getNode("countdown").getNode("xp").setValue(countdownXP);
+                    node.getNode("scoreboard").getNode("countdown").getNode("title").setValue(countdownTitle);
+
                     configLoader.save(node);
-                    logger.info("[EasyScoreboards]: Saved config");
+                    logger.info("Saved config");
                 } catch (IOException e) {
-                    logger.error("[EasyScoreboards]: There was an error writing to the config file");
+                    logger.error("There was an error writing to the config file");
                 }
                 break;
         }
@@ -255,6 +344,13 @@ public class Main {
                     loadedData[i] = loadedData[i].replace("PLAYERNAME", player.getName());
                 } else {
                     loadedData[i] = loadedData[i].replace("PLAYERNAME", "");
+                }
+            }
+            if(loadedData[i].contains("COUNTDOWN")) {
+                if(replacePlaceholders(loadedData[i].replace("COUNTDOWN", secondsToTime(countdownTimeUse)), player).length() < 30) {
+                    loadedData[i] = loadedData[i].replace("COUNTDOWN", secondsToTime(countdownTimeUse));
+                } else {
+                    loadedData[i] = loadedData[i].replace("COUNTDOWN", "--");
                 }
             }
 
@@ -321,7 +417,7 @@ public class Main {
         return TextStyles.NONE;
     }
 
-    String replacePlaceholders(String text, Player player) {
+    private String replacePlaceholders(String text, Player player) {
         for(int i = 0; i < 16; i++) {
             if(text.contains(colorStrings[i])){
                 text = text.replaceAll(colorStrings[i],"");
@@ -341,7 +437,7 @@ public class Main {
         return text;
     }
 
-    boolean checkIfBufferable() {
+    private boolean checkIfBufferable() {
         for(String s : scoreboardText) {
             if(s.contains("PLAYER")) {
                 return false;
@@ -350,7 +446,7 @@ public class Main {
         return true;
     }
 
-    boolean checkIfUsedPlayerCount() {
+    private boolean checkIfUsedPlayerCount() {
         for(String s : scoreboardText) {
             if(s.contains("ONLINECOUNT")) {
                 return true;
@@ -389,7 +485,86 @@ public class Main {
         return BigDecimal.ZERO;
     }
 
-    void setBufferable(boolean bufferable) {
+    private void setBufferable(boolean bufferable) {
         this.bufferable = bufferable;
+    }
+
+    void setLine(String newText, int line, Player player, CommandSource src) {
+        if (newText.equals("")) {
+            newText = " ";
+        }
+        try {
+            if (line < 16 && line >= 0) {
+                if (replacePlaceholders(newText, player).length() < 30) {
+                    scoreboardText[line] = newText;
+                    src.sendMessage(Text.of(TextColors.GRAY, "Setting line " + line + " to: " + newText));
+                } else {
+                    src.sendMessage(Text.of(TextColors.RED, "The length of one line is limited to 30 characters!"));
+                }
+            } else {
+                src.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setBufferable(checkIfBufferable());
+        usedPlayerCount = checkIfUsedPlayerCount();
+
+        updateScoreboard(player);
+
+        handleConfig("save");
+    }
+
+    void updateScoreboard(Player player) {
+        if (bufferable) {
+            bufferedScoreboard = makeScoreboard(player);
+            for (Player p : Sponge.getServer().getOnlinePlayers()) {
+                p.setScoreboard(bufferedScoreboard);
+            }
+        } else {
+            for (Player p : Sponge.getServer().getOnlinePlayers()) {
+                p.setScoreboard(makeScoreboard(p));
+            }
+        }
+    }
+
+    private String secondsToTime(int secondsGiven){
+        int secondsLeft = secondsGiven;
+        String hours = "0";
+        String minutes = "0";
+        String seconds;
+        String time;
+
+        while(secondsLeft >= 3600) {
+            hours = String.valueOf(Integer.valueOf(hours) + 1);
+            secondsLeft = secondsLeft - 3600;
+        }
+        while(secondsLeft >= 60) {
+            minutes = String.valueOf(Integer.valueOf(minutes) + 1);
+            secondsLeft = secondsLeft - 60;
+        }
+
+        seconds = String.valueOf(secondsLeft);
+
+        if(hours.length() == 1) {
+            hours = "0" + hours;
+        }
+        if(minutes.length() == 1) {
+            minutes = "0" + minutes;
+        }
+        if(seconds.length() == 1) {
+            seconds = "0" + seconds;
+        }
+
+        if(!hours.equals("00")) {
+            time = hours + ":" + minutes + ":" + seconds;
+        } else if(!minutes.equals("00")) {
+            time = minutes + ":" + seconds;
+        } else {
+            time = seconds;
+        }
+
+        return  time;
     }
 }

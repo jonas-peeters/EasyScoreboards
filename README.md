@@ -11,6 +11,12 @@ A Sponge plugin to create easily dynamic scoreboards
 7. Use the player balance of economy plugins
 8. Dynamically changes its size to be as small as possible
 9. See changes immediately
+10. Include countdowns in scoreboard, chat, XP-Bar and titles.
+
+If you have ideas for more features please open an issue here:
+https://github.com/byYottaFLOPS/EasyScoreboards/issues
+If this is not possible just write it into the comments below or send me a PM here: 
+https://forums.spongepowered.org/users/yottaflops/
 
 ##Setup
 1. Place the plugin file in the mods folder
@@ -19,16 +25,18 @@ of you Sponge server
 3. Edit the text by commands
 
 ##Links (Download)
-Lastest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest
+Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest
 
 This guide: http://byyottaflops.github.io/EasyScoreboards/
 
 Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
-##Commands
+## Commands
     !!Changes are instantly applied for all players!!
 
-`/setscoreboard <Line> <Text>`
+### Scoreboard
+
+`/setscoreboard set <Line> <Text>`
 
 `<Line>` is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.
 
@@ -36,8 +44,46 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
     !!You can only use one color and one style per line!!
 
-`/clearscoreboard` will clear the scoreboard and remove
-it from every player.
+`/scoreboard clear` will clear the scoreboard and remove it from every player.
+
+### Countdown
+
+`/scoreboard countdown set <Seconds> <Command>`
+
+    The `<Command>` will be executed after the countdown is over.
+    If you want to use quotation marks (") in the command, just replace them with
+    single quotation marks (')
+
+
+`/scoreboard countdown xp <true/false>` Choose if the countdown should be shown in the experience bar of the players.
+
+    Using the XP countdown is not recommended for countdowns larger than a few 
+    minutes as this countdown wont be seperated in hours, minutes and seconds.
+
+`/scoreboard countdown chat <true/false>` Choose if there should be a countdown in the chat.
+
+`/scoreboard countdown title <true/false>` Choose if there should be a countdown in the form of titles.
+
+    The countdown in the title and in the chat will be shown like this:
+    
+    Notification for every hour if the remaining time is larger than 3600 seconds (1 hour)
+    Notification for every 10 minutes if the remaining time is beetwen 600 seconds and 3600 seconds (10 and 60 minutes)
+    Notification for every minute if the remaining time is beetwen 60 seconds and 600 seconds (1 and 10 minutes)
+    Notification for every 10 seconds if the remaining time is beetwen 10 and 60 seconds
+    Notification for every seconds if the remaining time is smaller than 5 seconds
+
+
+`/scoreboard countdown start` starts the countdown.
+
+`/scoreboard countdown stop` stops the countdown. If you run start afterwards it will continue.
+
+`/scoreboard countdown reset` resets the countdown to the time defined.
+
+
+### Other
+
+`/scoreboard reload` reloads the config file. If you made any changes in it these will be applied instantly.
+
 
 ##Replacements
 In the `<Text>` argument the following strings will
@@ -82,21 +128,37 @@ who sees the scoreboard
     a new scoreboard for every player if a player leaves or joines
 
 ##Examples
-`/setscoreboard 0 "BOLDGREENHello PLAYERNAME"`
+`/scoreboard set 0 "BOLDGREENHello PLAYERNAME"`
 
-`/setscoreboard 2 "DARK_PURPLEWelcome to the server"`
+`/scoreboard set 1 "DARK_PURPLEWelcome to the server"`
 
-`/setscoreboard 4 "-------------------"`
+`/scoreboard set 2 "--------------------"`
 
-`/setscoreboard 6 "GREENMoney:"`
+`/scoreboard set 3 "GREENMoney:"`
 
-`/setscoreboard 7 " PLAYERBALANCE"`
+`/scoreboard set 4 " PLAYERBALANCE"`
 
-`/setscoreboard 9 "-------------------"`
+`/scoreboard set 5 "--------------------"`
 
-`/setscoreboard 11 "GREENPlayers Online:"`
+`/scoreboard set 6 "GREENPlayers Online:"`
 
-`/setscoreboard 12 " ONLINECOUNT"`
+`/scoreboard set 7 " ONLINECOUNT"`
+
+`/scoreboard set 8 "--------------------"`
+
+`/scoreboard set 9 "GREENCountdown:"`
+
+`/scoreboard set 10 " COUNTDOWN"`
+
+`/scoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
 
 Result:
 ![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot1.png?raw=true)
+
+## Bugs & Feature Requests
+There are no bugs.
+
+But in case you found one or you have a new stunning feature that must be included, please open an issue here: 
+https://github.com/byYottaFLOPS/EasyScoreboards/issues
+If this is not possible just write it into the comments below or send me a PM here:
+https://forums.spongepowered.org/users/yottaflops/
