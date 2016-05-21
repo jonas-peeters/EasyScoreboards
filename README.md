@@ -19,8 +19,7 @@ If this is not possible just write it into the comments below or send me a PM he
 https://forums.spongepowered.org/users/yottaflops/
 
 ##Setup
-1. Place the plugin file in the mods folder
-of you Sponge server
+1. Place the plugin file in the mods folder of you Sponge server
 2. Start the server
 3. Edit the text by commands
 
@@ -36,7 +35,7 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 ### Scoreboard
 
-`/setscoreboard set <Line> <Text>`
+`/easyscoreboard set <Line> <Text>`
 
 `<Line>` is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.
 
@@ -44,25 +43,25 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
     !!You can only use one color and one style per line!!
 
-`/scoreboard clear` will clear the scoreboard and remove it from every player.
+`/easyscoreboard clear` will clear the scoreboard and remove it from every player.
 
 ### Countdown
 
-`/scoreboard countdown set <Seconds> <Command>`
+`/easyscoreboard countdown set <Seconds> <Command>`
 
     The `<Command>` will be executed after the countdown is over.
     If you want to use quotation marks (") in the command, just replace them with
     single quotation marks (')
 
 
-`/scoreboard countdown xp <true/false>` Choose if the countdown should be shown in the experience bar of the players.
+`/easyscoreboard countdown xp <true/false>` Choose if the countdown should be shown in the experience bar of the players.
 
     Using the XP countdown is not recommended for countdowns larger than a few 
     minutes as this countdown wont be seperated in hours, minutes and seconds.
 
-`/scoreboard countdown chat <true/false>` Choose if there should be a countdown in the chat.
+`/easyscoreboard countdown chat <true/false>` Choose if there should be a countdown in the chat.
 
-`/scoreboard countdown title <true/false>` Choose if there should be a countdown in the form of titles.
+`/easyscoreboard countdown title <true/false>` Choose if there should be a countdown in the form of titles.
 
     The countdown in the title and in the chat will be shown like this:
     
@@ -73,16 +72,16 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
     Notification for every seconds if the remaining time is smaller than 5 seconds
 
 
-`/scoreboard countdown start` starts the countdown.
+`/easyscoreboard countdown start` starts the countdown.
 
-`/scoreboard countdown stop` stops the countdown. If you run start afterwards it will continue.
+`/easyscoreboard countdown stop` stops the countdown. If you run start afterwards it will continue.
 
-`/scoreboard countdown reset` resets the countdown to the time defined.
+`/easyscoreboard countdown reset` resets the countdown to the time defined.
 
 
 ### Other
 
-`/scoreboard reload` reloads the config file. If you made any changes in it these will be applied instantly.
+`/easyscoreboard reload` reloads the config file. If you made any changes in it these will be applied instantly.
 
 
 ##Replacements
@@ -121,36 +120,42 @@ who sees the scoreboard
 
 `PLAYERBALANCE` will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API
 
+    Please note that  `PLAYERBALANCE` will give you an error in the 
+    console on 1.8 because the economy API is not implemented
+    in this version
+
 `ONLINECOUNT` will be replaced with the number of online players
 
     Using "PLAYERNAME"/"PLAYERBALANCE" together with "ONLINECOUNT"
-    is not recommended for large server because it has to compute
+    is not recommended for large servers because it has to compute
     a new scoreboard for every player if a player leaves or joines
+    
+`COUNTDOWN` will be replaced with the time left of the countdown. This will be wrapped into hours, minutes and seconds.
 
-##Examples
-`/scoreboard set 0 "BOLDGREENHello PLAYERNAME"`
+## Example
+`/easyscoreboard set 0 "BOLDGREENHello PLAYERNAME"`
 
-`/scoreboard set 1 "DARK_PURPLEWelcome to the server"`
+`/easyscoreboard set 1 "DARK_PURPLEWelcome to the server"`
 
-`/scoreboard set 2 "--------------------"`
+`/easyscoreboard set 2 "--------------------"`
 
-`/scoreboard set 3 "GREENMoney:"`
+`/easyscoreboard set 3 "GREENMoney:"`
 
-`/scoreboard set 4 " PLAYERBALANCE"`
+`/easyscoreboard set 4 " PLAYERBALANCE"`
 
-`/scoreboard set 5 "--------------------"`
+`/easyscoreboard set 5 "--------------------"`
 
-`/scoreboard set 6 "GREENPlayers Online:"`
+`/easyscoreboard set 6 "GREENPlayers Online:"`
 
-`/scoreboard set 7 " ONLINECOUNT"`
+`/easyscoreboard set 7 " ONLINECOUNT"`
 
-`/scoreboard set 8 "--------------------"`
+`/easyscoreboard set 8 "--------------------"`
 
-`/scoreboard set 9 "GREENCountdown:"`
+`/easyscoreboard set 9 "GREENCountdown:"`
 
-`/scoreboard set 10 " COUNTDOWN"`
+`/easyscoreboard set 10 " COUNTDOWN"`
 
-`/scoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
+`/easyscoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
 
 Result:
 ![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot.png?raw=true)

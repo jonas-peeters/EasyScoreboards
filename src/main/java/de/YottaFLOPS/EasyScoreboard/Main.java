@@ -151,7 +151,7 @@ public class Main {
                 .children(subcommands)
                 .build();
 
-        Sponge.getCommandManager().register(this, easyscoreboardsCommandSpec, "scoreboard");
+        Sponge.getCommandManager().register(this, easyscoreboardsCommandSpec, "easyscoreboard");
 
         handleConfig("init");
         handleConfig("load");
