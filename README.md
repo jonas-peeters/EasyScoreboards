@@ -153,7 +153,7 @@ who sees the scoreboard
 `/scoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
 
 Result:
-![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot1.png?raw=true)
+![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot.png?raw=true)
 
 ## Bugs & Feature Requests
 There are no bugs.
