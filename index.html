@@ -37,7 +37,13 @@
 <li>Use the player balance of economy plugins</li>
 <li>Dynamically changes its size to be as small as possible</li>
 <li>See changes immediately</li>
+<li>Include countdowns in scoreboard, chat, XP-Bar and titles.</li>
 </ol>
+
+<p>If you have ideas for more features please open an issue here:
+<a href="https://github.com/byYottaFLOPS/EasyScoreboards/issues">https://github.com/byYottaFLOPS/EasyScoreboards/issues</a>
+If this is not possible just write it into the comments below or send me a PM here: 
+<a href="https://forums.spongepowered.org/users/yottaflops/">https://forums.spongepowered.org/users/yottaflops/</a></p>
 
 <h2>
 <a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
@@ -52,7 +58,7 @@ of you Sponge server</li>
 <h2>
 <a id="links-download" class="anchor" href="#links-download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Links (Download)</h2>
 
-<p>Lastest Release (Download): <a href="https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest">https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest</a></p>
+<p>Latest Release (Download): <a href="https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest">https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest</a></p>
 
 <p>This guide: <a href="http://byyottaflops.github.io/EasyScoreboards/">http://byyottaflops.github.io/EasyScoreboards/</a></p>
 
@@ -64,7 +70,10 @@ of you Sponge server</li>
 <pre><code>!!Changes are instantly applied for all players!!
 </code></pre>
 
-<p><code>/setscoreboard &lt;Line&gt; &lt;Text&gt;</code></p>
+<h3>
+<a id="scoreboard" class="anchor" href="#scoreboard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoreboard</h3>
+
+<p><code>/setscoreboard set &lt;Line&gt; &lt;Text&gt;</code></p>
 
 <p><code>&lt;Line&gt;</code> is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.</p>
 
@@ -73,8 +82,47 @@ of you Sponge server</li>
 <pre><code>!!You can only use one color and one style per line!!
 </code></pre>
 
-<p><code>/clearscoreboard</code> will clear the scoreboard and remove
-it from every player.</p>
+<p><code>/scoreboard clear</code> will clear the scoreboard and remove it from every player.</p>
+
+<h3>
+<a id="countdown" class="anchor" href="#countdown" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Countdown</h3>
+
+<p><code>/scoreboard countdown set &lt;Seconds&gt; &lt;Command&gt;</code></p>
+
+<pre><code>The `&lt;Command&gt;` will be executed after the countdown is over.
+If you want to use quotation marks (") in the command, just replace them with
+single quotation marks (')
+</code></pre>
+
+<p><code>/scoreboard countdown xp &lt;true/false&gt;</code> Choose if the countdown should be shown in the experience bar of the players.</p>
+
+<pre><code>Using the XP countdown is not recommended for countdowns larger than a few 
+minutes as this countdown wont be seperated in hours, minutes and seconds.
+</code></pre>
+
+<p><code>/scoreboard countdown chat &lt;true/false&gt;</code> Choose if there should be a countdown in the chat.</p>
+
+<p><code>/scoreboard countdown title &lt;true/false&gt;</code> Choose if there should be a countdown in the form of titles.</p>
+
+<pre><code>The countdown in the title and in the chat will be shown like this:
+
+Notification for every hour if the remaining time is larger than 3600 seconds (1 hour)
+Notification for every 10 minutes if the remaining time is beetwen 600 seconds and 3600 seconds (10 and 60 minutes)
+Notification for every minute if the remaining time is beetwen 60 seconds and 600 seconds (1 and 10 minutes)
+Notification for every 10 seconds if the remaining time is beetwen 10 and 60 seconds
+Notification for every seconds if the remaining time is smaller than 5 seconds
+</code></pre>
+
+<p><code>/scoreboard countdown start</code> starts the countdown.</p>
+
+<p><code>/scoreboard countdown stop</code> stops the countdown. If you run start afterwards it will continue.</p>
+
+<p><code>/scoreboard countdown reset</code> resets the countdown to the time defined.</p>
+
+<h3>
+<a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
+
+<p><code>/scoreboard reload</code> reloads the config file. If you made any changes in it these will be applied instantly.</p>
 
 <h2>
 <a id="replacements" class="anchor" href="#replacements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Replacements</h2>
@@ -114,7 +162,7 @@ be replaced.</p>
 <code>UNDERLINE</code></p>
 
 <h3>
-<a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
+<a id="other-1" class="anchor" href="#other-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
 
 <p><code>PLAYERNAME</code> will be replaced with the name of the player
 who sees the scoreboard</p>
@@ -131,24 +179,42 @@ a new scoreboard for every player if a player leaves or joines
 <h2>
 <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
 
-<p><code>/setscoreboard 0 "BOLDGREENHello PLAYERNAME"</code></p>
+<p><code>/scoreboard set 0 "BOLDGREENHello PLAYERNAME"</code></p>
 
-<p><code>/setscoreboard 2 "DARK_PURPLEWelcome to the server"</code></p>
+<p><code>/scoreboard set 1 "DARK_PURPLEWelcome to the server"</code></p>
 
-<p><code>/setscoreboard 4 "-------------------"</code></p>
+<p><code>/scoreboard set 2 "--------------------"</code></p>
 
-<p><code>/setscoreboard 6 "GREENMoney:"</code></p>
+<p><code>/scoreboard set 3 "GREENMoney:"</code></p>
 
-<p><code>/setscoreboard 7 " PLAYERBALANCE"</code></p>
+<p><code>/scoreboard set 4 " PLAYERBALANCE"</code></p>
 
-<p><code>/setscoreboard 9 "-------------------"</code></p>
+<p><code>/scoreboard set 5 "--------------------"</code></p>
 
-<p><code>/setscoreboard 11 "GREENPlayers Online:"</code></p>
+<p><code>/scoreboard set 6 "GREENPlayers Online:"</code></p>
 
-<p><code>/setscoreboard 12 " ONLINECOUNT"</code></p>
+<p><code>/scoreboard set 7 " ONLINECOUNT"</code></p>
+
+<p><code>/scoreboard set 8 "--------------------"</code></p>
+
+<p><code>/scoreboard set 9 "GREENCountdown:"</code></p>
+
+<p><code>/scoreboard set 10 " COUNTDOWN"</code></p>
+
+<p><code>/scoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"</code></p>
 
 <p>Result:
 <img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot1.png?raw=true" alt="Result"></p>
+
+<h2>
+<a id="bugs--feature-requests" class="anchor" href="#bugs--feature-requests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bugs &amp; Feature Requests</h2>
+
+<p>There are no bugs.</p>
+
+<p>But in case you found one or you have a new stunning feature that must be included, please open an issue here: 
+<a href="https://github.com/byYottaFLOPS/EasyScoreboards/issues">https://github.com/byYottaFLOPS/EasyScoreboards/issues</a>
+If this is not possible just write it into the comments below or send me a PM here:
+<a href="https://forums.spongepowered.org/users/yottaflops/">https://forums.spongepowered.org/users/yottaflops/</a></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/byYottaFLOPS/EasyScoreboards">Easyscoreboards</a> is maintained by <a href="https://github.com/byYottaFLOPS">byYottaFLOPS</a>.</span>
