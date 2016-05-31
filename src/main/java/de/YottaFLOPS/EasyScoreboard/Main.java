@@ -38,7 +38,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 
-@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.3", description = "A plugin to easily create scoreboards for lobbys")
+@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.4", description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
     String[] scoreboardText = new String[]{" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
