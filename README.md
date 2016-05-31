@@ -1,24 +1,24 @@
-#Easy Scoreboard
-A Sponge plugin to create easily dynamic scoreboards
+# Easy Scoreboards
+A Sponge plugin to create dynamic scoreboards
 
-##Features
+## Features
 1. Easy setup
-2. Change the scoreboard texts by commands OR by config
-3. Use colors
-4. Use styles
+2. Change the scoreboard texts by commands AND by config
+3. Use multiple colors per line
+4. Use multiple styles per line
 5. Use the players name
 6. Use the number of online players
 7. Use the player balance of economy plugins
 8. Dynamically changes its size to be as small as possible
 9. See changes immediately
-10. Include countdowns in scoreboard, chat, XP-Bar and titles.
+10. Include countdowns in scoreboard, chat, XP-Bar and titles
 
 If you have ideas for more features please open an issue here:
 https://github.com/byYottaFLOPS/EasyScoreboards/issues
 If this is not possible just write it into the comments below or send me a PM here: 
 https://forums.spongepowered.org/users/yottaflops/
 
-##Setup
+## Setup
 1. Place the plugin file in the mods folder of you Sponge server
 2. Start the server
 3. Edit the text by commands
@@ -31,7 +31,7 @@ This guide: http://byyottaflops.github.io/EasyScoreboards/
 Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 ## Commands
-    !!Changes are instantly applied for all players!!
+    !! Changes are instantly applied for all players !!
 
 ### Scoreboard
 
@@ -41,7 +41,7 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 `<Text>` Is the text the line will contain. To use spaces the hole text must be in quotation marks (see examples).
 
-    !!You can only use one color and one style per line!!
+    To use multiple colors and styles seperate the parts with semicolons (;)
 
 `/easyscoreboard clear` will clear the scoreboard and remove it from every player.
 
@@ -84,10 +84,14 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 `/easyscoreboard reload` reloads the config file. If you made any changes in it these will be applied instantly.
 
 
-##Replacements
-In the `<Text>` argument the following strings will
-be replaced.
-###Colors
+## Replacements
+In the `<Text>` argument the following strings will be replaced.
+
+To use multiple colors and/or styles seperate the textparts with semicolons (;):
+`/easyscoreboard set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"`
+`/easyscoreboard set 1 "ITALICDifferent ;BOLDStyles"`
+
+### Colors
 `AQUA`
 `BLUE`
 `GOLD`
@@ -107,14 +111,14 @@ be replaced.
 
 These will be replaced with the equivalent color.
 
-###Styles
+### Styles
 `BOLD`
 `OBFUSCATED`
 `ITALIC`
 `STRIKETHROUGH`
 `UNDERLINE`
 
-###Other
+### Other
 `PLAYERNAME` will be replaced with the name of the player
 who sees the scoreboard
 
@@ -135,7 +139,7 @@ who sees the scoreboard
 ## Example
 `/easyscoreboard set 0 "BOLDGREENHello PLAYERNAME"`
 
-`/easyscoreboard set 1 "DARK_PURPLEWelcome to the server"`
+`/easyscoreboard set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"`
 
 `/easyscoreboard set 2 "--------------------"`
 
@@ -158,7 +162,7 @@ who sees the scoreboard
 `/easyscoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
 
 Result:
-![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot.png?raw=true)
+![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot2.png?raw=true)
 
 ## Bugs & Feature Requests
 There are no bugs.

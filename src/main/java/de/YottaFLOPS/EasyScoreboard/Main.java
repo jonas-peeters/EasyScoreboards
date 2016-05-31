@@ -62,7 +62,8 @@ public class Main {
     boolean countdownXP;
     boolean countdownTitle;
 
-
+    //Inits the commands and the logger
+    //Starts the config handling
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         logger = LoggerFactory.getLogger("EasyScoreboards");
@@ -160,6 +161,7 @@ public class Main {
         usedPlayerCount = checkIfUsedPlayerCount();
     }
 
+    //Used for the playercount (to now when it is updated)
     @Listener
     public void onPlayerJoin(ClientConnectionEvent.Join event) {
         if(bufferable) {
@@ -182,6 +184,7 @@ public class Main {
         }
     }
 
+    //Used for the playercount (to now when it is updated)
     @Listener
     public void onPlayerLeave(ClientConnectionEvent.Disconnect event) {
         Task.Builder taskBuilder = Sponge.getScheduler().createTaskBuilder();
@@ -199,6 +202,7 @@ public class Main {
         }).delayTicks(10).submit(this);
     }
 
+    //Sets the economy plugin provider
     @Listener
     public void onChangeServiceProvider(ChangeServiceProviderEvent event) {
         if(event.getService().equals(EconomyService.class)) {
@@ -206,6 +210,7 @@ public class Main {
         }
     }
 
+    //Is called on change of a players balance -> rewrite the scoreboard
     @Listener
     public void onTransaction(EconomyTransactionEvent event) {
         if(!bufferable) {
@@ -217,10 +222,12 @@ public class Main {
         }
     }
 
+    //IDEA says this code is useless (but it isn't)
     @Inject
     @DefaultConfig(sharedRoot = true)
     private Path defaultConfig;
 
+    //Handles the config with init, save and load
     void handleConfig(String arg) {
         switch (arg) {
             case "init":
@@ -315,6 +322,7 @@ public class Main {
         }
     }
 
+    //Generating the scoreboard
     Scoreboard makeScoreboard(Player player) {
         Scoreboard scoreboard = Scoreboard.builder().build();
 
@@ -326,40 +334,40 @@ public class Main {
 
         for(int i = 0; i < loadedData.length; i++) {
             if(loadedData[i].contains("ONLINECOUNT")) {
-                if(replacePlaceholders(loadedData[i].replace("ONLINECOUNT", String.valueOf(Sponge.getServer().getOnlinePlayers().size())), player).length() < 30) {
+                if(replacePlaceholders(loadedData[i].replace("ONLINECOUNT", String.valueOf(Sponge.getServer().getOnlinePlayers().size()))).length() < 30) {
                     loadedData[i] = loadedData[i].replace("ONLINECOUNT", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
                 } else {
                     loadedData[i] = loadedData[i].replace("ONLINECOUNT", "-");
                 }
             }
             if(loadedData[i].contains("PLAYERBALANCE")) {
-                if(replacePlaceholders(loadedData[i].replace("PLAYERBALANCE", String.valueOf(getPlayerBalance(player))), player).length() < 30) {
+                if(replacePlaceholders(loadedData[i].replace("PLAYERBALANCE", String.valueOf(getPlayerBalance(player)))).length() < 30) {
                     loadedData[i] = loadedData[i].replace("PLAYERBALANCE", String.valueOf(getPlayerBalance(player)));
                 } else {
                     loadedData[i] = loadedData[i].replace("PLAYERBALANCE", "--");
                 }
             }
             if(loadedData[i].contains("PLAYERNAME")) {
-                if(replacePlaceholders(loadedData[i].replace("PLAYERNAME", player.getName()), player).length() < 30) {
+                if(replacePlaceholders(loadedData[i].replace("PLAYERNAME", player.getName())).length() < 30) {
                     loadedData[i] = loadedData[i].replace("PLAYERNAME", player.getName());
                 } else {
                     loadedData[i] = loadedData[i].replace("PLAYERNAME", "");
                 }
             }
             if(loadedData[i].contains("COUNTDOWN")) {
-                if(replacePlaceholders(loadedData[i].replace("COUNTDOWN", secondsToTime(countdownTimeUse)), player).length() < 30) {
+                if(replacePlaceholders(loadedData[i].replace("COUNTDOWN", secondsToTime(countdownTimeUse))).length() < 30) {
                     loadedData[i] = loadedData[i].replace("COUNTDOWN", secondsToTime(countdownTimeUse));
                 } else {
                     loadedData[i] = loadedData[i].replace("COUNTDOWN", "--");
                 }
             }
 
-            if(replacePlaceholders(loadedData[i], player).length() > 29) {
+            if(replacePlaceholders(loadedData[i]).length() > 29) {
                 return Scoreboard.builder().build();
             }
         }
 
-        obj = Objective.builder().name("Test").criterion(Criteria.DUMMY).displayName(Text.of(TextFormat.NONE.color(getColor(loadedData[0])).style(getStyles(loadedData[0])), replacePlaceholders(loadedData[0], player))).build();
+        obj = Objective.builder().name("Test").criterion(Criteria.DUMMY).displayName(lineToTexts(loadedData[0])).build();
 
         for(int i = 0; i <= 20; i++) {
             if(scoreboardText[i].equals("")) {
@@ -389,7 +397,7 @@ public class Main {
                     }
                 }
             }
-            lines.add(obj.getOrCreateScore(Text.of(TextFormat.NONE.color(getColor(loadedData[i])).style(getStyles(loadedData[i])), replacePlaceholders(loadedData[i], player))));
+            lines.add(obj.getOrCreateScore(lineToTexts(loadedData[i])));
             lines.get(i-1).setScore(length-i);
         }
 
@@ -399,6 +407,7 @@ public class Main {
         return scoreboard;
     }
 
+    //Filters the string for color names
     private TextColor getColor(String text){
         for(int i = 0; i < 16; i++) {
             if(text.contains(colorStrings[i])){
@@ -408,6 +417,7 @@ public class Main {
         return TextColors.WHITE;
     }
 
+    //Filters the string for style names
     private TextStyle getStyles(String text) {
         for(int i = 0; i < 5; i++) {
             if(text.contains(styleStrings[i])){
@@ -417,7 +427,8 @@ public class Main {
         return TextStyles.NONE;
     }
 
-    private String replacePlaceholders(String text, Player player) {
+    //Replaces all placeholders like colors, styles etc.
+    private String replacePlaceholders(String text) {
         for(int i = 0; i < 16; i++) {
             if(text.contains(colorStrings[i])){
                 text = text.replaceAll(colorStrings[i],"");
@@ -437,6 +448,25 @@ public class Main {
         return text;
     }
 
+    //Converts a line-string into the Sponge text for multiple colors
+    private Text lineToTexts(String s) {
+        String[] strings = s.split(";");
+
+        List<Text> texts = new ArrayList<>();
+
+        for(String string : strings) {
+            texts.add(stringToText(string.replaceAll(";","")));
+        }
+
+        return Text.join(texts);
+    }
+
+    //Converts a string into the Sponge Text
+    private Text stringToText(String s) {
+        return Text.of(getColor(s), getStyles(s), replacePlaceholders(s));
+    }
+
+    //Checks if Bufferable
     private boolean checkIfBufferable() {
         for(String s : scoreboardText) {
             if(s.contains("PLAYER")) {
@@ -464,6 +494,7 @@ public class Main {
         return false;
     }
 
+    //Never Used (could be removed)
     boolean checkIfUsedPlayerName() {
         for(String s : scoreboardText) {
             if(s.contains("PLAYERNAME")) {
@@ -473,6 +504,7 @@ public class Main {
         return false;
     }
 
+    //Return the money the players has
     private BigDecimal getPlayerBalance(Player player) {
         try {
             Optional<UniqueAccount> uOpt = economyService.getOrCreateAccount(player.getUniqueId());
@@ -485,17 +517,19 @@ public class Main {
         return BigDecimal.ZERO;
     }
 
+    //Set the Bufferable bool (mostly useless code, but don't want to fix this right now)
     private void setBufferable(boolean bufferable) {
         this.bufferable = bufferable;
     }
 
+    //Is used by all the command which change the text of the lines
     void setLine(String newText, int line, Player player, CommandSource src) {
         if (newText.equals("")) {
             newText = " ";
         }
         try {
             if (line < 16 && line >= 0) {
-                if (replacePlaceholders(newText, player).length() < 30) {
+                if (replacePlaceholders(newText).length() < 30) {
                     scoreboardText[line] = newText;
                     src.sendMessage(Text.of(TextColors.GRAY, "Setting line " + line + " to: " + newText));
                 } else {
@@ -516,6 +550,7 @@ public class Main {
         handleConfig("save");
     }
 
+    //Sets a players Scoreboard (after bufferable check)
     void updateScoreboard(Player player) {
         if (bufferable) {
             bufferedScoreboard = makeScoreboard(player);
@@ -529,6 +564,7 @@ public class Main {
         }
     }
 
+    //Converts a time in seconds into a human readable format
     private String secondsToTime(int secondsGiven){
         int secondsLeft = secondsGiven;
         String hours = "0";
