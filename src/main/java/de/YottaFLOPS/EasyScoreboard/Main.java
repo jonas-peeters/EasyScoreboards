@@ -38,7 +38,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 
-@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.4", description = "A plugin to easily create scoreboards for lobbys")
+@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.5", description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
     String[] scoreboardText = new String[]{" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
@@ -61,6 +61,7 @@ public class Main {
     boolean countdownChat;
     boolean countdownXP;
     boolean countdownTitle;
+    List<String> dontShowFor = new ArrayList<>();
 
     //Inits the commands and the logger
     //Starts the config handling
@@ -146,6 +147,18 @@ public class Main {
                 .children(subcommandsCountdown)
                 .build());
 
+        subcommands.put(Collections.singletonList("show"), CommandSpec.builder()
+                .permission("easyscoreboards.show")
+                .description(Text.of("Enable scoreboard"))
+                .executor(new show(this))
+                .build());
+
+        subcommands.put(Collections.singletonList("hide"), CommandSpec.builder()
+                .permission("easyscoreboards.hide")
+                .description(Text.of("Hide scoreboard"))
+                .executor(new hide(this))
+                .build());
+
         CommandSpec easyscoreboardsCommandSpec = CommandSpec.builder()
                 .extendedDescription(Text.of("Scoreboard Commands"))
                 .permission("easyscoreboards.use")
@@ -153,6 +166,7 @@ public class Main {
                 .build();
 
         Sponge.getCommandManager().register(this, easyscoreboardsCommandSpec, "easyscoreboard");
+        Sponge.getCommandManager().register(this, easyscoreboardsCommandSpec, "esb");
 
         handleConfig("init");
         handleConfig("load");
@@ -164,23 +178,11 @@ public class Main {
     //Used for the playercount (to now when it is updated)
     @Listener
     public void onPlayerJoin(ClientConnectionEvent.Join event) {
-        if(bufferable) {
-            if(Sponge.getServer().getOnlinePlayers().size() == 1) {
-                bufferedScoreboard = makeScoreboard(event.getTargetEntity());
-            }
-            event.getTargetEntity().setScoreboard(bufferedScoreboard);
-        } else {
-            event.getTargetEntity().setScoreboard(makeScoreboard(event.getTargetEntity()));
-        }
-        if(usedPlayerCount) {
 
-            for(Player player : Sponge.getServer().getOnlinePlayers()) {
-                if(bufferable) {
-                    player.setScoreboard(bufferedScoreboard);
-                } else {
-                    player.setScoreboard(makeScoreboard(player));
-                }
-            }
+        setScoreboard(event.getTargetEntity());
+
+        if(usedPlayerCount) {
+            updateAllScoreboards(event.getTargetEntity());
         }
     }
 
@@ -192,11 +194,7 @@ public class Main {
             @Override
             public void run() {
                 for(Player player : Sponge.getServer().getOnlinePlayers()) {
-                    if(bufferable) {
-                        player.setScoreboard(bufferedScoreboard);
-                    } else {
-                        player.setScoreboard(makeScoreboard(player));
-                    }
+                    setScoreboard(player);
                 }
             }
         }).delayTicks(10).submit(this);
@@ -216,7 +214,7 @@ public class Main {
         if(!bufferable) {
             if(checkIfUsedPlayerBalance()) {
                 for(Player player : Sponge.getServer().getOnlinePlayers()) {
-                    player.setScoreboard(makeScoreboard(player));
+                    setScoreboard(player);
                 }
             }
         }
@@ -264,6 +262,7 @@ public class Main {
                     newNode.getNode("14").setValue(" ");
                     newNode.getNode("15").setValue(" ");
 
+                    node.getNode("scoreboard").getNode("hideFor").setValue(" ");
                     node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(0);
                     node.getNode("scoreboard").getNode("countdown").getNode("command").setValue("say The countdown is over");
                     node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(false);
@@ -296,6 +295,14 @@ public class Main {
                     countdownTitle = node.getNode("scoreboard").getNode("countdown").getNode("title").getBoolean();
                     countdownTimeUse = countdownTime;
 
+                    String hideFor = node.getNode("scoreboard").getNode("hideFor").getString();
+                    String[] hideForSplit = hideFor.split(" ");
+
+                    dontShowFor.clear();
+                    for(String s : hideForSplit) {
+                        dontShowFor.add(s.replace(" ",""));
+                    }
+
                     logger.info("Loaded config");
                 } catch (Exception e) {
                     logger.error("There was an error reading the config file");
@@ -312,6 +319,14 @@ public class Main {
                     node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(countdownChat);
                     node.getNode("scoreboard").getNode("countdown").getNode("xp").setValue(countdownXP);
                     node.getNode("scoreboard").getNode("countdown").getNode("title").setValue(countdownTitle);
+
+                    String hideFor = "";
+
+                    for(String s : dontShowFor) {
+                        hideFor = hideFor + " " + s;
+                    }
+
+                    node.getNode("scoreboard").getNode("hideFor").setValue(hideFor);
 
                     configLoader.save(node);
                     logger.info("Saved config");
@@ -545,23 +560,45 @@ public class Main {
         setBufferable(checkIfBufferable());
         usedPlayerCount = checkIfUsedPlayerCount();
 
-        updateScoreboard(player);
+        updateAllScoreboards(player);
 
         handleConfig("save");
     }
 
-    //Sets a players Scoreboard (after bufferable check)
-    void updateScoreboard(Player player) {
+    //Prepares Scoreboard
+    void updateAllScoreboards(Player player) {
         if (bufferable) {
             bufferedScoreboard = makeScoreboard(player);
-            for (Player p : Sponge.getServer().getOnlinePlayers()) {
-                p.setScoreboard(bufferedScoreboard);
+        }
+        for(Player p : Sponge.getServer().getOnlinePlayers()) {
+            setScoreboard(p);
+        }
+    }
+
+    //sets the scoreboard
+    void setScoreboard(Player player) {
+        if(Sponge.getServer().getOnlinePlayers().size() == 1) {
+            bufferedScoreboard = makeScoreboard(player);
+        }
+        if(shouldShow(player)) {
+            if (bufferable) {
+                player.setScoreboard(bufferedScoreboard);
+            } else {
+                player.setScoreboard(makeScoreboard(player));
             }
         } else {
-            for (Player p : Sponge.getServer().getOnlinePlayers()) {
-                p.setScoreboard(makeScoreboard(p));
+            player.setScoreboard(Scoreboard.builder().build());
+        }
+    }
+
+    //Check if scoreboard should be shown to that player
+    private boolean shouldShow(Player player) {
+        for(String s : dontShowFor) {
+            if(player.getName().equals(s)) {
+                return false;
             }
         }
+        return true;
     }
 
     //Converts a time in seconds into a human readable format

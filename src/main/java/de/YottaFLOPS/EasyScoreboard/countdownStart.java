@@ -106,7 +106,7 @@ class countdownStart implements CommandExecutor {
                         }
                     }
 
-                    plugin.updateScoreboard(player);
+                    plugin.updateAllScoreboards(player);
 
                 } else {
                     if (!plugin.countdownCommand.equals("")) {
@@ -121,7 +121,7 @@ class countdownStart implements CommandExecutor {
 
                     plugin.countdownTimeUse = plugin.countdownTime;
 
-                    plugin.updateScoreboard((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
+                    plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
 
                     plugin.countdownTask.cancel();
                 }

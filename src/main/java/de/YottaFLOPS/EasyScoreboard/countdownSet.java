@@ -32,7 +32,7 @@ class countdownSet implements CommandExecutor {
                 commandSource.sendMessage(Text.of(TextColors.GRAY, "     XP-Countdown:    " + plugin.countdownXP));
                 commandSource.sendMessage(Text.of(TextColors.GRAY, "     Title-Countdown: " + plugin.countdownTitle));
                 Player player = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
-                plugin.updateScoreboard(player);
+                plugin.updateAllScoreboards(player);
 
                 plugin.handleConfig("save");
 

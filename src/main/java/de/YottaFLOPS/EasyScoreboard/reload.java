@@ -21,7 +21,7 @@ class reload implements CommandExecutor {
         plugin.handleConfig("init");
         plugin.handleConfig("load");
 
-        plugin.updateScoreboard((Player) commandSource);
+        plugin.updateAllScoreboards((Player) commandSource);
 
         return CommandResult.success();
     }

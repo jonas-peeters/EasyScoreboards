@@ -12,6 +12,7 @@ A Sponge plugin to create dynamic scoreboards
 8. Dynamically changes its size to be as small as possible
 9. See changes immediately
 10. Include countdowns in scoreboard, chat, XP-Bar and titles
+11. Single players can hide the scoreboard
 
 If you have ideas for more features please open an issue here:
 https://github.com/byYottaFLOPS/EasyScoreboards/issues
@@ -33,6 +34,8 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 ## Commands
     !! Changes are instantly applied for all players !!
 
+> Instead of `/easyscoreboard` you can also use `/esb`
+
 ### Scoreboard
 
 `/easyscoreboard set <Line> <Text>`
@@ -41,9 +44,13 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 `<Text>` Is the text the line will contain. To use spaces the hole text must be in quotation marks (see examples).
 
-    To use multiple colors and styles seperate the parts with semicolons (;)
+    To use multiple colors and styles separate the parts with semicolons (;)
 
 `/easyscoreboard clear` will clear the scoreboard and remove it from every player.
+
+`/easyscoreboard show` shows the scoreboard to the player who uses this command
+
+`/easyscoreboard hide` hides the scoreboard from the player who uses this command
 
 ### Countdown
 
@@ -82,6 +89,23 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 ### Other
 
 `/easyscoreboard reload` reloads the config file. If you made any changes in it these will be applied instantly.
+
+## Permissions
+
+> easyscoreboard.use 
+ easyscoreboard.set 
+ easyscoreboard.clear 
+ easyscoreboard.show
+ easyscoreboard.hide
+ easyscoreboard.reload
+ easyscoreboard.countdown.use
+ easyscoreboard.countdown.set
+ easyscoreboard.countdown.start
+ easyscoreboard.countdown.stop
+ easyscoreboard.countdown.reset
+ easyscoreboard.countdown.xp
+ easyscoreboard.countdown.chat
+ easyscoreboard.countdown.title
 
 
 ## Replacements
@@ -124,9 +148,9 @@ who sees the scoreboard
 
 `PLAYERBALANCE` will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API
 
-    Please note that  `PLAYERBALANCE` will give you an error in the 
-    console on 1.8 because the economy API is not implemented
-    in this version
+    Please note that the usage of `PLAYERBALANCE` will give you  
+    an error in the console on 1.8 because the economy API is 
+    not implemented in this version
 
 `ONLINECOUNT` will be replaced with the number of online players
 
