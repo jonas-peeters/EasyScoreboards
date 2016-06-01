@@ -38,6 +38,7 @@
 <li>Dynamically changes its size to be as small as possible</li>
 <li>See changes immediately</li>
 <li>Include countdowns in scoreboard, chat, XP-Bar and titles</li>
+<li>Single players can hide the scoreboard</li>
 </ol>
 
 <p>If you have ideas for more features please open an issue here:
@@ -69,6 +70,10 @@ If this is not possible just write it into the comments below or send me a PM he
 <pre><code>!! Changes are instantly applied for all players !!
 </code></pre>
 
+<blockquote>
+<p>Instead of <code>/easyscoreboard</code> you can also use <code>/esb</code></p>
+</blockquote>
+
 <h3>
 <a id="scoreboard" class="anchor" href="#scoreboard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoreboard</h3>
 
@@ -78,10 +83,14 @@ If this is not possible just write it into the comments below or send me a PM he
 
 <p><code>&lt;Text&gt;</code> Is the text the line will contain. To use spaces the hole text must be in quotation marks (see examples).</p>
 
-<pre><code>To use multiple colors and styles seperate the parts with semicolons (;)
+<pre><code>To use multiple colors and styles separate the parts with semicolons (;)
 </code></pre>
 
 <p><code>/easyscoreboard clear</code> will clear the scoreboard and remove it from every player.</p>
+
+<p><code>/easyscoreboard show</code> shows the scoreboard to the player who uses this command</p>
+
+<p><code>/easyscoreboard hide</code> hides the scoreboard from the player who uses this command</p>
 
 <h3>
 <a id="countdown" class="anchor" href="#countdown" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Countdown</h3>
@@ -122,6 +131,26 @@ Notification for every seconds if the remaining time is smaller than 5 seconds
 <a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
 
 <p><code>/easyscoreboard reload</code> reloads the config file. If you made any changes in it these will be applied instantly.</p>
+
+<h2>
+<a id="permissions" class="anchor" href="#permissions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Permissions</h2>
+
+<blockquote>
+<p>easyscoreboard.use 
+ easyscoreboard.set 
+ easyscoreboard.clear 
+ easyscoreboard.show
+ easyscoreboard.hide
+ easyscoreboard.reload
+ easyscoreboard.countdown.use
+ easyscoreboard.countdown.set
+ easyscoreboard.countdown.start
+ easyscoreboard.countdown.stop
+ easyscoreboard.countdown.reset
+ easyscoreboard.countdown.xp
+ easyscoreboard.countdown.chat
+ easyscoreboard.countdown.title</p>
+</blockquote>
 
 <h2>
 <a id="replacements" class="anchor" href="#replacements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Replacements</h2>
@@ -171,9 +200,9 @@ who sees the scoreboard</p>
 
 <p><code>PLAYERBALANCE</code> will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API</p>
 
-<pre><code>Please note that  `PLAYERBALANCE` will give you an error in the 
-console on 1.8 because the economy API is not implemented
-in this version
+<pre><code>Please note that the usage of `PLAYERBALANCE` will give you  
+an error in the console on 1.8 because the economy API is 
+not implemented in this version
 </code></pre>
 
 <p><code>ONLINECOUNT</code> will be replaced with the number of online players</p>
