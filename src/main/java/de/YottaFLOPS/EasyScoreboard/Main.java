@@ -38,7 +38,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 
-@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.5", description = "A plugin to easily create scoreboards for lobbys")
+@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.5.1", description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
     String[] scoreboardText = new String[]{" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
@@ -73,7 +73,7 @@ public class Main {
         HashMap<List<String>, CommandSpec> subcommandsCountdown = new HashMap<>();
 
         subcommandsCountdown.put(Collections.singletonList("set"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.set")
+                .permission("easyscoreboard.countdown.set")
                 .description(Text.of("Set the countdown time in seconds"))
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("Seconds"))),
@@ -82,46 +82,46 @@ public class Main {
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("start"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.start")
+                .permission("easyscoreboard.countdown.start")
                 .description(Text.of("Starts the countdown"))
                 .executor(new countdownStart(this))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("stop"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.stop")
+                .permission("easyscoreboard.countdown.stop")
                 .description(Text.of("Stops the countdown"))
                 .executor(new countdownStop(this))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("reset"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.reset")
+                .permission("easyscoreboard.countdown.reset")
                 .description(Text.of("Resets the countdown"))
                 .executor(new countdownReset(this))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("xp"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.xp")
+                .permission("easyscoreboard.countdown.xp")
                 .description(Text.of("Set if there should be a XP countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
                 .executor(new countdownXP(this))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("chat"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.chat")
+                .permission("easyscoreboard.countdown.chat")
                 .description(Text.of("Set if there should be a chat countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
                 .executor(new countdownChat(this))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("title"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.title")
+                .permission("easyscoreboard.countdown.title")
                 .description(Text.of("Set if there should be a title countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
                 .executor(new countdownTitle(this))
                 .build());
 
         subcommands.put(Collections.singletonList("set"), CommandSpec.builder()
-                .permission("easyscoreboards.set")
+                .permission("easyscoreboard.set")
                 .description(Text.of("Change the scoreboard text"))
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("Line"))),
@@ -130,38 +130,38 @@ public class Main {
                 .build());
 
         subcommands.put(Collections.singletonList("clear"), CommandSpec.builder()
-                .permission("easyscoreboards.clear")
+                .permission("easyscoreboard.clear")
                 .description(Text.of("Clear the complete scoreboard"))
                 .executor(new clearAll(this))
                 .build());
 
         subcommands.put(Collections.singletonList("reload"), CommandSpec.builder()
-                .permission("easyscoreboards.reload")
+                .permission("easyscoreboard.reload")
                 .description(Text.of("Reloads the config file"))
                 .executor(new reload(this))
                 .build());
 
         subcommands.put(Collections.singletonList("countdown"), CommandSpec.builder()
-                .permission("easyscoreboards.countdown.use")
+                .permission("easyscoreboard.countdown.use")
                 .description(Text.of("Edit the countdown"))
                 .children(subcommandsCountdown)
                 .build());
 
         subcommands.put(Collections.singletonList("show"), CommandSpec.builder()
-                .permission("easyscoreboards.show")
+                .permission("easyscoreboard.show")
                 .description(Text.of("Enable scoreboard"))
                 .executor(new show(this))
                 .build());
 
         subcommands.put(Collections.singletonList("hide"), CommandSpec.builder()
-                .permission("easyscoreboards.hide")
+                .permission("easyscoreboard.hide")
                 .description(Text.of("Hide scoreboard"))
                 .executor(new hide(this))
                 .build());
 
         CommandSpec easyscoreboardsCommandSpec = CommandSpec.builder()
                 .extendedDescription(Text.of("Scoreboard Commands"))
-                .permission("easyscoreboards.use")
+                .permission("easyscoreboard.use")
                 .children(subcommands)
                 .build();
 
