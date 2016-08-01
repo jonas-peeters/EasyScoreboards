@@ -23,6 +23,11 @@ class reload implements CommandExecutor {
 
         plugin.updateAllScoreboards((Player) commandSource);
 
+        plugin.stopTPS();
+        if(plugin.checkIfUsedTPS()) {
+            plugin.startTPS();
+        }
+
         return CommandResult.success();
     }
 }

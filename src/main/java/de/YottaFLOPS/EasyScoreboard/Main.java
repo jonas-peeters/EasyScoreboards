@@ -38,7 +38,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 
-@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.5.1", description = "A plugin to easily create scoreboards for lobbys")
+@Plugin(id = "de.yottaflops.easyscoreboard", name = "Easy Scoreboards", version = "1.6.0", description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
     String[] scoreboardText = new String[]{" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "};
@@ -46,7 +46,7 @@ public class Main {
     private final TextColor[] colors = new TextColor[]{TextColors.DARK_AQUA,TextColors.DARK_BLUE,TextColors.DARK_GREEN,TextColors.DARK_RED,TextColors.DARK_PURPLE,TextColors.LIGHT_PURPLE,TextColors.DARK_GRAY,TextColors.GRAY,TextColors.WHITE,TextColors.BLACK,TextColors.AQUA,TextColors.BLUE,TextColors.GOLD,TextColors.GREEN,TextColors.YELLOW,TextColors.RED};
     private final String[] styleStrings = new String[]{"BOLD","OBFUSCATED","ITALIC","STRIKETHROUGH","UNDERLINE"};
     private final TextStyle[] styles = new TextStyle[]{TextStyles.BOLD,TextStyles.OBFUSCATED,TextStyles.ITALIC,TextStyles.STRIKETHROUGH,TextStyles.UNDERLINE};
-    private final String[] placeholders = new String[]{"ONLINECOUNT", "PLAYERNAME", "PLAYERBALANCE"};
+    private final String[] placeholders = new String[]{"ONLINECOUNT", "PLAYERNAME", "PLAYERBALANCE", "TPS"};
     boolean bufferable = true;
     boolean usedPlayerCount = false;
     private Scoreboard bufferedScoreboard;
@@ -61,7 +61,12 @@ public class Main {
     boolean countdownChat;
     boolean countdownXP;
     boolean countdownTitle;
+    boolean showall = true;
     List<String> dontShowFor = new ArrayList<>();
+    private Task TPSTask1;
+    private Task TPSTask2;
+    private double lastTPS = 20.0;
+    private double tps = 0.0;
 
     //Inits the commands and the logger
     //Starts the config handling
@@ -159,6 +164,18 @@ public class Main {
                 .executor(new hide(this))
                 .build());
 
+        subcommands.put(Collections.singletonList("showall"), CommandSpec.builder()
+                .permission("easyscoreboard.showall")
+                .description(Text.of("Enable scoreboard for all players (not with private settings)"))
+                .executor(new showall(this))
+                .build());
+
+        subcommands.put(Collections.singletonList("hideall"), CommandSpec.builder()
+                .permission("easyscoreboard.hideall")
+                .description(Text.of("Disable scoreboard for all players (also with private settings)"))
+                .executor(new hideall(this))
+                .build());
+
         CommandSpec easyscoreboardsCommandSpec = CommandSpec.builder()
                 .extendedDescription(Text.of("Scoreboard Commands"))
                 .permission("easyscoreboard.use")
@@ -173,6 +190,10 @@ public class Main {
         handleConfig("save");
         bufferable = checkIfBufferable();
         usedPlayerCount = checkIfUsedPlayerCount();
+        if(checkIfUsedTPS()) {
+            startTPS();
+        }
+
     }
 
     //Used for the playercount (to now when it is updated)
@@ -213,9 +234,7 @@ public class Main {
     public void onTransaction(EconomyTransactionEvent event) {
         if(!bufferable) {
             if(checkIfUsedPlayerBalance()) {
-                for(Player player : Sponge.getServer().getOnlinePlayers()) {
-                    setScoreboard(player);
-                }
+                Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
             }
         }
     }
@@ -263,6 +282,7 @@ public class Main {
                     newNode.getNode("15").setValue(" ");
 
                     node.getNode("scoreboard").getNode("hideFor").setValue(" ");
+                    node.getNode("scoreboard").getNode("showForAll").setValue(true);
                     node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(0);
                     node.getNode("scoreboard").getNode("countdown").getNode("command").setValue("say The countdown is over");
                     node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(false);
@@ -288,6 +308,7 @@ public class Main {
                         scoreboardText[i] = node.getNode("scoreboard", "line", String.valueOf(i)).getString();
                     }
 
+                    showall = node.getNode("scoreboard").getNode("showForAll").getBoolean();
                     countdownTime = node.getNode("scoreboard").getNode("countdown").getNode("time").getInt();
                     countdownCommand = node.getNode("scoreboard").getNode("countdown").getNode("command").getString();
                     countdownChat = node.getNode("scoreboard").getNode("countdown").getNode("chat").getBoolean();
@@ -313,6 +334,8 @@ public class Main {
                     for(int i = 0; i < 16; i++) {
                         node.getNode("scoreboard", "line", String.valueOf(i)).setValue(scoreboardText[i]);
                     }
+
+                    node.getNode("scoreboard").getNode("showForAll").setValue(showall);
 
                     node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(countdownTime);
                     node.getNode("scoreboard").getNode("countdown").getNode("command").setValue(countdownCommand);
@@ -353,6 +376,7 @@ public class Main {
                     loadedData[i] = loadedData[i].replace("ONLINECOUNT", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
                 } else {
                     loadedData[i] = loadedData[i].replace("ONLINECOUNT", "-");
+                    logger.warn("Line " + i + " is to long");
                 }
             }
             if(loadedData[i].contains("PLAYERBALANCE")) {
@@ -360,6 +384,7 @@ public class Main {
                     loadedData[i] = loadedData[i].replace("PLAYERBALANCE", String.valueOf(getPlayerBalance(player)));
                 } else {
                     loadedData[i] = loadedData[i].replace("PLAYERBALANCE", "--");
+                    logger.warn("Line " + i + " is to long");
                 }
             }
             if(loadedData[i].contains("PLAYERNAME")) {
@@ -367,6 +392,15 @@ public class Main {
                     loadedData[i] = loadedData[i].replace("PLAYERNAME", player.getName());
                 } else {
                     loadedData[i] = loadedData[i].replace("PLAYERNAME", "");
+                    logger.warn("Line " + i + " is to long");
+                }
+            }
+            if(loadedData[i].contains("TPS")) {
+                if(replacePlaceholders(loadedData[i].replace("TPS", String.valueOf(Math.round(100.0 * lastTPS) / 100.0))).length() < 30) {
+                    loadedData[i] = loadedData[i].replace("TPS", String.valueOf(Math.round(100.0 * lastTPS) / 100.0));
+                } else {
+                    loadedData[i] = loadedData[i].replace("TPS", "");
+                    logger.warn("Line " + i + " is to long");
                 }
             }
             if(loadedData[i].contains("COUNTDOWN")) {
@@ -374,6 +408,7 @@ public class Main {
                     loadedData[i] = loadedData[i].replace("COUNTDOWN", secondsToTime(countdownTimeUse));
                 } else {
                     loadedData[i] = loadedData[i].replace("COUNTDOWN", "--");
+                    logger.warn("Line " + i + " is to long");
                 }
             }
 
@@ -509,6 +544,16 @@ public class Main {
         return false;
     }
 
+    //Check for TPS
+    boolean checkIfUsedTPS() {
+        for(String s : scoreboardText) {
+            if(s.contains("TPS")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Never Used (could be removed)
     boolean checkIfUsedPlayerName() {
         for(String s : scoreboardText) {
@@ -532,12 +577,7 @@ public class Main {
         return BigDecimal.ZERO;
     }
 
-    //Set the Bufferable bool (mostly useless code, but don't want to fix this right now)
-    private void setBufferable(boolean bufferable) {
-        this.bufferable = bufferable;
-    }
-
-    //Is used by all the command which change the text of the lines
+    //Is used by all the commands which change the text of the lines
     void setLine(String newText, int line, Player player, CommandSource src) {
         if (newText.equals("")) {
             newText = " ";
@@ -557,7 +597,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        setBufferable(checkIfBufferable());
+        bufferable = checkIfBufferable();
         usedPlayerCount = checkIfUsedPlayerCount();
 
         updateAllScoreboards(player);
@@ -570,9 +610,7 @@ public class Main {
         if (bufferable) {
             bufferedScoreboard = makeScoreboard(player);
         }
-        for(Player p : Sponge.getServer().getOnlinePlayers()) {
-            setScoreboard(p);
-        }
+        Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
     }
 
     //sets the scoreboard
@@ -591,8 +629,48 @@ public class Main {
         }
     }
 
+    //Starting the runnable to update the tps count
+    void startTPS() {
+        TPSTask1 = Sponge.getScheduler().createTaskBuilder().execute(new Runnable() {
+            @Override
+            public void run() {
+                if(tps/10 != lastTPS) {
+                    lastTPS = tps/10;
+                    if(Sponge.getServer().getOnlinePlayers().size() != 0) {
+                        updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
+                    }
+                }
+                tps = 0;
+            }
+        }).intervalTicks(200).delayTicks(200).submit(this);
+
+        TPSTask2 = Sponge.getScheduler().createTaskBuilder().execute(new Runnable() {
+            @Override
+            public void run() {
+                if(Sponge.getServer().getOnlinePlayers().size() != 0) {
+                    tps += Sponge.getServer().getTicksPerSecond();
+                } else {
+                    tps += 20.0;
+                }
+            }
+        }).intervalTicks(20).submit(this);
+    }
+
+    //Stopping the runnable to update the tps count
+    void stopTPS() {
+        if(TPSTask1 != null) {
+            TPSTask1.cancel();
+        }
+        if(TPSTask2 != null) {
+            TPSTask2.cancel();
+        }
+    }
+
     //Check if scoreboard should be shown to that player
     private boolean shouldShow(Player player) {
+        if(!showall) {
+            return false;
+        }
         for(String s : dontShowFor) {
             if(player.getName().equals(s)) {
                 return false;

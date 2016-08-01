@@ -9,12 +9,13 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
 
-class setLine implements CommandExecutor {
+class showall implements CommandExecutor {
 
     private final Main plugin;
 
-    setLine(Main instance) {
+    showall(Main instance) {
         plugin = instance;
     }
 
@@ -22,19 +23,14 @@ class setLine implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        if(args.<Integer>getOne("Line").isPresent()) {
-            int line = args.<Integer>getOne("Line").get();
-            if (args.<String>getOne("New Text").isPresent()) {
-                String newText = args.<String>getOne("New Text").get();
-                Player player = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
+        plugin.showall = true;
+        plugin.handleConfig("save");
 
-                plugin.setLine(newText, line, player, src);
-
-            } else {
-                src.sendMessage(Text.of(TextColors.RED, "Missing text"));
-            }
+        if(src instanceof Player) {
+            plugin.updateAllScoreboards((Player) src);
+            src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Showing scoreboard for all players"));
         } else {
-            src.sendMessage(Text.of(TextColors.RED, "Missing line"));
+            plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
         }
 
         plugin.stopTPS();

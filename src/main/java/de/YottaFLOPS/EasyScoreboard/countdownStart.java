@@ -110,7 +110,7 @@ class countdownStart implements CommandExecutor {
 
                 } else {
                     if (!plugin.countdownCommand.equals("")) {
-                        commandManager.process(server, plugin.countdownCommand);
+                        commandManager.process(server, plugin.countdownCommand.replaceAll("'", "\""));
                     }
 
                     if(plugin.countdownXP) {

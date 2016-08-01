@@ -9,10 +9,11 @@ A Sponge plugin to create dynamic scoreboards
 5. Use the players name
 6. Use the number of online players
 7. Use the player balance of economy plugins
-8. Dynamically changes its size to be as small as possible
-9. See changes immediately
-10. Include countdowns in scoreboard, chat, XP-Bar and titles
-11. Single players can hide the scoreboard
+8. Show the current TPS
+9. Dynamically changes its size to be as small as possible
+10. See changes immediately
+11. Include countdowns in scoreboard, chat, XP-Bar and titles
+12. Single players can hide the scoreboard
 
 If you have ideas for more features please open an issue here:
 https://github.com/byYottaFLOPS/EasyScoreboards/issues
@@ -51,6 +52,11 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 `/easyscoreboard show` shows the scoreboard to the player who uses this command
 
 `/easyscoreboard hide` hides the scoreboard from the player who uses this command
+
+`/easyscoreboard showall` shows the scoreboard to all players (except if they are on the list of players that don't receive the scoreboard)
+
+`/easyscoreboard hideall` hides the scoreboard from all players without exceptions
+
 
 ### Countdown
 
@@ -97,6 +103,8 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
  easyscoreboard.clear 
  easyscoreboard.show
  easyscoreboard.hide
+ easyscoreboard.showall
+ easyscoreboard.hideall
  easyscoreboard.reload
  easyscoreboard.countdown.use
  easyscoreboard.countdown.set
@@ -111,7 +119,7 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 ## Replacements
 In the `<Text>` argument the following strings will be replaced.
 
-To use multiple colors and/or styles seperate the textparts with semicolons (;):
+To use multiple colors and/or styles separate the textparts with semicolons (;):
 `/easyscoreboard set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"`
 `/easyscoreboard set 1 "ITALICDifferent ;BOLDStyles"`
 
@@ -158,7 +166,9 @@ who sees the scoreboard
     is not recommended for large servers because it has to compute
     a new scoreboard for every player if a player leaves or joines
     
-`COUNTDOWN` will be replaced with the time left of the countdown. This will be wrapped into hours, minutes and seconds.
+`COUNTDOWN` will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.
+
+`TPS` will be replaced with the average ticks of the last 30 seconds. This updates every 30 seconds.
 
 ## Example
 `/easyscoreboard set 0 "BOLDGREENHello PLAYERNAME"`
