@@ -168,7 +168,7 @@ who sees the scoreboard
     
 `COUNTDOWN` will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.
 
-`TPS` will be replaced with the average ticks of the last 30 seconds. This updates every 30 seconds.
+`TPS` will be replaced with the average ticks of the last 10 seconds. This updates every 10 seconds.
 
 ## Example
 `/easyscoreboard set 0 "BOLDGREENHello PLAYERNAME"`
