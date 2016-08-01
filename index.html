@@ -35,6 +35,7 @@
 <li>Use the players name</li>
 <li>Use the number of online players</li>
 <li>Use the player balance of economy plugins</li>
+<li>Show the current TPS</li>
 <li>Dynamically changes its size to be as small as possible</li>
 <li>See changes immediately</li>
 <li>Include countdowns in scoreboard, chat, XP-Bar and titles</li>
@@ -92,6 +93,10 @@ If this is not possible just write it into the comments below or send me a PM he
 
 <p><code>/easyscoreboard hide</code> hides the scoreboard from the player who uses this command</p>
 
+<p><code>/easyscoreboard showall</code> shows the scoreboard to all players (except if they are on the list of players that don't receive the scoreboard)</p>
+
+<p><code>/easyscoreboard hideall</code> hides the scoreboard from all players without exceptions</p>
+
 <h3>
 <a id="countdown" class="anchor" href="#countdown" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Countdown</h3>
 
@@ -141,6 +146,8 @@ Notification for every seconds if the remaining time is smaller than 5 seconds
  easyscoreboard.clear 
  easyscoreboard.show
  easyscoreboard.hide
+ easyscoreboard.showall
+ easyscoreboard.hideall
  easyscoreboard.reload
  easyscoreboard.countdown.use
  easyscoreboard.countdown.set
@@ -157,7 +164,7 @@ Notification for every seconds if the remaining time is smaller than 5 seconds
 
 <p>In the <code>&lt;Text&gt;</code> argument the following strings will be replaced.</p>
 
-<p>To use multiple colors and/or styles seperate the textparts with semicolons (;):
+<p>To use multiple colors and/or styles separate the textparts with semicolons (;):
 <code>/easyscoreboard set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"</code>
 <code>/easyscoreboard set 1 "ITALICDifferent ;BOLDStyles"</code></p>
 
@@ -212,7 +219,9 @@ is not recommended for large servers because it has to compute
 a new scoreboard for every player if a player leaves or joines
 </code></pre>
 
-<p><code>COUNTDOWN</code> will be replaced with the time left of the countdown. This will be wrapped into hours, minutes and seconds.</p>
+<p><code>COUNTDOWN</code> will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.</p>
+
+<p><code>TPS</code> will be replaced with the average ticks of the last 30 seconds. This updates every 30 seconds.</p>
 
 <h2>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h2>
