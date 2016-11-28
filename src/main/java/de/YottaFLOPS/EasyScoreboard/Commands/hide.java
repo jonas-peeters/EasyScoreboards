@@ -1,6 +1,7 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Commands;
 
-import org.spongepowered.api.Sponge;
+import de.YottaFLOPS.EasyScoreboard.Config;
+import de.YottaFLOPS.EasyScoreboard.Main;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -11,11 +12,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
-class showall implements CommandExecutor {
+public class hide implements CommandExecutor {
 
     private final Main plugin;
 
-    showall(Main instance) {
+    public hide(Main instance) {
         plugin = instance;
     }
 
@@ -23,20 +24,11 @@ class showall implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        plugin.showall = true;
-        plugin.handleConfig("save");
+        Main.dontShowFor.add(src.getName());
+        Config.save();
+        plugin.setScoreboard((Player) src);
 
-        if(src instanceof Player) {
-            plugin.updateAllScoreboards((Player) src);
-            src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Showing scoreboard for all players"));
-        } else {
-            plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
-        }
-
-        plugin.stopTPS();
-        if(plugin.checkIfUsedTPS()) {
-            plugin.startTPS();
-        }
+        src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Hide scoreboard"));
 
         return CommandResult.success();
     }

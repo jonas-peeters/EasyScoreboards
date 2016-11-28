@@ -1,5 +1,8 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Commands;
 
+import de.YottaFLOPS.EasyScoreboard.Checks;
+import de.YottaFLOPS.EasyScoreboard.Main;
+import de.YottaFLOPS.EasyScoreboard.TPS;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -10,11 +13,11 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-class setLine implements CommandExecutor {
+public class setLine implements CommandExecutor {
 
     private final Main plugin;
 
-    setLine(Main instance) {
+    public setLine(Main instance) {
         plugin = instance;
     }
 
@@ -37,9 +40,9 @@ class setLine implements CommandExecutor {
             src.sendMessage(Text.of(TextColors.RED, "Missing line"));
         }
 
-        plugin.stopTPS();
-        if(plugin.checkIfUsedTPS()) {
-            plugin.startTPS();
+        TPS.stopTPS();
+        if(Checks.checkIfUsedTPS(Main.scoreboardText)) {
+            TPS.startTPS(plugin);
         }
 
         return CommandResult.success();

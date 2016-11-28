@@ -1,5 +1,6 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Commands.Countdown;
 
+import de.YottaFLOPS.EasyScoreboard.Main;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -8,18 +9,14 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-class countdownStop implements CommandExecutor {
+public class countdownStop implements CommandExecutor {
 
-    private final Main plugin;
-
-    countdownStop(Main instance) {
-        plugin = instance;
-    }
+    public countdownStop() {}
 
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
 
-        plugin.countdownTask.cancel();
+        Main.countdownTask.cancel();
         commandSource.sendMessage(Text.of(TextColors.GRAY, "The countdown has been stopped"));
 
         return CommandResult.success();

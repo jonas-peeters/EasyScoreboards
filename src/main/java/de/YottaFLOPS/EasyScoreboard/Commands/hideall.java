@@ -1,5 +1,8 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Commands;
 
+import de.YottaFLOPS.EasyScoreboard.Config;
+import de.YottaFLOPS.EasyScoreboard.Main;
+import de.YottaFLOPS.EasyScoreboard.TPS;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -11,11 +14,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
-class hideall implements CommandExecutor {
+public class hideall implements CommandExecutor {
 
     private final Main plugin;
 
-    hideall(Main instance) {
+    public hideall(Main instance) {
         plugin = instance;
     }
 
@@ -23,8 +26,8 @@ class hideall implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        plugin.showall = false;
-        plugin.handleConfig("save");
+        Main.showAll = false;
+        Config.save();
 
         if(src instanceof Player) {
             plugin.updateAllScoreboards((Player) src);
@@ -33,7 +36,7 @@ class hideall implements CommandExecutor {
             plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
         }
 
-        plugin.stopTPS();
+        TPS.stopTPS();
 
         return CommandResult.success();
     }
