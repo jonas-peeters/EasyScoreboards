@@ -8,7 +8,7 @@ import org.spongepowered.api.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-class Conversions {
+public class Conversions {
     //Converts a line-string into the Sponge text for multiple colors
     static Text lineToTexts(String s) {
         String[] strings = s.split(";");
@@ -65,5 +65,30 @@ class Conversions {
         }
 
         return  time;
+    }
+
+    //Converts a time in ticks into a human readable format
+    public static String ticksToTime(long ticksGiven){
+        long ticksLeft = ticksGiven;
+        String hours = "0";
+        String minutes = "0";
+
+        while(ticksLeft >= 1000) {
+            hours = String.valueOf(Integer.valueOf(hours) + 1);
+            ticksLeft = ticksLeft - 1000;
+        }
+        while(ticksLeft >= 167) {
+            minutes = String.valueOf(Integer.valueOf(minutes) + 10);
+            ticksLeft = ticksLeft - 167;
+        }
+
+        if(hours.length() == 1) {
+            hours = "0" + hours;
+        }
+        if(minutes.length() == 1) {
+            minutes = "0" + minutes;
+        }
+
+        return hours + ":" + minutes;
     }
 }

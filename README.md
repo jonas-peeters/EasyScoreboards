@@ -9,11 +9,13 @@ A Sponge plugin to create dynamic scoreboards
 5. Use the players name
 6. Use the number of online players
 7. Use the player balance of economy plugins
-8. Show the current TPS
-9. Dynamically changes its size to be as small as possible
-10. See changes immediately
-11. Include countdowns in scoreboard, chat, XP-Bar and titles
-12. Single players can hide the scoreboard
+8. Show the current Ticks per second
+9. Show the current time both from minecraft and the server time
+10. Dynamically changes its size to be as small as possible
+11. See changes immediately
+12. Include countdowns in scoreboard, chat, XP-Bar and titles
+13. Single players can hide the scoreboard
+
 
 If you have ideas for more features please open an issue here:
 https://github.com/byYottaFLOPS/EasyScoreboards/issues
@@ -26,7 +28,7 @@ https://forums.spongepowered.org/users/yottaflops/
 3. Edit the text by commands
 
 ##Links (Download)
-Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest
+**Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest**
 
 This guide: http://byyottaflops.github.io/EasyScoreboards/
 
@@ -35,11 +37,11 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 ## Commands
     !! Changes are instantly applied for all players !!
 
-> Instead of `/easyscoreboard` you can also use `/esb`
+> Instead of `/esb` you can also use `/easyscoreboard`
 
 ### Scoreboard
 
-`/easyscoreboard set <Line> <Text>`
+`/esb set <Line> <Text>`
 
 `<Line>` is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.
 
@@ -47,34 +49,34 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
     To use multiple colors and styles separate the parts with semicolons (;)
 
-`/easyscoreboard clear` will clear the scoreboard and remove it from every player.
+`/esb clear` will clear the scoreboard and remove it from every player.
 
-`/easyscoreboard show` shows the scoreboard to the player who uses this command
+`/esb show` shows the scoreboard to the player who uses this command
 
-`/easyscoreboard hide` hides the scoreboard from the player who uses this command
+`/esb hide` hides the scoreboard from the player who uses this command
 
-`/easyscoreboard showall` shows the scoreboard to all players (except if they are on the list of players that don't receive the scoreboard)
+`/esb showall` shows the scoreboard to all players (except if they are on the list of players that don't receive the scoreboard)
 
-`/easyscoreboard hideall` hides the scoreboard from all players without exceptions
+`/esb hideall` hides the scoreboard from all players without exceptions
 
 
 ### Countdown
 
-`/easyscoreboard countdown set <Seconds> <Command>`
+`/esb countdown set <Seconds> <Command>`
 
     The `<Command>` will be executed after the countdown is over.
     If you want to use quotation marks (") in the command, just replace them with
     single quotation marks (')
 
 
-`/easyscoreboard countdown xp <true/false>` Choose if the countdown should be shown in the experience bar of the players.
+`/esb countdown xp <true/false>` Choose if the countdown should be shown in the experience bar of the players.
 
     Using the XP countdown is not recommended for countdowns larger than a few 
     minutes as this countdown wont be seperated in hours, minutes and seconds.
 
-`/easyscoreboard countdown chat <true/false>` Choose if there should be a countdown in the chat.
+`/esb countdown chat <true/false>` Choose if there should be a countdown in the chat.
 
-`/easyscoreboard countdown title <true/false>` Choose if there should be a countdown in the form of titles.
+`/esb countdown title <true/false>` Choose if there should be a countdown in the form of titles.
 
     The countdown in the title and in the chat will be shown like this:
     
@@ -85,11 +87,11 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
     Notification for every seconds if the remaining time is smaller than 5 seconds
 
 
-`/easyscoreboard countdown start` starts the countdown.
+`/esb countdown start` starts the countdown.
 
-`/easyscoreboard countdown stop` stops the countdown. If you run start afterwards it will continue.
+`/esb countdown stop` stops the countdown. If you run start afterwards it will continue.
 
-`/easyscoreboard countdown reset` resets the countdown to the time defined.
+`/esb countdown reset` resets the countdown to the time defined.
 
 
 ### Other
@@ -116,39 +118,43 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
  easyscoreboard.countdown.title
 
 
-## Replacements
+## Placeholders
 In the `<Text>` argument the following strings will be replaced.
 
 To use multiple colors and/or styles separate the textparts with semicolons (;):
-`/easyscoreboard set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"`
-`/easyscoreboard set 1 "ITALICDifferent ;BOLDStyles"`
+`/esb set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"`
+`/esb set 1 "ITALICDifferent ;BOLDStyles"`
 
 ### Colors
-`AQUA`
-`BLUE`
-`GOLD`
-`GREEN`
-`YELLOW`
-`RED`
-`LIGHT_PURPLE`
-`DARK_AQUA`
-`DARK_BLUE`
-`DARK_GREEN`
-`DARK_RED`
-`DARK_PURPLE`
-`WHITE`
-`GRAY`
-`DARK_GRAY`
-`BLACK`
+* `AQUA` or `&b`
+* `BLUE` or `&9`
+* `GOLD` or `&6`
+* `GREEN` or `&a`
+* `YELLOW` or `&e`
+* `RED` or `&c`
+* `LIGHT_PURPLE` or `&d`
+* `DARK_AQUA` or `&3`
+* `DARK_BLUE` or `&1`
+* `DARK_GREEN` or `&2`
+* `DARK_RED` or `&4`
+* `DARK_PURPLE` or `&d`
+* `WHITE` or `&f`
+* `GRAY` or `&7`
+* `DARK_GRAY` or `&8`
+* `BLACK` or `&0`
 
 These will be replaced with the equivalent color.
 
+![Colors](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot4_colors.png?raw=true)
+
 ### Styles
-`BOLD`
-`OBFUSCATED`
-`ITALIC`
-`STRIKETHROUGH`
-`UNDERLINE`
+* `BOLD` or `&l`
+* `OBFUSCATED` or `&k`
+* `ITALIC` or `&o`
+* `STRIKETHROUGH` or `&m`
+* `UNDERLINE` or `&n`
+
+![Styles](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true)
 
 ### Other
 `PLAYERNAME` will be replaced with the name of the player
@@ -158,7 +164,7 @@ who sees the scoreboard
 
     Please note that the usage of `PLAYERBALANCE` will give you  
     an error in the console on 1.8 because the economy API is 
-    not implemented in this version
+    not implemented in this version.
 
 `ONLINECOUNT` will be replaced with the number of online players
 
@@ -168,32 +174,38 @@ who sees the scoreboard
     
 `COUNTDOWN` will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.
 
-`TPS` will be replaced with the average ticks of the last 10 seconds. This updates every 10 seconds.
+`TPS` will be replaced with the average ticks of the last 10 seconds. It will update every 10 seconds.
+
+`MTIME` is the current time Minecraft. Updates every 8.35 seconds aka every 10 Minecraft-Minutes.
+
+`STIME` is the time the server has. Updates every 60 seconds.
+
+![Placeholders](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true)
 
 ## Example
-`/easyscoreboard set 0 "BOLDGREENHello PLAYERNAME"`
+`/esb set 0 "BOLDGREENHello PLAYERNAME"`
 
-`/easyscoreboard set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"`
+`/esb set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"`
 
-`/easyscoreboard set 2 "--------------------"`
+`/esb set 2 "--------------------"`
 
-`/easyscoreboard set 3 "GREENMoney:"`
+`/esb set 3 "GREENMoney:"`
 
-`/easyscoreboard set 4 " PLAYERBALANCE"`
+`/esb set 4 " PLAYERBALANCE"`
 
-`/easyscoreboard set 5 "--------------------"`
+`/esb set 5 "--------------------"`
 
-`/easyscoreboard set 6 "GREENPlayers Online:"`
+`/esb set 6 "GREENPlayers Online:"`
 
-`/easyscoreboard set 7 " ONLINECOUNT"`
+`/esb set 7 " ONLINECOUNT"`
 
-`/easyscoreboard set 8 "--------------------"`
+`/esb set 8 "--------------------"`
 
-`/easyscoreboard set 9 "GREENCountdown:"`
+`/esb set 9 "GREENCountdown:"`
 
-`/easyscoreboard set 10 " COUNTDOWN"`
+`/esb set 10 " COUNTDOWN"`
 
-`/easyscoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
+`/esb countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
 
 Result:
 ![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot2.png?raw=true)
@@ -201,7 +213,6 @@ Result:
 ## Bugs & Feature Requests
 There are no bugs.
 
-But in case you found one or you have a new stunning feature that must be included, please open an issue here: 
-https://github.com/byYottaFLOPS/EasyScoreboards/issues
-If this is not possible just write it into the comments below or send me a PM here:
-https://forums.spongepowered.org/users/yottaflops/
+But in case you found one or you have a new stunning feature that must be included, please open an issue 
+[here](https://github.com/byYottaFLOPS/EasyScoreboards/issues), just write it into the comments below or send me a PM
+[here](https://forums.spongepowered.org/users/yottaflops/)

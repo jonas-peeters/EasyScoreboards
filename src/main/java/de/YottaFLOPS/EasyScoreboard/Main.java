@@ -5,6 +5,7 @@ import de.YottaFLOPS.EasyScoreboard.Commands.*;
 import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.*;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
 
+import de.YottaFLOPS.EasyScoreboard.Replacements.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -35,7 +36,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 
-@Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "1.6.1", description = "A plugin " +
+@Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "1.7.0", description = "A plugin " +
         "to easily create scoreboards for lobbys")
 public class Main {
 
@@ -44,7 +45,7 @@ public class Main {
     public boolean bufferable = true;
     public boolean usedPlayerCount = false;
     private Scoreboard bufferedScoreboard;
-    private Logger logger;
+    private static Logger logger;
     private EconomyService economyService;
     public static int countdownTime = 60;
     public static int countdownTimeUse = 0;
@@ -182,7 +183,13 @@ public class Main {
         bufferable = Checks.checkIfBufferable(scoreboardText);
         usedPlayerCount = Checks.checkIfUsedPlayerCount(scoreboardText);
         if(Checks.checkIfUsedTPS(scoreboardText)) {
-            TPS.startTPS(this);
+            Runnables.startTPS(this);
+        }
+        if(Checks.checkIfUsedMTime(scoreboardText)) {
+            Runnables.startMTime(this);
+        }
+        if(Checks.checkIfUsedSTime(scoreboardText)) {
+            Runnables.startSTime(this);
         }
 
     }
@@ -238,6 +245,7 @@ public class Main {
 
     //Generating the scoreboard
     public Scoreboard makeScoreboard(Player player) {
+
         Scoreboard scoreboard = Scoreboard.builder().build();
 
         List<Score> lines = new ArrayList<>();
@@ -272,8 +280,8 @@ public class Main {
                 }
             }
             if(loadedData[i].contains("TPS")) {
-                if(Replacements.replacePlaceholders(loadedData[i].replace("TPS", String.valueOf(Math.round(100.0 * TPS.lastTPS) / 100.0))).length() < 30) {
-                    loadedData[i] = loadedData[i].replace("TPS", String.valueOf(Math.round(100.0 * TPS.lastTPS) / 100.0));
+                if(Replacements.replacePlaceholders(loadedData[i].replace("TPS", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0))).length() < 30) {
+                    loadedData[i] = loadedData[i].replace("TPS", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0));
                 } else {
                     loadedData[i] = loadedData[i].replace("TPS", "");
                     logger.warn("Line " + i + " is to long");
@@ -284,6 +292,22 @@ public class Main {
                     loadedData[i] = loadedData[i].replace("COUNTDOWN", Conversions.secondsToTime(countdownTimeUse));
                 } else {
                     loadedData[i] = loadedData[i].replace("COUNTDOWN", "--");
+                    logger.warn("Line " + i + " is to long");
+                }
+            }
+            if(loadedData[i].contains("MTIME")) {
+                if(Replacements.replacePlaceholders(loadedData[i].replace("MTIME", Time.getMTime())).length() < 30) {
+                    loadedData[i] = loadedData[i].replace("MTIME", Time.getMTime());
+                } else {
+                    loadedData[i] = loadedData[i].replace("MTIME", "--");
+                    logger.warn("Line " + i + " is to long");
+                }
+            }
+            if(loadedData[i].contains("STIME")) {
+                if(Replacements.replacePlaceholders(loadedData[i].replace("STIME", Time.getSTime())).length() < 30) {
+                    loadedData[i] = loadedData[i].replace("STIME", Time.getSTime());
+                } else {
+                    loadedData[i] = loadedData[i].replace("STIME", "--");
                     logger.warn("Line " + i + " is to long");
                 }
             }

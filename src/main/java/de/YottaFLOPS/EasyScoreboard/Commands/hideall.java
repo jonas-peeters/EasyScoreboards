@@ -2,7 +2,7 @@ package de.YottaFLOPS.EasyScoreboard.Commands;
 
 import de.YottaFLOPS.EasyScoreboard.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.TPS;
+import de.YottaFLOPS.EasyScoreboard.Runnables;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -36,7 +36,7 @@ public class hideall implements CommandExecutor {
             plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
         }
 
-        TPS.stopTPS();
+        Runnables.stopTPS();
 
         return CommandResult.success();
     }

@@ -19,6 +19,12 @@ public class Replacements {
                 text = text.replaceAll(s, "");
             }
         }
+        if (text.contains("STIME")) {
+            text = text.replaceAll("STIME", Time.getSTime());
+        }
+        if (text.contains("MTIME")) {
+            text = text.replaceAll("MTIME", Time.getMTime());
+        }
 
         return text;
     }

@@ -3,7 +3,7 @@ package de.YottaFLOPS.EasyScoreboard.Commands;
 import de.YottaFLOPS.EasyScoreboard.Checks;
 import de.YottaFLOPS.EasyScoreboard.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.TPS;
+import de.YottaFLOPS.EasyScoreboard.Runnables;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -32,10 +32,17 @@ public class reload implements CommandExecutor {
             plugin.updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
         }
 
-        TPS.stopTPS();
-
+        Runnables.stopTPS();
+        Runnables.stopMTime();
+        Runnables.stopSTime();
         if (Checks.checkIfUsedTPS(Main.scoreboardText)) {
-            TPS.startTPS(plugin);
+            Runnables.startTPS(plugin);
+        }
+        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
+            Runnables.startMTime(plugin);
+        }
+        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
+            Runnables.startSTime(plugin);
         }
 
         return CommandResult.success();

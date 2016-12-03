@@ -29,10 +29,28 @@ public class Checks {
         return false;
     }
 
-    //Check for TPS
+    //Check for Runnables
     public static boolean checkIfUsedTPS(String[] scoreboardText) {
         for(String s : scoreboardText) {
             if(s.contains("TPS")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkIfUsedMTime(String[] scoreboardText) {
+        for(String s : scoreboardText) {
+            if(s.contains("MTIME")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkIfUsedSTime(String[] scoreboardText) {
+        for(String s : scoreboardText) {
+            if(s.contains("STIME")) {
                 return true;
             }
         }

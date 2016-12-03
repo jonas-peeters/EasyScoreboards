@@ -3,7 +3,7 @@ package de.YottaFLOPS.EasyScoreboard.Commands;
 import de.YottaFLOPS.EasyScoreboard.Checks;
 import de.YottaFLOPS.EasyScoreboard.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.TPS;
+import de.YottaFLOPS.EasyScoreboard.Runnables;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -37,9 +37,17 @@ public class showall implements CommandExecutor {
             plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
         }
 
-        TPS.stopTPS();
-        if(Checks.checkIfUsedTPS(Main.scoreboardText)) {
-            TPS.startTPS(plugin);
+        Runnables.stopTPS();
+        Runnables.stopMTime();
+        Runnables.stopSTime();
+        if (Checks.checkIfUsedTPS(Main.scoreboardText)) {
+            Runnables.startTPS(plugin);
+        }
+        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
+            Runnables.startMTime(plugin);
+        }
+        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
+            Runnables.startSTime(plugin);
         }
 
         return CommandResult.success();
