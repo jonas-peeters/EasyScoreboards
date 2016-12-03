@@ -35,17 +35,15 @@
 <li>Use the players name</li>
 <li>Use the number of online players</li>
 <li>Use the player balance of economy plugins</li>
-<li>Show the current TPS</li>
+<li>Show the current Ticks per second</li>
+<li>Show the current time both from minecraft and the server</li>
 <li>Dynamically changes its size to be as small as possible</li>
 <li>See changes immediately</li>
 <li>Include countdowns in scoreboard, chat, XP-Bar and titles</li>
 <li>Single players can hide the scoreboard</li>
 </ol>
 
-<p>If you have ideas for more features please open an issue here:
-<a href="https://github.com/byYottaFLOPS/EasyScoreboards/issues">https://github.com/byYottaFLOPS/EasyScoreboards/issues</a>
-If this is not possible just write it into the comments below or send me a PM here: 
-<a href="https://forums.spongepowered.org/users/yottaflops/">https://forums.spongepowered.org/users/yottaflops/</a></p>
+<p>If you have ideas for more features please open an issue <a href="https://github.com/byYottaFLOPS/EasyScoreboards/issues">here</a>, just write it into the comments below or send me a PM <a href="https://forums.spongepowered.org/users/yottaflops/">here</a></p>
 
 <h2>
 <a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
@@ -53,13 +51,13 @@ If this is not possible just write it into the comments below or send me a PM he
 <ol>
 <li>Place the plugin file in the mods folder of you Sponge server</li>
 <li>Start the server</li>
-<li>Edit the text by commands</li>
+<li>Edit the scoreboard with commands</li>
 </ol>
 
 <h2>
 <a id="links-download" class="anchor" href="#links-download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Links (Download)</h2>
 
-<p>Latest Release (Download): <a href="https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest">https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest</a></p>
+<p><strong>Latest Release (Download): <a href="https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest">https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest</a></strong></p>
 
 <p>This guide: <a href="http://byyottaflops.github.io/EasyScoreboards/">http://byyottaflops.github.io/EasyScoreboards/</a></p>
 
@@ -72,13 +70,13 @@ If this is not possible just write it into the comments below or send me a PM he
 </code></pre>
 
 <blockquote>
-<p>Instead of <code>/easyscoreboard</code> you can also use <code>/esb</code></p>
+<p>Instead of <code>/esb</code> you can also use <code>/easyscoreboard</code></p>
 </blockquote>
 
 <h3>
 <a id="scoreboard" class="anchor" href="#scoreboard" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoreboard</h3>
 
-<p><code>/easyscoreboard set &lt;Line&gt; &lt;Text&gt;</code></p>
+<p><code>/esb set &lt;Line&gt; &lt;Text&gt;</code></p>
 
 <p><code>&lt;Line&gt;</code> is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.</p>
 
@@ -87,35 +85,35 @@ If this is not possible just write it into the comments below or send me a PM he
 <pre><code>To use multiple colors and styles separate the parts with semicolons (;)
 </code></pre>
 
-<p><code>/easyscoreboard clear</code> will clear the scoreboard and remove it from every player.</p>
+<p><code>/esb clear</code> will clear the scoreboard and remove it from every player.</p>
 
-<p><code>/easyscoreboard show</code> shows the scoreboard to the player who uses this command</p>
+<p><code>/esb show</code> shows the scoreboard to the player who uses this command</p>
 
-<p><code>/easyscoreboard hide</code> hides the scoreboard from the player who uses this command</p>
+<p><code>/esb hide</code> hides the scoreboard from the player who uses this command</p>
 
-<p><code>/easyscoreboard showall</code> shows the scoreboard to all players (except if they are on the list of players that don't receive the scoreboard)</p>
+<p><code>/esb showall</code> shows the scoreboard to all players (except if they are on the list of players that don't receive the scoreboard)</p>
 
-<p><code>/easyscoreboard hideall</code> hides the scoreboard from all players without exceptions</p>
+<p><code>/esb hideall</code> hides the scoreboard from all players without exceptions</p>
 
 <h3>
 <a id="countdown" class="anchor" href="#countdown" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Countdown</h3>
 
-<p><code>/easyscoreboard countdown set &lt;Seconds&gt; &lt;Command&gt;</code></p>
+<p><code>/esb countdown set &lt;Seconds&gt; &lt;Command&gt;</code></p>
 
 <pre><code>The `&lt;Command&gt;` will be executed after the countdown is over.
 If you want to use quotation marks (") in the command, just replace them with
 single quotation marks (')
 </code></pre>
 
-<p><code>/easyscoreboard countdown xp &lt;true/false&gt;</code> Choose if the countdown should be shown in the experience bar of the players.</p>
+<p><code>/esb countdown xp &lt;true/false&gt;</code> Choose if the countdown should be shown in the experience bar of the players.</p>
 
 <pre><code>Using the XP countdown is not recommended for countdowns larger than a few 
 minutes as this countdown wont be seperated in hours, minutes and seconds.
 </code></pre>
 
-<p><code>/easyscoreboard countdown chat &lt;true/false&gt;</code> Choose if there should be a countdown in the chat.</p>
+<p><code>/esb countdown chat &lt;true/false&gt;</code> Choose if there should be a countdown in the chat.</p>
 
-<p><code>/easyscoreboard countdown title &lt;true/false&gt;</code> Choose if there should be a countdown in the form of titles.</p>
+<p><code>/esb countdown title &lt;true/false&gt;</code> Choose if there should be a countdown in the form of titles.</p>
 
 <pre><code>The countdown in the title and in the chat will be shown like this:
 
@@ -126,11 +124,11 @@ Notification for every 10 seconds if the remaining time is beetwen 10 and 60 sec
 Notification for every seconds if the remaining time is smaller than 5 seconds
 </code></pre>
 
-<p><code>/easyscoreboard countdown start</code> starts the countdown.</p>
+<p><code>/esb countdown start</code> starts the countdown.</p>
 
-<p><code>/easyscoreboard countdown stop</code> stops the countdown. If you run start afterwards it will continue.</p>
+<p><code>/esb countdown stop</code> stops the countdown. If you run start afterwards it will continue.</p>
 
-<p><code>/easyscoreboard countdown reset</code> resets the countdown to the time defined.</p>
+<p><code>/esb countdown reset</code> resets the countdown to the time defined.</p>
 
 <h3>
 <a id="other" class="anchor" href="#other" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
@@ -160,44 +158,94 @@ Notification for every seconds if the remaining time is smaller than 5 seconds
 </blockquote>
 
 <h2>
-<a id="replacements" class="anchor" href="#replacements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Replacements</h2>
+<a id="placeholders" class="anchor" href="#placeholders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Placeholders</h2>
 
 <p>In the <code>&lt;Text&gt;</code> argument the following strings will be replaced.</p>
 
 <p>To use multiple colors and/or styles separate the textparts with semicolons (;):
-<code>/easyscoreboard set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"</code>
-<code>/easyscoreboard set 1 "ITALICDifferent ;BOLDStyles"</code></p>
+<code>/esb set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"</code>
+<code>/esb set 1 "ITALICDifferent ;BOLDStyles"</code></p>
 
 <h3>
 <a id="colors" class="anchor" href="#colors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Colors</h3>
 
-<p><code>AQUA</code>
-<code>BLUE</code>
-<code>GOLD</code>
-<code>GREEN</code>
-<code>YELLOW</code>
-<code>RED</code>
-<code>LIGHT_PURPLE</code>
-<code>DARK_AQUA</code>
-<code>DARK_BLUE</code>
-<code>DARK_GREEN</code>
-<code>DARK_RED</code>
-<code>DARK_PURPLE</code>
-<code>WHITE</code>
-<code>GRAY</code>
-<code>DARK_GRAY</code>
-<code>BLACK</code></p>
+<ul>
+<li>
+<code>AQUA</code> or <code>&amp;b</code>
+</li>
+<li>
+<code>BLUE</code> or <code>&amp;9</code>
+</li>
+<li>
+<code>GOLD</code> or <code>&amp;6</code>
+</li>
+<li>
+<code>GREEN</code> or <code>&amp;a</code>
+</li>
+<li>
+<code>YELLOW</code> or <code>&amp;e</code>
+</li>
+<li>
+<code>RED</code> or <code>&amp;c</code>
+</li>
+<li>
+<code>LIGHT_PURPLE</code> or <code>&amp;d</code>
+</li>
+<li>
+<code>DARK_AQUA</code> or <code>&amp;3</code>
+</li>
+<li>
+<code>DARK_BLUE</code> or <code>&amp;1</code>
+</li>
+<li>
+<code>DARK_GREEN</code> or <code>&amp;2</code>
+</li>
+<li>
+<code>DARK_RED</code> or <code>&amp;4</code>
+</li>
+<li>
+<code>DARK_PURPLE</code> or <code>&amp;d</code>
+</li>
+<li>
+<code>WHITE</code> or <code>&amp;f</code>
+</li>
+<li>
+<code>GRAY</code> or <code>&amp;7</code>
+</li>
+<li>
+<code>DARK_GRAY</code> or <code>&amp;8</code>
+</li>
+<li>
+<code>BLACK</code> or <code>&amp;0</code>
+</li>
+</ul>
 
 <p>These will be replaced with the equivalent color.</p>
+
+<p><img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot4_colors.png?raw=true" alt="Colors"></p>
 
 <h3>
 <a id="styles" class="anchor" href="#styles" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Styles</h3>
 
-<p><code>BOLD</code>
-<code>OBFUSCATED</code>
-<code>ITALIC</code>
-<code>STRIKETHROUGH</code>
-<code>UNDERLINE</code></p>
+<ul>
+<li>
+<code>BOLD</code> or <code>&amp;l</code>
+</li>
+<li>
+<code>OBFUSCATED</code> or <code>&amp;k</code>
+</li>
+<li>
+<code>ITALIC</code> or <code>&amp;o</code>
+</li>
+<li>
+<code>STRIKETHROUGH</code> or <code>&amp;m</code>
+</li>
+<li>
+<code>UNDERLINE</code> or <code>&amp;n</code>
+</li>
+</ul>
+
+<p><img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true" alt="Styles"></p>
 
 <h3>
 <a id="other-1" class="anchor" href="#other-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other</h3>
@@ -209,7 +257,7 @@ who sees the scoreboard</p>
 
 <pre><code>Please note that the usage of `PLAYERBALANCE` will give you  
 an error in the console on 1.8 because the economy API is 
-not implemented in this version
+not implemented in this version.
 </code></pre>
 
 <p><code>ONLINECOUNT</code> will be replaced with the number of online players</p>
@@ -221,34 +269,40 @@ a new scoreboard for every player if a player leaves or joines
 
 <p><code>COUNTDOWN</code> will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.</p>
 
-<p><code>TPS</code> will be replaced with the average ticks of the last 30 seconds. This updates every 30 seconds.</p>
+<p><code>TPS</code> will be replaced with the average ticks of the last 10 seconds. It will update every 10 seconds.</p>
+
+<p><code>MTIME</code> is the current time Minecraft. Updates every 8.35 seconds aka every 10 Minecraft-Minutes.</p>
+
+<p><code>STIME</code> is the time the server has. Updates every 60 seconds.</p>
+
+<p><img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true" alt="Placeholders"></p>
 
 <h2>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h2>
 
-<p><code>/easyscoreboard set 0 "BOLDGREENHello PLAYERNAME"</code></p>
+<p><code>/esb set 0 "BOLDGREENHello PLAYERNAME"</code></p>
 
-<p><code>/easyscoreboard set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"</code></p>
+<p><code>/esb set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"</code></p>
 
-<p><code>/easyscoreboard set 2 "--------------------"</code></p>
+<p><code>/esb set 2 "--------------------"</code></p>
 
-<p><code>/easyscoreboard set 3 "GREENMoney:"</code></p>
+<p><code>/esb set 3 "GREENMoney:"</code></p>
 
-<p><code>/easyscoreboard set 4 " PLAYERBALANCE"</code></p>
+<p><code>/esb set 4 " PLAYERBALANCE"</code></p>
 
-<p><code>/easyscoreboard set 5 "--------------------"</code></p>
+<p><code>/esb set 5 "--------------------"</code></p>
 
-<p><code>/easyscoreboard set 6 "GREENPlayers Online:"</code></p>
+<p><code>/esb set 6 "GREENPlayers Online:"</code></p>
 
-<p><code>/easyscoreboard set 7 " ONLINECOUNT"</code></p>
+<p><code>/esb set 7 " ONLINECOUNT"</code></p>
 
-<p><code>/easyscoreboard set 8 "--------------------"</code></p>
+<p><code>/esb set 8 "--------------------"</code></p>
 
-<p><code>/easyscoreboard set 9 "GREENCountdown:"</code></p>
+<p><code>/esb set 9 "GREENCountdown:"</code></p>
 
-<p><code>/easyscoreboard set 10 " COUNTDOWN"</code></p>
+<p><code>/esb set 10 " COUNTDOWN"</code></p>
 
-<p><code>/easyscoreboard countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"</code></p>
+<p><code>/esb countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"</code></p>
 
 <p>Result:
 <img src="https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot2.png?raw=true" alt="Result"></p>
@@ -258,10 +312,8 @@ a new scoreboard for every player if a player leaves or joines
 
 <p>There are no bugs.</p>
 
-<p>But in case you found one or you have a new stunning feature that must be included, please open an issue here: 
-<a href="https://github.com/byYottaFLOPS/EasyScoreboards/issues">https://github.com/byYottaFLOPS/EasyScoreboards/issues</a>
-If this is not possible just write it into the comments below or send me a PM here:
-<a href="https://forums.spongepowered.org/users/yottaflops/">https://forums.spongepowered.org/users/yottaflops/</a></p>
+<p>But in case you found one or you have a new stunning feature that must be included, please open an issue 
+<a href="https://github.com/byYottaFLOPS/EasyScoreboards/issues">here</a>, just write it into the comments below or send me a PM <a href="https://forums.spongepowered.org/users/yottaflops/">here</a></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/byYottaFLOPS/EasyScoreboards">Easyscoreboards</a> is maintained by <a href="https://github.com/byYottaFLOPS">byYottaFLOPS</a>.</span>
