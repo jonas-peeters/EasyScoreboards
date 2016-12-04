@@ -37,30 +37,30 @@ public class Config {
             node = configLoader.createEmptyNode(ConfigurationOptions.defaults());
 
             ConfigurationNode newNode = node.getNode("scoreboard").getNode("line");
-            newNode.getNode("0").setValue("Example Scoreboard");
-            newNode.getNode("1").setValue("This is an");
-            newNode.getNode("2").setValue("example for");
-            newNode.getNode("3").setValue("how you could");
-            newNode.getNode("4").setValue("use this plugin");
-            newNode.getNode("5").setValue(" ");
-            newNode.getNode("6").setValue(" ");
-            newNode.getNode("7").setValue(" ");
-            newNode.getNode("8").setValue(" ");
-            newNode.getNode("9").setValue(" ");
-            newNode.getNode("10").setValue(" ");
-            newNode.getNode("11").setValue(" ");
-            newNode.getNode("12").setValue(" ");
-            newNode.getNode("13").setValue(" ");
-            newNode.getNode("14").setValue(" ");
-            newNode.getNode("15").setValue(" ");
+            newNode.getNode("0").setValue("GREENBOLDHi; GOLDBOLDPLAYERNAME:");
+            newNode.getNode("1").setValue("GREENMain command:");
+            newNode.getNode("2").setValue("    /esb");
+            newNode.getNode("3").setValue("----------------------");
+            newNode.getNode("4").setValue("GREENEdit line:");
+            newNode.getNode("5").setValue("    /esb set <Line> <Text>");
+            newNode.getNode("6").setValue("----------------------");
+            newNode.getNode("7").setValue("GREENStart countdown:");
+            newNode.getNode("8").setValue("    /esb countdown start");
+            newNode.getNode("9").setValue("");
+            newNode.getNode("10").setValue("");
+            newNode.getNode("11").setValue("");
+            newNode.getNode("12").setValue("");
+            newNode.getNode("13").setValue("");
+            newNode.getNode("14").setValue("");
+            newNode.getNode("15").setValue("");
 
             node.getNode("scoreboard").getNode("hideFor").setValue(" ");
             node.getNode("scoreboard").getNode("showForAll").setValue(true);
-            node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(0);
+            node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(11);
             node.getNode("scoreboard").getNode("countdown").getNode("command").setValue("say The countdown is over");
-            node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(false);
+            node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(true);
             node.getNode("scoreboard").getNode("countdown").getNode("xp").setValue(false);
-            node.getNode("scoreboard").getNode("countdown").getNode("title").setValue(false);
+            node.getNode("scoreboard").getNode("countdown").getNode("title").setValue(true);
 
             try {
                 configLoader.save(node);

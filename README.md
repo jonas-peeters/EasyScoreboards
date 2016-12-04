@@ -10,7 +10,7 @@ A Sponge plugin to create dynamic scoreboards
 6. Use the number of online players
 7. Use the player balance of economy plugins
 8. Show the current Ticks per second
-9. Show the current time both from minecraft and the server time
+9. Show the current time both from minecraft and the server
 10. Dynamically changes its size to be as small as possible
 11. See changes immediately
 12. Include countdowns in scoreboard, chat, XP-Bar and titles
@@ -25,12 +25,12 @@ https://forums.spongepowered.org/users/yottaflops/
 ## Setup
 1. Place the plugin file in the mods folder of you Sponge server
 2. Start the server
-3. Edit the text by commands
+3. Edit the scoreboard by commands
 
 ##Links (Download)
 **Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest**
 
-This guide: http://byyottaflops.github.io/EasyScoreboards/
+Guide: http://byyottaflops.github.io/EasyScoreboards/
 
 Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
