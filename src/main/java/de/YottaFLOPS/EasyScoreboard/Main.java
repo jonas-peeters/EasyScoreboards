@@ -1,11 +1,13 @@
 package de.YottaFLOPS.EasyScoreboard;
 
-import com.google.inject.Inject;
-import de.YottaFLOPS.EasyScoreboard.Commands.*;
-import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.*;
-import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
+import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
-import de.YottaFLOPS.EasyScoreboard.Replacements.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -29,11 +31,27 @@ import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.*;
+import org.spongepowered.api.text.format.TextColors;
 
-import java.math.BigDecimal;
-import java.nio.file.Path;
-import java.util.*;
+import com.google.inject.Inject;
+
+import de.YottaFLOPS.EasyScoreboard.Commands.clearAll;
+import de.YottaFLOPS.EasyScoreboard.Commands.hide;
+import de.YottaFLOPS.EasyScoreboard.Commands.hideall;
+import de.YottaFLOPS.EasyScoreboard.Commands.reload;
+import de.YottaFLOPS.EasyScoreboard.Commands.setLine;
+import de.YottaFLOPS.EasyScoreboard.Commands.show;
+import de.YottaFLOPS.EasyScoreboard.Commands.showall;
+import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.countdownChat;
+import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.countdownReset;
+import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.countdownSet;
+import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.countdownStart;
+import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.countdownStop;
+import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.countdownTitle;
+import de.YottaFLOPS.EasyScoreboard.Commands.Countdown.countdownXP;
+import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
+import de.YottaFLOPS.EasyScoreboard.Replacements.Time;
+import me.rojo8399.placeholderapi.PlaceholderAPI;
 
 
 @Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "1.7.0", description = "A plugin " +
@@ -311,6 +329,10 @@ public class Main {
                     logger.warn("Line " + i + " is to long");
                 }
             }
+            
+            if (placeholderapiEnabled()) {
+            	loadedData[i] = PlaceholderAPI.setPlaceholders(player, loadedData[i]);
+            }
 
             if(Replacements.replacePlaceholders(loadedData[i]).length() > 29) {
                 return Scoreboard.builder().build();
@@ -435,4 +457,9 @@ public class Main {
         }
         return true;
     }
+    
+    public static boolean placeholderapiEnabled() {
+    	return Sponge.getPluginManager().getPlugin("placeholderapi").isPresent();
+    }
+    
 }

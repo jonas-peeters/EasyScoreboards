@@ -1,12 +1,13 @@
 package de.YottaFLOPS.EasyScoreboard;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.spongepowered.api.text.Text;
+
 import de.YottaFLOPS.EasyScoreboard.Replacements.Colors;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Styles;
-import org.spongepowered.api.text.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Conversions {
     //Converts a line-string into the Sponge text for multiple colors
