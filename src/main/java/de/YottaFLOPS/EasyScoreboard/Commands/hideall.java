@@ -14,7 +14,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
-public class hideall implements CommandExecutor {
+class hideall implements CommandExecutor {
 
     private final Main plugin;
 

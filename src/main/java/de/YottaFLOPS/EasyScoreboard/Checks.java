@@ -13,7 +13,7 @@ public class Checks {
 
     static boolean checkIfUsedPlayerCount(String[] scoreboardText) {
         for(String s : scoreboardText) {
-            if(s.contains("ONLINECOUNT")) {
+            if(s.contains("%ONLINECOUNT%")) {
                 return true;
             }
         }
@@ -22,7 +22,7 @@ public class Checks {
 
     static boolean checkIfUsedPlayerBalance(String[] scoreboardText) {
         for(String s : scoreboardText) {
-            if(s.contains("PLAYERBALANCE")) {
+            if(s.contains("%PLAYERBALANCE%")) {
                 return true;
             }
         }
@@ -32,7 +32,7 @@ public class Checks {
     //Check for Runnables
     public static boolean checkIfUsedTPS(String[] scoreboardText) {
         for(String s : scoreboardText) {
-            if(s.contains("TPS")) {
+            if(s.contains("%TPS%")) {
                 return true;
             }
         }
@@ -41,7 +41,7 @@ public class Checks {
 
     public static boolean checkIfUsedMTime(String[] scoreboardText) {
         for(String s : scoreboardText) {
-            if(s.contains("MTIME")) {
+            if(s.contains("%MTIME%")) {
                 return true;
             }
         }
@@ -50,7 +50,7 @@ public class Checks {
 
     public static boolean checkIfUsedSTime(String[] scoreboardText) {
         for(String s : scoreboardText) {
-            if(s.contains("STIME")) {
+            if(s.contains("%STIME%")) {
                 return true;
             }
         }

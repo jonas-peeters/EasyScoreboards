@@ -5,8 +5,8 @@ import org.spongepowered.api.text.format.TextStyles;
 
 public class Styles {
 
-    private static final String[] styleStrings = new String[]{"BOLD","OBFUSCATED","ITALIC","STRIKETHROUGH","UNDERLINE",
-            "&l", "&k", "&o", "&m", "&n"};
+    private static final String[] styleStrings = new String[]{"%BOLD%","%OBFUSCATED%","%ITALIC%","%STRIKETHROUGH%",
+            "%UNDERLINE%", "%&l%", "%&k%", "%&o%", "%&m%", "%&n%"};
     private static final TextStyle[] styles = new TextStyle[]{TextStyles.BOLD, TextStyles.OBFUSCATED, TextStyles.ITALIC,
             TextStyles.STRIKETHROUGH, TextStyles.UNDERLINE, TextStyles.BOLD, TextStyles.OBFUSCATED, TextStyles.ITALIC,
             TextStyles.STRIKETHROUGH, TextStyles.UNDERLINE};

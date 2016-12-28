@@ -12,7 +12,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
-public class hide implements CommandExecutor {
+class hide implements CommandExecutor {
 
     private final Main plugin;
 
@@ -24,11 +24,12 @@ public class hide implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        Main.dontShowFor.add(src.getName());
-        Config.save();
-        plugin.setScoreboard((Player) src);
-
-        src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Hide scoreboard"));
+        if (src instanceof Player) {
+            Main.dontShowFor.add(src.getName());
+            Config.save();
+            plugin.setScoreboard((Player) src);
+            src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Hiding scoreboard"));
+        }
 
         return CommandResult.success();
     }

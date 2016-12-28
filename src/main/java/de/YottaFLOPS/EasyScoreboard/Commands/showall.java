@@ -15,7 +15,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
-public class showall implements CommandExecutor {
+class showall implements CommandExecutor {
 
     private final Main plugin;
 

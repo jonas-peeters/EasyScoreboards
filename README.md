@@ -35,7 +35,8 @@ Guide: http://byyottaflops.github.io/EasyScoreboards/
 Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 ## Commands
-    !! Changes are instantly applied for all players !!
+    Changes are instantly applied for all players
+    To avoid this you should edit the config file and then reload the plugin
 
 > Instead of `/esb` you can also use `/easyscoreboard`
 
@@ -65,6 +66,7 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 `/esb countdown set <Seconds> <Command>`
 
     The `<Command>` will be executed after the countdown is over.
+    You can to anything from writing in the chat over placing a block to summon a monster.
     If you want to use quotation marks (") in the command, just replace them with
     single quotation marks (')
 
@@ -84,7 +86,7 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
     Notification for every 10 minutes if the remaining time is beetwen 600 seconds and 3600 seconds (10 and 60 minutes)
     Notification for every minute if the remaining time is beetwen 60 seconds and 600 seconds (1 and 10 minutes)
     Notification for every 10 seconds if the remaining time is beetwen 10 and 60 seconds
-    Notification for every seconds if the remaining time is smaller than 5 seconds
+    Notification for every second if the remaining time is smaller than 5 seconds
 
 
 `/esb countdown start` starts the countdown.
@@ -96,7 +98,8 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 ### Other
 
-`/easyscoreboard reload` reloads the config file. If you made any changes in it these will be applied instantly.
+To reload the config file, just use the Plugin reload command from Sponge: `/sponge plugins reload`. 
+If you made any changes to the config file these will be applied instantly.
 
 ## Permissions
 
@@ -119,91 +122,91 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 
 ## Placeholders
-In the `<Text>` argument the following strings will be replaced.
+In the `<Text>` argument there are a few strings that will be replaced. These are always surrounded with %.
 
-To use multiple colors and/or styles separate the textparts with semicolons (;):
-`/esb set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"`
-`/esb set 1 "ITALICDifferent ;BOLDStyles"`
+To use multiple colors and/or styles separate the parts of the text with semicolons (;):
+`/esb set 1 "%AQUA%C;%BLUE%o;%GOLD%l;%GREEN%o;%YELLOW%r;%RED%f;%WHITE%u;%BLACK%l"`
+`/esb set 1 "%ITALIC%Different ;%BOLD%Styles"`
 
 ### Colors
-* `AQUA` or `&b`
-* `BLUE` or `&9`
-* `GOLD` or `&6`
-* `GREEN` or `&a`
-* `YELLOW` or `&e`
-* `RED` or `&c`
-* `LIGHT_PURPLE` or `&d`
-* `DARK_AQUA` or `&3`
-* `DARK_BLUE` or `&1`
-* `DARK_GREEN` or `&2`
-* `DARK_RED` or `&4`
-* `DARK_PURPLE` or `&d`
-* `WHITE` or `&f`
-* `GRAY` or `&7`
-* `DARK_GRAY` or `&8`
-* `BLACK` or `&0`
+* `%AQUA%` or `%&b%`
+* `%BLUE%` or `%&9%`
+* `%GOLD%` or `%&6%`
+* `%GREEN%` or `%&a%`
+* `%YELLOW%` or `%&e%`
+* `%RED%` or `%&c%`
+* `%LIGHT_PURPLE%` or `%&d%`
+* `%DARK_AQUA%` or `%&3%`
+* `%DARK_BLUE%` or `%&1%`
+* `%DARK_GREEN%` or `%&2%`
+* `%DARK_RED%` or `%&4%`
+* `%DARK_PURPLE%` or `%&d%`
+* `%WHITE%` or `%&f%`
+* `%GRAY%` or `%&7%`
+* `%DARK_GRAY%` or `%&8%`
+* `%BLACK%` or `%&0%`
 
 These will be replaced with the equivalent color.
 
 ![Colors](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot4_colors.png?raw=true)
 
 ### Styles
-* `BOLD` or `&l`
-* `OBFUSCATED` or `&k`
-* `ITALIC` or `&o`
-* `STRIKETHROUGH` or `&m`
-* `UNDERLINE` or `&n`
+* `%BOLD%` or `%&l%`
+* `%OBFUSCATED%` or `%&k%`
+* `%ITALIC%` or `%&o%`
+* `%STRIKETHROUGH%` or `%&m%`
+* `%UNDERLINE%` or `%&n%`
 
 ![Styles](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true)
 
 ### Other
-`PLAYERNAME` will be replaced with the name of the player
+`%PLAYERNAME%` will be replaced with the name of the player
 who sees the scoreboard
 
-`PLAYERBALANCE` will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API
+`%PLAYERBALANCE%` will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API
 
     Please note that the usage of `PLAYERBALANCE` will give you  
     an error in the console on 1.8 because the economy API is 
     not implemented in this version.
 
-`ONLINECOUNT` will be replaced with the number of online players
+`%ONLINECOUNT%` will be replaced with the number of online players
 
     Using "PLAYERNAME"/"PLAYERBALANCE" together with "ONLINECOUNT"
     is not recommended for large servers because it has to compute
     a new scoreboard for every player if a player leaves or joines
     
-`COUNTDOWN` will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.
+`%COUNTDOWN%` will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.
 
-`TPS` will be replaced with the average ticks of the last 10 seconds. It will update every 10 seconds.
+`%TPS%` will be replaced with the average ticks of the last 10 seconds. It will update every 10 seconds.
 
-`MTIME` is the current time Minecraft. Updates every 8.35 seconds aka every 10 Minecraft-Minutes.
+`%MTIME%` is the current time Minecraft. Updates every 8.35 seconds aka every 10 Minecraft-Minutes.
 
-`STIME` is the time the server has. Updates every 60 seconds.
+`%STIME%` is the time the server has. Updates every 60 seconds.
 
 ![Placeholders](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true)
 
 ## Example
-`/esb set 0 "BOLDGREENHello PLAYERNAME"`
+`/esb set 0 "%BOLD%%GREEN%Hello %PLAYERNAME%"`
 
-`/esb set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"`
+`/esb set 1 "%DARK_PURPLE%Welcome to the ;%YELLOW%%BOLD%se;%GOLD%%BOLD%rv;%RED%%BOLD%er"`
 
 `/esb set 2 "--------------------"`
 
-`/esb set 3 "GREENMoney:"`
+`/esb set 3 "%GREEN%Money:"`
 
-`/esb set 4 " PLAYERBALANCE"`
+`/esb set 4 " %PLAYERBALANCE%"`
 
 `/esb set 5 "--------------------"`
 
-`/esb set 6 "GREENPlayers Online:"`
+`/esb set 6 "%GREEN%Players Online:"`
 
-`/esb set 7 " ONLINECOUNT"`
+`/esb set 7 " %ONLINECOUNT%"`
 
 `/esb set 8 "--------------------"`
 
-`/esb set 9 "GREENCountdown:"`
+`/esb set 9 "%GREEN%Countdown:"`
 
-`/esb set 10 " COUNTDOWN"`
+`/esb set 10 " %COUNTDOWN%"`
 
 `/esb countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
 

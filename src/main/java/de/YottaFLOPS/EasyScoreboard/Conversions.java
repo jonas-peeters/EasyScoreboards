@@ -24,11 +24,11 @@ public class Conversions {
 
     //Converts a string into the Sponge Text
     private static Text stringToText(String s) {
-        return Text.of(Colors.getColor(s), Styles.getStyles(s), Replacements.replacePlaceholders(s));
+        return Text.of(Colors.getColor(s), Styles.getStyles(s), Replacements.removePlaceholders(s));
     }
 
     //Converts a time in seconds into a human readable format
-    static String secondsToTime(int secondsGiven){
+    public static String secondsToTime(int secondsGiven){
         int secondsLeft = secondsGiven;
         String hours = "0";
         String minutes = "0";

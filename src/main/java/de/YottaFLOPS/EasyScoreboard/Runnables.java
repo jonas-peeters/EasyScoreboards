@@ -9,7 +9,7 @@ public class Runnables {
     private static Task TPSTask2;
     private static Task STime;
     private static Task MTime;
-    static double lastTPS = 20.0;
+    public static double lastTPS = 20.0;
     private static double tps = 0.0;
 
     //Starting the runnable to update the tps count
@@ -35,6 +35,7 @@ public class Runnables {
 
     //Stopping the runnable to update the tps count
     public static void stopTPS() {
+        tps = 0.0;
         if(TPSTask1 != null) {
             TPSTask1.cancel();
         }
