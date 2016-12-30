@@ -122,40 +122,40 @@ If you made any changes to the config file these will be applied instantly.
 
 
 ## Placeholders
-In the `<Text>` argument there are a few strings that will be replaced. These are always surrounded with %.
+In the `<Text>` argument there are a few strings that will be replaced.
 
 To use multiple colors and/or styles separate the parts of the text with semicolons (;):
-`/esb set 1 "%AQUA%C;%BLUE%o;%GOLD%l;%GREEN%o;%YELLOW%r;%RED%f;%WHITE%u;%BLACK%l"`
-`/esb set 1 "%ITALIC%Different ;%BOLD%Styles"`
+`/esb set 1 "AQUAC;BLUEo;GOLDl;GREENo;YELLOWr;REDf;WHITEu;BLACKl"`
+`/esb set 1 "ITALICDifferent ;BOLDStyles"`
 
 ### Colors
-* `%AQUA%` or `%&b%`
-* `%BLUE%` or `%&9%`
-* `%GOLD%` or `%&6%`
-* `%GREEN%` or `%&a%`
-* `%YELLOW%` or `%&e%`
-* `%RED%` or `%&c%`
-* `%LIGHT_PURPLE%` or `%&d%`
-* `%DARK_AQUA%` or `%&3%`
-* `%DARK_BLUE%` or `%&1%`
-* `%DARK_GREEN%` or `%&2%`
-* `%DARK_RED%` or `%&4%`
-* `%DARK_PURPLE%` or `%&d%`
-* `%WHITE%` or `%&f%`
-* `%GRAY%` or `%&7%`
-* `%DARK_GRAY%` or `%&8%`
-* `%BLACK%` or `%&0%`
+* `AQUA` or `&b`
+* `BLUE` or `&9`
+* `GOLD` or `&6`
+* `GREEN` or `&a`
+* `YELLOW` or `&e`
+* `RED` or `&c`
+* `LIGHT_PURPLE` or `&d`
+* `DARK_AQUA` or `&3`
+* `DARK_BLUE` or `&1`
+* `DARK_GREEN` or `&2`
+* `DARK_RED` or `&4`
+* `DARK_PURPLE` or `&d`
+* `WHITE` or `&f`
+* `GRAY` or `&7`
+* `DARK_GRAY` or `&8`
+* `BLACK` or `&0`
 
 These will be replaced with the equivalent color.
 
 ![Colors](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot4_colors.png?raw=true)
 
 ### Styles
-* `%BOLD%` or `%&l%`
-* `%OBFUSCATED%` or `%&k%`
-* `%ITALIC%` or `%&o%`
-* `%STRIKETHROUGH%` or `%&m%`
-* `%UNDERLINE%` or `%&n%`
+* `BOLD` or `&l`
+* `OBFUSCATED` or `&k`
+* `ITALIC` or `&o`
+* `STRIKETHROUGH` or `&m`
+* `UNDERLINE` or `&n`
 
 ![Styles](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true)
 
@@ -186,25 +186,25 @@ who sees the scoreboard
 ![Placeholders](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true)
 
 ## Example
-`/esb set 0 "%BOLD%%GREEN%Hello %PLAYERNAME%"`
+`/esb set 0 "BOLDGREENHello %PLAYERNAME%"`
 
-`/esb set 1 "%DARK_PURPLE%Welcome to the ;%YELLOW%%BOLD%se;%GOLD%%BOLD%rv;%RED%%BOLD%er"`
+`/esb set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"`
 
 `/esb set 2 "--------------------"`
 
-`/esb set 3 "%GREEN%Money:"`
+`/esb set 3 "GREENMoney:"`
 
 `/esb set 4 " %PLAYERBALANCE%"`
 
 `/esb set 5 "--------------------"`
 
-`/esb set 6 "%GREEN%Players Online:"`
+`/esb set 6 "GREENPlayers Online:"`
 
 `/esb set 7 " %ONLINECOUNT%"`
 
 `/esb set 8 "--------------------"`
 
-`/esb set 9 "%GREEN%Countdown:"`
+`/esb set 9 "GREENCountdown:"`
 
 `/esb set 10 " %COUNTDOWN%"`
 

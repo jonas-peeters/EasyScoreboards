@@ -162,7 +162,11 @@ public class Main {
 
         String[] loadedData = Replacements.replacePlaceholders(player, scoreboardText.clone());
 
-        obj = Objective.builder().name("Test").criterion(Criteria.DUMMY).displayName(Conversions.lineToTexts(loadedData[0])).build();
+        obj = Objective.builder()
+                .name("Test")
+                .criterion(Criteria.DUMMY)
+                .displayName(Conversions.lineToTexts(loadedData[0]))
+                .build();
 
         for(int i = 0; i < scoreboardText.length; i++) {
             if(scoreboardText[i].equals("")) {

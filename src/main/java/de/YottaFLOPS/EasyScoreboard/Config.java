@@ -37,14 +37,14 @@ public class Config {
             node = configLoader.createEmptyNode(ConfigurationOptions.defaults());
 
             ConfigurationNode newNode = node.getNode("scoreboard").getNode("line");
-            newNode.getNode("0").setValue("GREENBOLDHi; GOLDBOLDPLAYERNAME:");
-            newNode.getNode("1").setValue("GREENMain command:");
+            newNode.getNode("0").setValue("&a&lHi; &6&l%PLAYERNAME%:");
+            newNode.getNode("1").setValue("&aMain command:");
             newNode.getNode("2").setValue("    /esb");
             newNode.getNode("3").setValue("----------------------");
-            newNode.getNode("4").setValue("GREENEdit line:");
+            newNode.getNode("4").setValue("&aEdit line:");
             newNode.getNode("5").setValue("    /esb set <Line> <Text>");
             newNode.getNode("6").setValue("----------------------");
-            newNode.getNode("7").setValue("GREENStart countdown:");
+            newNode.getNode("7").setValue("&aStart countdown:");
             newNode.getNode("8").setValue("    /esb countdown start");
             newNode.getNode("9").setValue("");
             newNode.getNode("10").setValue("");
