@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "1.7.1", description = "A plugin " +
+@Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "1.7.2", description = "A plugin " +
         "to easily create scoreboards for lobbys")
 public class Main {
 
