@@ -1,15 +1,19 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Utils;
 
+import com.google.common.reflect.TypeToken;
+import de.YottaFLOPS.EasyScoreboard.Line;
+import de.YottaFLOPS.EasyScoreboard.Main;
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Config {
 
@@ -23,63 +27,59 @@ public class Config {
 
         File config = new File(Main.normalConfig.toString());
 
+        configLoader = HoconConfigurationLoader
+                .builder()
+                .setPath(Main.normalConfig)
+                .build();
+
         if (!config.exists()) {
             logger.warn("Could not find config");
+
+
+            InputStream stream = null;
+            OutputStream resStreamOut = null;
             try {
-                //noinspection ResultOfMethodCallIgnored
-                config.createNewFile();
-                logger.info("Created config file");
-            } catch (IOException e) {
+                stream = Config.class.getResourceAsStream("/ExampleConfig.conf");
+                int readBytes;
+                byte[] buffer = new byte[4096];
+                resStreamOut = new FileOutputStream(config.getAbsolutePath());
+                while ((readBytes = stream.read(buffer)) > 0) {
+                    resStreamOut.write(buffer, 0, readBytes);
+                }
+                logger.info("Created new config file");
+            } catch (Exception e) {
                 logger.error("There was an error creating the config file");
-            }
-
-            configLoader = HoconConfigurationLoader.builder().setPath(Main.normalConfig).build();
-            node = configLoader.createEmptyNode(ConfigurationOptions.defaults());
-
-            ConfigurationNode newNode = node.getNode("scoreboard").getNode("line");
-            newNode.getNode("0").setValue("&a&lHi; &6&l%PLAYERNAME%:");
-            newNode.getNode("1").setValue("&aMain command:");
-            newNode.getNode("2").setValue("    /esb");
-            newNode.getNode("3").setValue("----------------------");
-            newNode.getNode("4").setValue("&aEdit line:");
-            newNode.getNode("5").setValue("    /esb set <Line> <Text>");
-            newNode.getNode("6").setValue("----------------------");
-            newNode.getNode("7").setValue("&aStart countdown:");
-            newNode.getNode("8").setValue("    /esb countdown start");
-            newNode.getNode("9").setValue("");
-            newNode.getNode("10").setValue("");
-            newNode.getNode("11").setValue("");
-            newNode.getNode("12").setValue("");
-            newNode.getNode("13").setValue("");
-            newNode.getNode("14").setValue("");
-            newNode.getNode("15").setValue("");
-
-            node.getNode("scoreboard").getNode("hideFor").setValue(" ");
-            node.getNode("scoreboard").getNode("showForAll").setValue(true);
-            node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(11);
-            node.getNode("scoreboard").getNode("countdown").getNode("command").setValue("say The countdown is over");
-            node.getNode("scoreboard").getNode("countdown").getNode("chat").setValue(true);
-            node.getNode("scoreboard").getNode("countdown").getNode("xp").setValue(false);
-            node.getNode("scoreboard").getNode("countdown").getNode("title").setValue(true);
-
-            try {
-                configLoader.save(node);
-            } catch (IOException e) {
+                logger.error("Please report the following lines on https://github.com/byYottaFLOPS/EasyScoreboards/issues");
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (stream != null) {
+                        stream.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (resStreamOut != null) {
+                        resStreamOut.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
-        } else {
-            configLoader = HoconConfigurationLoader.builder().setPath(Main.normalConfig).build();
-            node = configLoader.createEmptyNode(ConfigurationOptions.defaults());
         }
     }
 
     public static void load() {
         try {
             node = configLoader.load();
-
-            for(int i = 0; i < 16; i++) {
-                Main.scoreboardText[i] = node.getNode("scoreboard", "line", String.valueOf(i)).getString();
+            Main.scoreboardText.clear();
+            List<? extends ConfigurationNode> nodeList = node.getNode("scoreboard", "lines").getChildrenList();
+            for (ConfigurationNode n : nodeList) {
+                String out = n.getValue().toString();
+                String number = out.split(",")[0].split("=")[1];
+                String text = out.split(",")[1].split("=")[1].replaceAll("}", "");
+                Main.scoreboardText.add(new Line(number, text));
             }
 
             Main.showAll = node.getNode("scoreboard").getNode("showForAll").getBoolean();
@@ -101,14 +101,20 @@ public class Config {
             logger.info("Loaded config");
         } catch (Exception e) {
             logger.error("There was an error reading the config file");
+            e.printStackTrace();
         }
     }
 
     public static void save() {
         try {
-            for(int i = 0; i < 16; i++) {
-                node.getNode("scoreboard", "line", String.valueOf(i)).setValue(Main.scoreboardText[i]);
+
+            List<String> list = new ArrayList<>();
+
+            for (Line line : Main.scoreboardText) {
+                list.add("number=" + line.getNumber() + ", text=" + line.getText());
             }
+
+            node.getNode("scoreboard", "lines").setValue(new TypeToken<List<String>>() {}, list);
 
             node.getNode("scoreboard").getNode("showForAll").setValue(Main.showAll);
 
@@ -128,7 +134,7 @@ public class Config {
 
             configLoader.save(node);
             logger.info("Saved config");
-        } catch (IOException e) {
+        } catch (IOException | ObjectMappingException e) {
             logger.error("There was an error writing to the config file");
         }
     }

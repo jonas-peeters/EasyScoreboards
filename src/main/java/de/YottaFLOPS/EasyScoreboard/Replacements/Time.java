@@ -1,6 +1,6 @@
 package de.YottaFLOPS.EasyScoreboard.Replacements;
 
-import de.YottaFLOPS.EasyScoreboard.Conversions;
+import de.YottaFLOPS.EasyScoreboard.Utils.Conversions;
 import org.spongepowered.api.Sponge;
 
 import java.text.DateFormat;
@@ -14,6 +14,15 @@ class Time {
             return Conversions.ticksToTime(time);
         } else {
             return "Error";
+        }
+    }
+
+    static String getMTimeAsInt() {
+        if (Sponge.getServer().getDefaultWorld().isPresent()) {
+            long time = (Sponge.getServer().getDefaultWorld().get().getWorldTime() + 6000) % 24000;
+            return String.valueOf(Math.round(time/1000));
+        } else {
+            return "0";
         }
     }
 

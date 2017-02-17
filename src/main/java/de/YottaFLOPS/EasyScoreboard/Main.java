@@ -3,10 +3,15 @@ package de.YottaFLOPS.EasyScoreboard;
 import com.google.inject.Inject;
 import de.YottaFLOPS.EasyScoreboard.Commands.Register;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
+import de.YottaFLOPS.EasyScoreboard.Utils.Checks;
+import de.YottaFLOPS.EasyScoreboard.Utils.Config;
+import de.YottaFLOPS.EasyScoreboard.Utils.Conversions;
+import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -31,13 +36,14 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-@Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "1.7.2", description = "A plugin " +
+@Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "2.0.0", description = "A plugin " +
         "to easily create scoreboards for lobbys")
 public class Main {
 
-    public static String[] scoreboardText = new String[16];
+    public static List<Line> scoreboardText = new ArrayList<>();
     public boolean bufferable = true;
     public boolean usedPlayerCount = false;
     private Scoreboard bufferedScoreboard;
@@ -52,7 +58,7 @@ public class Main {
     public static boolean countdownTitle;
     public static boolean showAll = true;
     public static final List<String> dontShowFor = new ArrayList<>();
-    static Path normalConfig;
+    public static Path normalConfig;
 
     //Inits the commands and the logger
     //Starts the config handling
@@ -157,47 +163,70 @@ public class Main {
         Scoreboard scoreboard = Scoreboard.builder().build();
 
         List<Score> lines = new ArrayList<>();
-        int length = 15;
         Objective obj;
 
-        String[] loadedData = Replacements.replacePlaceholders(player, scoreboardText.clone());
+        List<Line> loadedData = new ArrayList<>();
+
+        for (Line line : scoreboardText) {
+            loadedData.add(new Line(Replacements.replacePlaceholders(player, line.getNumber(), true),
+                    Replacements.replacePlaceholders(player, line.getText(), false)));
+        }
+
+        String title = " ";
+        for (Line line : loadedData) {
+            try {
+                if (Integer.parseInt(line.getNumber()) == -1) {
+                    title = line.getText();
+                    break;
+                }
+            } catch (Exception e) {
+                //TODO
+            }
+        }
 
         obj = Objective.builder()
-                .name("Test")
+                .name("EasyScoreboard")
                 .criterion(Criteria.DUMMY)
-                .displayName(Conversions.lineToTexts(loadedData[0]))
+                .displayName(Conversions.lineToText(title))
                 .build();
 
-        for(int i = 0; i < scoreboardText.length; i++) {
-            if(scoreboardText[i].equals("")) {
-                scoreboardText[i] = " ";
+        for (Line line : scoreboardText) {
+            if (Objects.equals(line.getText(), "")) {
+                line.setText(" ");
             }
         }
 
-        for(int i = scoreboardText.length-1; i >= 0; i--) {
-            if(scoreboardText[i].equals(" ")) {
-                length--;
-            }
-            if(!scoreboardText[i].equals(" ")) {
-                i = 0;
-            }
-        }
+        int minusOneScoreCount = 0;
 
-        for(int i = 1; i <= length; i++) {
-            boolean doesNotEqual = false;
-            while(!doesNotEqual) {
-                doesNotEqual = true;
-                for (int i2 = 1; i2 <= length; i2++) {
-                    if (i2 != i) {
-                        if (loadedData[i].equals(loadedData[i2])) {
-                            loadedData[i] = loadedData[i] + " ";
-                            doesNotEqual = false;
-                        }
+        for (int i = 0; i < loadedData.size(); i++) {
+            boolean equalExist = true;
+            while (equalExist) {
+                equalExist = false;
+                for (int j = 0; j < loadedData.size(); j++) {
+                    if (i != j && Objects.equals(loadedData.get(i).getText(), loadedData.get(j).getText())) {
+                        equalExist = true;
                     }
                 }
+                if (equalExist) {
+                    loadedData.get(i).setText(loadedData.get(i).getText() + " ");
+                }
             }
-            lines.add(obj.getOrCreateScore(Conversions.lineToTexts(loadedData[i])));
-            lines.get(i-1).setScore(length-i);
+
+
+            int score = 0;
+            try {
+                score = Integer.parseInt(loadedData.get(i).getNumber());
+            } catch (NumberFormatException e) {
+                logger.error("Line " + i + " is missing a valid score. If you think this is not your vault please " +
+                        "report the following lines to https://github.com/byYottaFLOPS/EasyScoreboards/issues");
+                e.printStackTrace();
+            }
+            if (score != -1) {
+                lines.add(obj.getOrCreateScore(Conversions.lineToText(loadedData.get(i).getText())));
+                lines.get(i-minusOneScoreCount).setScore(score);
+            } else {
+                minusOneScoreCount++;
+            }
         }
 
         scoreboard.addObjective(obj);
@@ -221,20 +250,26 @@ public class Main {
     }
 
     //Is used by all the commands which change the text of the lines
-    public void setLine(String newText, int line, Player player, CommandSource src) {
+    public void setLine(String newText, int line, CommandSource commandSource) {
         if (newText.equals("")) {
             newText = " ";
         }
         try {
             if (line < 16 && line >= 0) {
                 if (Replacements.removePlaceholders(newText).length() < 30) {
-                    scoreboardText[line] = newText;
-                    src.sendMessage(Text.of(TextColors.GRAY, "Setting line " + line + " to: " + newText));
+                    scoreboardText.get(line).setText(newText);
+                    if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
+                        commandSource.sendMessage(Text.of(TextColors.GRAY, "Setting line " + line + " to: " + newText));
+                    }
                 } else {
-                    src.sendMessage(Text.of(TextColors.RED, "The length of one line is limited to 30 characters!"));
+                    if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
+                        commandSource.sendMessage(Text.of(TextColors.RED, "The length of one line is limited to 30 characters!"));
+                    }
                 }
             } else {
-                src.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
+                if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
+                    commandSource.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,7 +278,9 @@ public class Main {
         bufferable = Checks.checkIfBufferable(scoreboardText);
         usedPlayerCount = Checks.checkIfUsedPlayerCount(scoreboardText);
 
-        updateAllScoreboards(player);
+        if (Sponge.getServer().getOnlinePlayers().size() > 0) {
+            updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
+        }
 
         Config.save();
     }

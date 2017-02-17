@@ -1,16 +1,17 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Utils;
 
 import de.YottaFLOPS.EasyScoreboard.Replacements.Colors;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Styles;
 import org.spongepowered.api.text.Text;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Conversions {
     //Converts a line-string into the Sponge text for multiple colors
-    static Text lineToTexts(String s) {
+    public static Text lineToText(String s) {
         String[] strings = s.split(";");
 
         List<Text> texts = new ArrayList<>();
@@ -90,5 +91,18 @@ public class Conversions {
         }
 
         return hours + ":" + minutes;
+    }
+
+    public static String intToMoney(BigDecimal money) {
+        double m = money.doubleValue();
+        if (m < 1000) {
+            return String.valueOf(m);
+        } else if (m < 1000000) {
+            return String.valueOf((double) Math.round(m/100)/10) + "k";
+        } else if (m < 1000000000) {
+            return String.valueOf((double) Math.round(m/100000)/10) + "m";
+        } else {
+            return String.valueOf((double) Math.round(m/100000000)/10) + "b";
+        }
     }
 }

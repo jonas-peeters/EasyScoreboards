@@ -1,40 +1,45 @@
 package de.YottaFLOPS.EasyScoreboard.Commands;
 
-import de.YottaFLOPS.EasyScoreboard.Checks;
-import de.YottaFLOPS.EasyScoreboard.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.Runnables;
-import org.spongepowered.api.Sponge;
+import de.YottaFLOPS.EasyScoreboard.Utils.Checks;
+import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.format.TextStyles;
 
-class showall implements CommandExecutor {
+class SetLine implements CommandExecutor {
 
     private final Main plugin;
 
-    public showall(Main instance) {
+    public SetLine(Main instance) {
         plugin = instance;
     }
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+    public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
 
-        Main.showAll = true;
-        Config.save();
+        if(args.<Integer>getOne("Line").isPresent()) {
+            int line = args.<Integer>getOne("Line").get();
+            if (args.<String>getOne("New Text").isPresent()) {
+                String newText = args.<String>getOne("New Text").get();
+                plugin.setLine(newText, line, commandSource);
 
-        if(src instanceof Player) {
-            plugin.updateAllScoreboards((Player) src);
-            src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Showing scoreboard for all players"));
+            } else {
+                if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
+                    commandSource.sendMessage(Text.of(TextColors.RED, "Missing text"));
+                }
+            }
         } else {
-            plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
+            if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
+                commandSource.sendMessage(Text.of(TextColors.RED, "Missing line"));
+            }
         }
 
         Runnables.stopTPS();

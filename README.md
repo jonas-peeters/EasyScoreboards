@@ -3,18 +3,12 @@ A Sponge plugin to create dynamic scoreboards
 
 ## Features
 1. Easy setup
-2. Change the scoreboard texts by commands AND by config
-3. Use multiple colors per line
-4. Use multiple styles per line
-5. Use the players name
-6. Use the number of online players
-7. Use the player balance of economy plugins
-8. Show the current Ticks per second
-9. Show the current time both from minecraft and the server
-10. Dynamically changes its size to be as small as possible
-11. See changes immediately
-12. Include countdowns in scoreboard, chat, XP-Bar and titles
-13. Single players can hide the scoreboard
+2. Use multiple colors per line
+3. Use multiple styles per line
+4. Use various placeholders
+5. See changes immediately
+6. Include countdowns in scoreboard, chat, XP-Bar and titles
+7. Single players can hide their scoreboard
 
 
 If you have ideas for more features please open an issue here:
@@ -25,7 +19,8 @@ https://forums.spongepowered.org/users/yottaflops/
 ## Setup
 1. Place the plugin file in the mods folder of you Sponge server
 2. Start the server
-3. Edit the scoreboard by commands
+3. Edit the config file (config/de_yottaflops_easyscoreboard.conf)
+4. Reload the scoreboard (/sponge plugins reload)
 
 ##Links (Download)
 **Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest**
@@ -35,20 +30,10 @@ Guide: http://byyottaflops.github.io/EasyScoreboards/
 Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 ## Commands
-    Changes are instantly applied for all players
-    To avoid this you should edit the config file and then reload the plugin
 
 > Instead of `/esb` you can also use `/easyscoreboard`
 
 ### Scoreboard
-
-`/esb set <Line> <Text>`
-
-`<Line>` is the line of the scoreboard and can be anything between 0 and 15. The line 0 is the title of the scoreboard.
-
-`<Text>` Is the text the line will contain. To use spaces the hole text must be in quotation marks (see examples).
-
-    To use multiple colors and styles separate the parts with semicolons (;)
 
 `/esb clear` will clear the scoreboard and remove it from every player.
 
@@ -70,6 +55,7 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
     If you want to use quotation marks (") in the command, just replace them with
     single quotation marks (')
 
+`/esb countdown add <Seconds>` Add some time to the countdown. This won't affect the config.
 
 `/esb countdown xp <true/false>` Choose if the countdown should be shown in the experience bar of the players.
 
@@ -104,7 +90,6 @@ If you made any changes to the config file these will be applied instantly.
 ## Permissions
 
 > easyscoreboard.use 
- easyscoreboard.set 
  easyscoreboard.clear 
  easyscoreboard.show
  easyscoreboard.hide
@@ -113,6 +98,7 @@ If you made any changes to the config file these will be applied instantly.
  easyscoreboard.reload
  easyscoreboard.countdown.use
  easyscoreboard.countdown.set
+ easyscoreboard.countdown.add
  easyscoreboard.countdown.start
  easyscoreboard.countdown.stop
  easyscoreboard.countdown.reset
@@ -160,20 +146,23 @@ These will be replaced with the equivalent color.
 ![Styles](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true)
 
 ### Other
+
+    Using placeholders that require a custom scoreboard for every player
+    while using some that require a lot of updating should be done with 
+    care on large servers because this will be very CPU intensive.
+
 `%PLAYERNAME%` will be replaced with the name of the player
 who sees the scoreboard
 
 `%PLAYERBALANCE%` will show the balance of the player, if you have installed an economy plugin, that uses the Sponge Economy API
 
-    Please note that the usage of `PLAYERBALANCE` will give you  
-    an error in the console on 1.8 because the economy API is 
+`%PLAYERBALANCEWRAP%` will show the balance of the player in a parsed style like *1.2k* or *34.5m*
+
+    Please note that the usage of `%PLAYERBALANCE%` and `%PLAYERBALANCEWRAP%`
+    will give you an error in the console on 1.8 because the economy API is 
     not implemented in this version.
 
 `%ONLINECOUNT%` will be replaced with the number of online players
-
-    Using "PLAYERNAME"/"PLAYERBALANCE" together with "ONLINECOUNT"
-    is not recommended for large servers because it has to compute
-    a new scoreboard for every player if a player leaves or joines
     
 `%COUNTDOWN%` will be replaced with the time left of the countdown. The time is wrapped into hours, minutes and seconds.
 
@@ -186,32 +175,7 @@ who sees the scoreboard
 ![Placeholders](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true)
 
 ## Example
-`/esb set 0 "BOLDGREENHello %PLAYERNAME%"`
-
-`/esb set 1 "DARK_PURPLEWelcome to the ;YELLOWBOLDse;GOLDBOLDrv;REDBOLDer"`
-
-`/esb set 2 "--------------------"`
-
-`/esb set 3 "GREENMoney:"`
-
-`/esb set 4 " %PLAYERBALANCE%"`
-
-`/esb set 5 "--------------------"`
-
-`/esb set 6 "GREENPlayers Online:"`
-
-`/esb set 7 " %ONLINECOUNT%"`
-
-`/esb set 8 "--------------------"`
-
-`/esb set 9 "GREENCountdown:"`
-
-`/esb set 10 " %COUNTDOWN%"`
-
-`/esb countdown set 500 "tellraw @a {'text':'The countdown is over','color':'aqua'}"`
-
-Result:
-![Result](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot2.png?raw=true)
+![Example](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot2.png?raw=true)
 
 ## Bugs & Feature Requests
 There are no bugs.

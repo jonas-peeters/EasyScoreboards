@@ -22,61 +22,68 @@ public class Register {
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.integer(Text.of("Seconds"))),
                         GenericArguments.onlyOne(GenericArguments.string(Text.of("Command"))))
-                .executor(new countdownSet(main))
+                .executor(new CountdownSet(main))
+                .build());
+
+        subcommandsCountdown.put(Collections.singletonList("add"), CommandSpec.builder()
+                .permission("easyscoreboard.countdown.add")
+                .description(Text.of("Add time to the current countdown in seconds"))
+                .arguments(GenericArguments.onlyOne(GenericArguments.integer(Text.of("seconds"))))
+                .executor(new CountdownAdd(main))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("start"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.start")
                 .description(Text.of("Starts the countdown"))
-                .executor(new countdownStart(main))
+                .executor(new CountdownStart(main))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("stop"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.stop")
                 .description(Text.of("Stops the countdown"))
-                .executor(new countdownStop())
+                .executor(new CountdownStop())
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("reset"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.reset")
                 .description(Text.of("Resets the countdown"))
-                .executor(new countdownReset())
+                .executor(new CountdownReset())
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("xp"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.xp")
                 .description(Text.of("Set if there should be a XP countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
-                .executor(new countdownXP())
+                .executor(new CountdownXP())
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("chat"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.chat")
                 .description(Text.of("Set if there should be a chat countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
-                .executor(new countdownChat())
+                .executor(new CountdownChat())
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("title"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.title")
                 .description(Text.of("Set if there should be a title countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
-                .executor(new countdownTitle())
+                .executor(new CountdownTitle())
                 .build());
 
-        subcommands.put(Collections.singletonList("set"), CommandSpec.builder()
-                .permission("easyscoreboard.set")
-                .description(Text.of("Change the scoreboard text"))
-                .arguments(
-                        GenericArguments.onlyOne(GenericArguments.integer(Text.of("Line"))),
-                        GenericArguments.onlyOne(GenericArguments.string(Text.of("New Text"))))
-                .executor(new setLine(main))
-                .build());
+        //subcommands.put(Collections.singletonList("set"), CommandSpec.builder()
+        //        .permission("easyscoreboard.set")
+        //        .description(Text.of("Change the scoreboard text"))
+        //        .arguments(
+        //                GenericArguments.onlyOne(GenericArguments.integer(Text.of("Line"))),
+        //                GenericArguments.onlyOne(GenericArguments.string(Text.of("New Text"))))
+        //        .executor(new SetLine(main))
+        //        .build());
 
         subcommands.put(Collections.singletonList("clear"), CommandSpec.builder()
                 .permission("easyscoreboard.clear")
                 .description(Text.of("Clear the complete scoreboard"))
-                .executor(new clearAll(main))
+                .executor(new ClearAll(main))
                 .build());
 
         subcommands.put(Collections.singletonList("countdown"), CommandSpec.builder()
@@ -85,28 +92,28 @@ public class Register {
                 .children(subcommandsCountdown)
                 .build());
 
-        subcommands.put(Collections.singletonList("show"), CommandSpec.builder()
-                .permission("easyscoreboard.show")
+        subcommands.put(Collections.singletonList("Show"), CommandSpec.builder()
+                .permission("easyscoreboard.Show")
                 .description(Text.of("Enable scoreboard"))
-                .executor(new show(main))
+                .executor(new Show(main))
                 .build());
 
-        subcommands.put(Collections.singletonList("hide"), CommandSpec.builder()
-                .permission("easyscoreboard.hide")
+        subcommands.put(Collections.singletonList("Hide"), CommandSpec.builder()
+                .permission("easyscoreboard.Hide")
                 .description(Text.of("Hide scoreboard"))
-                .executor(new hide(main))
+                .executor(new Hide(main))
                 .build());
 
         subcommands.put(Collections.singletonList("showAll"), CommandSpec.builder()
                 .permission("easyscoreboard.showAll")
                 .description(Text.of("Enable scoreboard for all players (not with private settings)"))
-                .executor(new showall(main))
+                .executor(new ShowAll(main))
                 .build());
 
         subcommands.put(Collections.singletonList("hideAll"), CommandSpec.builder()
-                .permission("easyscoreboard.hideall")
+                .permission("easyscoreboard.HideAll")
                 .description(Text.of("Disable scoreboard for all players (also with private settings)"))
-                .executor(new hideall(main))
+                .executor(new HideAll(main))
                 .build());
 
         CommandSpec easyscoreboardsCommandSpec = CommandSpec.builder()

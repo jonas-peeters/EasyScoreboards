@@ -1,5 +1,6 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Utils;
 
+import de.YottaFLOPS.EasyScoreboard.Main;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scheduler.Task;
 

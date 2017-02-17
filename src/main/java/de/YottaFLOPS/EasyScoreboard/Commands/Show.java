@@ -1,6 +1,6 @@
 package de.YottaFLOPS.EasyScoreboard.Commands;
 
-import de.YottaFLOPS.EasyScoreboard.Config;
+import de.YottaFLOPS.EasyScoreboard.Utils.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -12,11 +12,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
-class hide implements CommandExecutor {
+class Show implements CommandExecutor {
 
     private final Main plugin;
 
-    public hide(Main instance) {
+    public Show(Main instance) {
         plugin = instance;
     }
 
@@ -25,10 +25,10 @@ class hide implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
         if (src instanceof Player) {
-            Main.dontShowFor.add(src.getName());
+            Main.dontShowFor.remove(src.getName());
             Config.save();
             plugin.setScoreboard((Player) src);
-            src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Hiding scoreboard"));
+            src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Showing scoreboard"));
         }
 
         return CommandResult.success();

@@ -1,77 +1,115 @@
 package de.YottaFLOPS.EasyScoreboard.Replacements;
 
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.Runnables;
+import de.YottaFLOPS.EasyScoreboard.Utils.Conversions;
+import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
-import static de.YottaFLOPS.EasyScoreboard.Conversions.secondsToTime;
+import static de.YottaFLOPS.EasyScoreboard.Utils.Conversions.secondsToTime;
 import static de.YottaFLOPS.EasyScoreboard.Main.countdownTimeUse;
 
 public class Replacements {
 
-    public static String[] replacePlaceholders(Player player, String[] loadedData) {
-        String[] data = loadedData.clone();
-        for (int i = 0; i < data.length; i++) {
-            if (data[i].contains("%ONLINECOUNT%")) {
-                if (removePlaceholders(data[i].replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()))).length() < 30) {
-                    data[i] = data[i].replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
+    public static String replacePlaceholders(Player player, String string, Boolean asNumber) {
+        String data = string;
+        if (data.contains("%ONLINECOUNT%")) {
+            if (removePlaceholders(data.replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()))).length() < 30) {
+                data = data.replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
+            } else {
+                data = data.replace("%ONLINECOUNT%", "-");
+                Main.logger.warn("Line \"" + data + "\" is to long");
+            }
+        }
+        if (data.contains("%PLAYERBALANCE%")) {
+            if (removePlaceholders(data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)))).length() < 30) {
+                data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)));
+            } else {
+                data = data.replace("%PLAYERBALANCE%", "--");
+                Main.logger.warn("Line \"" + data + "\" is to long at player " + player.getName());
+            }
+        }
+        if (data.contains("%PLAYERBALANCEWRAP%")) {
+            if (asNumber) {
+                data = data.replace("%PLAYERBALANCEWRAP%", "0");
+                Main.logger.warn("You can not use %PLAYERBALANCEWRAP% as number");
+            } else {
+                if (removePlaceholders(data.replace("%PLAYERBALANCEWRAP%", Conversions.intToMoney(Main.getPlayerBalance(player)))).length() < 30) {
+                    data = data.replace("%PLAYERBALANCEWRAP%", Conversions.intToMoney(Main.getPlayerBalance(player)));
                 } else {
-                    data[i] = data[i].replace("%ONLINECOUNT%", "-");
-                    Main.logger.warn("Line " + i + " is to long");
+                    data = data.replace("%PLAYERBALANCEWRAP%", "--");
+                    Main.logger.warn("Line \"" + data + "\" is to long at player " + player.getName());
                 }
             }
-            if (data[i].contains("%PLAYERBALANCE%")) {
-                if (removePlaceholders(data[i].replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)))).length() < 30) {
-                    data[i] = data[i].replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)));
+        }
+        if (data.contains("%PLAYERNAME%")) {
+            if (asNumber) {
+                data = data.replace("%PLAYERNAME%", "0");
+                Main.logger.warn("You can not use %PLAYERNAME% as number");
+            } else {
+                if (removePlaceholders(data.replace("%PLAYERNAME%", player.getName())).length() < 30) {
+                    data = data.replace("%PLAYERNAME%", player.getName());
                 } else {
-                    data[i] = data[i].replace("%PLAYERBALANCE%", "--");
-                    Main.logger.warn("Line " + i + " is to long");
+                    data = data.replace("%PLAYERNAME%", "--");
+                    Main.logger.warn("Line \"" + data + "\" is to long");
                 }
             }
-            if (data[i].contains("%PLAYERNAME%")) {
-                if (removePlaceholders(data[i].replace("%PLAYERNAME%", player.getName())).length() < 30) {
-                    data[i] = data[i].replace("%PLAYERNAME%", player.getName());
+        }
+        if (data.contains("%TPS%")) {
+            if (asNumber) {
+                data = data.replace("%TPS%", String.valueOf(Math.round(Runnables.lastTPS)));
+            } else {
+                if (removePlaceholders(data.replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0))).length() < 30) {
+                    data = data.replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0));
                 } else {
-                    data[i] = data[i].replace("%PLAYERNAME%", "");
-                    Main.logger.warn("Line " + i + " is to long");
+                    data = data.replace("%TPS%", "");
+                    Main.logger.warn("Line \"" + data + "\" is to long");
                 }
             }
-            if (data[i].contains("%TPS%")) {
-                if (removePlaceholders(data[i].replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0))).length() < 30) {
-                    data[i] = data[i].replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0));
+        }
+        if (data.contains("%COUNTDOWN%")) {
+            if (asNumber) {
+                data = data.replace("%COUNTDOWN%", String.valueOf(countdownTimeUse));
+            } else {
+                if (removePlaceholders(data.replace("%COUNTDOWN%", secondsToTime(countdownTimeUse))).length() < 30) {
+                    data = data.replace("%COUNTDOWN%", secondsToTime(countdownTimeUse));
                 } else {
-                    data[i] = data[i].replace("%TPS%", "");
-                    Main.logger.warn("Line " + i + " is to long");
+                    data = data.replace("%COUNTDOWN%", "--");
+                    Main.logger.warn("Line \"" + data + "\" is to long");
                 }
             }
-            if (data[i].contains("%COUNTDOWN%")) {
-                if (removePlaceholders(data[i].replace("%COUNTDOWN%", secondsToTime(countdownTimeUse))).length() < 30) {
-                    data[i] = data[i].replace("%COUNTDOWN%", secondsToTime(countdownTimeUse));
+        }
+        if (data.contains("%MTIME%")) {
+            if (asNumber) {
+                data = data.replace("%MTIME%", Time.getMTimeAsInt());
+            } else {
+                if (removePlaceholders(data.replace("%MTIME%", Time.getMTime())).length() < 30) {
+                    data = data.replace("%MTIME%", Time.getMTime());
                 } else {
-                    data[i] = data[i].replace("%COUNTDOWN%", "--");
-                    Main.logger.warn("Line " + i + " is to long");
+                    data = data.replace("%MTIME%", "--");
+                    Main.logger.warn("Line \"" + data + "\" is to long");
                 }
             }
-            if (data[i].contains("%MTIME%")) {
-                if (removePlaceholders(data[i].replace("%MTIME%", Time.getMTime())).length() < 30) {
-                    data[i] = data[i].replace("%MTIME%", Time.getMTime());
+        }
+        if (data.contains("%STIME%")) {
+            if (asNumber) {
+                data = data.replace("%PLAYERNAME%", "0");
+                Main.logger.warn("You can not use %STIME% as number");
+            } else {
+                if (removePlaceholders(data.replace("%STIME%", Time.getSTime())).length() < 30) {
+                    data = data.replace("%STIME%", Time.getSTime());
                 } else {
-                    data[i] = data[i].replace("%MTIME%", "--");
-                    Main.logger.warn("Line " + i + " is to long");
+                    data = data.replace("%STIME%", "--");
+                    Main.logger.warn("Line \"" + data + "\" is to long");
                 }
             }
-            if (data[i].contains("%STIME%")) {
-                if (removePlaceholders(data[i].replace("%STIME%", Time.getSTime())).length() < 30) {
-                    data[i] = data[i].replace("%STIME%", Time.getSTime());
-                } else {
-                    data[i] = data[i].replace("%STIME%", "--");
-                    Main.logger.warn("Line " + i + " is to long");
-                }
-            }
+        }
 
-            if (removePlaceholders(data[i]).length() > 29) {
-                return new String[20];
+        if (removePlaceholders(data).length() > 29) {
+            if (asNumber) {
+                return "0";
+            } else {
+                return "";
             }
         }
 
