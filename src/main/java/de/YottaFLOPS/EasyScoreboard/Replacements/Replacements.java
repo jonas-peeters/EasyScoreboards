@@ -22,11 +22,15 @@ public class Replacements {
             }
         }
         if (data.contains("%PLAYERBALANCE%")) {
-            if (removePlaceholders(data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)))).length() < 30) {
-                data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)));
+            if (asNumber) {
+                data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player).intValue()));
             } else {
-                data = data.replace("%PLAYERBALANCE%", "--");
-                Main.logger.warn("Line \"" + data + "\" is to long at player " + player.getName());
+                if (removePlaceholders(data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)))).length() < 30) {
+                    data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)));
+                } else {
+                    data = data.replace("%PLAYERBALANCE%", "--");
+                    Main.logger.warn("Line \"" + data + "\" is to long at player " + player.getName());
+                }
             }
         }
         if (data.contains("%PLAYERBALANCEWRAP%")) {

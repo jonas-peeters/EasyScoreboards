@@ -33,13 +33,19 @@ public class Checks {
     public static boolean checkIfUsedPlayerBalance(List<Line> scoreboardText) {
         for(Line line : scoreboardText) {
             if (line.getNumber().contains("%PLAYERBALANCE%")) {
-                return false;
+                return true;
             }
             if (line.getText().contains("%PLAYERBALANCE%")) {
-                return false;
+                return true;
+            }
+            if (line.getNumber().contains("%PLAYERBALANCEWRAP%")) {
+                return true;
+            }
+            if (line.getText().contains("%PLAYERBALANCEWRAP%")) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     //Check for Runnables

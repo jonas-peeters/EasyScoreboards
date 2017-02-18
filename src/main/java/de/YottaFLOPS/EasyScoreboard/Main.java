@@ -321,4 +321,8 @@ public class Main {
         }
         return true;
     }
+
+    public static boolean placeholderapiEnabled() {
+        return Sponge.getPluginManager().getPlugin("placeholderapi").isPresent();
+    }
 }
