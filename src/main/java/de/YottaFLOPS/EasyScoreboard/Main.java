@@ -217,7 +217,7 @@ public class Main {
             try {
                 score = Integer.parseInt(loadedData.get(i).getNumber());
             } catch (NumberFormatException e) {
-                logger.error("Line " + i + " is missing a valid score. If you think this is not your vault please " +
+                logger.error("Line " + i + " is missing a valid score. If you think this is not your fault please " +
                         "report the following lines to https://github.com/byYottaFLOPS/EasyScoreboards/issues");
                 e.printStackTrace();
             }
