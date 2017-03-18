@@ -1,13 +1,13 @@
 package de.YottaFLOPS.EasyScoreboard.Utils;
 
-import de.YottaFLOPS.EasyScoreboard.Line;
+import de.YottaFLOPS.EasyScoreboard.LineOfString;
 
 import java.util.List;
 
 public class Checks {
     //Checks if Bufferable
-    public static boolean checkIfBufferable(List<Line> scoreboardText) {
-        for(Line line : scoreboardText) {
+    public static boolean checkIfBufferable(List<LineOfString> scoreboardText) {
+        for(LineOfString line : scoreboardText) {
             if (line.getNumber().contains("PLAYER")) {
                 return false;
             }
@@ -18,20 +18,20 @@ public class Checks {
         return true;
     }
 
-    public static boolean checkIfUsedPlayerCount(List<Line> scoreboardText) {
-        for(Line line : scoreboardText) {
+    public static boolean checkIfUsedPlayerCount(List<LineOfString> scoreboardText) {
+        for(LineOfString line : scoreboardText) {
             if (line.getNumber().contains("%ONLINECOUNT%")) {
-                return false;
+                return true;
             }
             if (line.getText().contains("%ONLINECOUNT%")) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public static boolean checkIfUsedPlayerBalance(List<Line> scoreboardText) {
-        for(Line line : scoreboardText) {
+    public static boolean checkIfUsedPlayerBalance(List<LineOfString> scoreboardText) {
+        for(LineOfString line : scoreboardText) {
             if (line.getNumber().contains("%PLAYERBALANCE%")) {
                 return true;
             }
@@ -49,39 +49,51 @@ public class Checks {
     }
 
     //Check for Runnables
-    public static boolean checkIfUsedTPS(List<Line> scoreboardText) {
-        for(Line line : scoreboardText) {
+    public static boolean checkIfUsedTPS(List<LineOfString> scoreboardText) {
+        for(LineOfString line : scoreboardText) {
             if (line.getNumber().contains("%TPS%")) {
-                return false;
+                return true;
             }
             if (line.getText().contains("%TPS%")) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public static boolean checkIfUsedMTime(List<Line> scoreboardText) {
-        for(Line line : scoreboardText) {
+    public static boolean checkIfUsedMTime(List<LineOfString> scoreboardText) {
+        for(LineOfString line : scoreboardText) {
             if (line.getNumber().contains("%MTIME%")) {
-                return false;
+                return true;
             }
             if (line.getText().contains("%MTIME%")) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public static boolean checkIfUsedSTime(List<Line> scoreboardText) {
-        for(Line line : scoreboardText) {
+    public static boolean checkIfUsedSTime(List<LineOfString> scoreboardText) {
+        for(LineOfString line : scoreboardText) {
             if (line.getNumber().contains("%STIME%")) {
-                return false;
+                return true;
             }
             if (line.getText().contains("%STIME%")) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+
+    public static boolean checkIfUsedPlaceholders(List<LineOfString> scoreboardText) {
+        for(LineOfString line : scoreboardText) {
+            if (line.getNumber().contains("%")) {
+                return true;
+            }
+            if (line.getText().contains("%")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 package de.YottaFLOPS.EasyScoreboard.Utils;
 
 import com.google.common.reflect.TypeToken;
-import de.YottaFLOPS.EasyScoreboard.Line;
+import de.YottaFLOPS.EasyScoreboard.LineOfString;
 import de.YottaFLOPS.EasyScoreboard.Main;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -79,9 +79,13 @@ public class Config {
                 String out = n.getValue().toString();
                 String number = out.split(",")[0].split("=")[1];
                 String text = out.split(",")[1].split("=")[1].replaceAll("}", "");
-                Main.scoreboardText.add(new Line(number, text));
+                Main.scoreboardText.add(new LineOfString(number, text));
             }
 
+            Main.updateTicks = node.getNode("scoreboard").getNode("placeholderUpdateTicks").getInt();
+            if (Main.updateTicks == 0) {
+                Main.updateTicks = 20;
+            }
             Main.showAll = node.getNode("scoreboard").getNode("showForAll").getBoolean();
             Main.countdownTime = node.getNode("scoreboard").getNode("countdown").getNode("time").getInt();
             Main.countdownCommand = node.getNode("scoreboard").getNode("countdown").getNode("command").getString();
@@ -110,13 +114,14 @@ public class Config {
 
             List<String> list = new ArrayList<>();
 
-            for (Line line : Main.scoreboardText) {
+            for (LineOfString line : Main.scoreboardText) {
                 list.add("number=" + line.getNumber() + ", text=" + line.getText());
             }
 
             node.getNode("scoreboard", "lines").setValue(new TypeToken<List<String>>() {}, list);
 
             node.getNode("scoreboard").getNode("showForAll").setValue(Main.showAll);
+            node.getNode("scoreboard").getNode("placeholderUpdateTicks").setValue(Main.updateTicks);
 
             node.getNode("scoreboard").getNode("countdown").getNode("time").setValue(Main.countdownTime);
             node.getNode("scoreboard").getNode("countdown").getNode("command").setValue(Main.countdownCommand);

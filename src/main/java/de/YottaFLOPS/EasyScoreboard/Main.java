@@ -7,6 +7,7 @@ import de.YottaFLOPS.EasyScoreboard.Utils.Checks;
 import de.YottaFLOPS.EasyScoreboard.Utils.Config;
 import de.YottaFLOPS.EasyScoreboard.Utils.Conversions;
 import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
+import me.rojo8399.placeholderapi.PlaceholderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -39,11 +40,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Plugin(id = "de_yottaflops_easyscoreboard", name = "Easy Scoreboards", version = "2.0.0", description = "A plugin " +
-        "to easily create scoreboards for lobbys")
+@Plugin(
+        id = "de_yottaflops_easyscoreboard",
+        name = "Easy Scoreboards",
+        version = "2.1.0",
+        description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
-    public static List<Line> scoreboardText = new ArrayList<>();
+    public static List<LineOfString> scoreboardText = new ArrayList<>();
+    private List<String> invalidLineNumbers = new ArrayList<>();
     public boolean bufferable = true;
     public boolean usedPlayerCount = false;
     private Scoreboard bufferedScoreboard;
@@ -57,6 +62,7 @@ public class Main {
     public static boolean countdownXP;
     public static boolean countdownTitle;
     public static boolean showAll = true;
+    public static int updateTicks = 40;
     public static final List<String> dontShowFor = new ArrayList<>();
     public static Path normalConfig;
 
@@ -78,11 +84,14 @@ public class Main {
         if(Checks.checkIfUsedTPS(scoreboardText)) {
             Runnables.startTPS(this);
         }
-        if(Checks.checkIfUsedMTime(scoreboardText)) {
-            Runnables.startMTime(this);
-        }
-        if(Checks.checkIfUsedSTime(scoreboardText)) {
-            Runnables.startSTime(this);
+//        if(Checks.checkIfUsedMTime(scoreboardText)) {
+//            Runnables.startMTime(this);
+//        }
+//        if(Checks.checkIfUsedSTime(scoreboardText)) {
+//            Runnables.startSTime(this);
+//        }
+        if (Checks.checkIfUsedPlaceholders(scoreboardText)) {
+            Runnables.startPlaceholderTask(this);
         }
 
     }
@@ -93,7 +102,7 @@ public class Main {
     @DefaultConfig(sharedRoot = true)
     Path defaultConfig;
 
-    //Used for the playercount (to now when it is updated)
+    //Used for the playercount (to know when it is updated)
     @Listener
     public void onPlayerJoin(ClientConnectionEvent.Join event) {
 
@@ -104,7 +113,7 @@ public class Main {
         }
     }
 
-    //Used for the playercount (to now when it is updated)
+    //Used for the playercount (to know when it is updated)
     @Listener
     public void onPlayerLeave(ClientConnectionEvent.Disconnect event) {
         Task.Builder taskBuilder = Sponge.getScheduler().createTaskBuilder();
@@ -144,16 +153,20 @@ public class Main {
         }
 
         Runnables.stopTPS();
-        Runnables.stopMTime();
-        Runnables.stopSTime();
-        if (Checks.checkIfUsedTPS(Main.scoreboardText)) {
+        //Runnables.stopMTime();
+        //Runnables.stopSTime();
+        Runnables.stopPlaceholderTask();
+        if (Checks.checkIfUsedTPS(scoreboardText)) {
             Runnables.startTPS(this);
         }
-        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
-            Runnables.startMTime(this);
-        }
-        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
-            Runnables.startSTime(this);
+//        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
+//            Runnables.startMTime(this);
+//        }
+//        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
+//            Runnables.startSTime(this);
+//        }
+        if (Checks.checkIfUsedPlaceholders(scoreboardText)) {
+            Runnables.startPlaceholderTask(this);
         }
     }
 
@@ -165,36 +178,51 @@ public class Main {
         List<Score> lines = new ArrayList<>();
         Objective obj;
 
-        List<Line> loadedData = new ArrayList<>();
+        List<TextLine> loadedData = new ArrayList<>();
 
-        for (Line line : scoreboardText) {
-            loadedData.add(new Line(Replacements.replacePlaceholders(player, line.getNumber(), true),
-                    Replacements.replacePlaceholders(player, line.getText(), false)));
+        for (LineOfString line : scoreboardText) {
+            loadedData.add(new TextLine(Replacements.replacePlaceholders(player, line.getNumber(), true),
+                    Conversions.lineToText(Replacements.replacePlaceholders(player, line.getText(), false))));
         }
 
-        String title = " ";
-        for (Line line : loadedData) {
+        if (placeholderapiEnabled()) {
+            Optional<PlaceholderService> service = Sponge.getGame().getServiceManager().provide(PlaceholderService.class);
+
+            if (service.isPresent()) {
+                PlaceholderService placeholderService = service.get();
+                for (TextLine line : loadedData) {
+                    line.setNumber(placeholderService.replacePlaceholders(player, line.getNumber()).toPlain());
+
+                    List<Text> parts = new ArrayList<>();
+
+                    for (Text text : line.getText().getChildren()) {
+                        parts.add(Text.of(text.getColor(), text.getStyle(),
+                                placeholderService.replacePlaceholders(player, text.toPlain())));
+
+                    }
+
+                    line.setText(Text.join(parts));
+                }
+            }
+        }
+
+        Text title = Text.of(" ");
+        for (TextLine line : loadedData) {
             try {
                 if (Integer.parseInt(line.getNumber()) == -1) {
                     title = line.getText();
                     break;
                 }
             } catch (Exception e) {
-                //TODO
+                //Catching exceptions
             }
         }
 
         obj = Objective.builder()
                 .name("EasyScoreboard")
                 .criterion(Criteria.DUMMY)
-                .displayName(Conversions.lineToText(title))
+                .displayName(title)
                 .build();
-
-        for (Line line : scoreboardText) {
-            if (Objects.equals(line.getText(), "")) {
-                line.setText(" ");
-            }
-        }
 
         int minusOneScoreCount = 0;
 
@@ -208,7 +236,9 @@ public class Main {
                     }
                 }
                 if (equalExist) {
-                    loadedData.get(i).setText(loadedData.get(i).getText() + " ");
+                    List<Text> parts = loadedData.get(i).getText().getChildren();
+                    parts.add(Text.of(" "));
+                    loadedData.get(i).setText(Text.join(parts));
                 }
             }
 
@@ -217,19 +247,25 @@ public class Main {
             try {
                 score = Integer.parseInt(loadedData.get(i).getNumber());
             } catch (NumberFormatException e) {
-                logger.error("Line " + i + " is missing a valid score. If you think this is not your fault please " +
-                        "report the following lines to https://github.com/byYottaFLOPS/EasyScoreboards/issues");
-                e.printStackTrace();
+                if (!invalidLineNumbers.contains(loadedData.get(i).getNumber())) {
+                    logger.error("Line " + loadedData.get(i).getNumber() + " is missing a valid score. If you think " +
+                            "this is not your fault please report the following lines to " +
+                            "https://github.com/byYottaFLOPS/EasyScoreboards/issues");
+                    e.printStackTrace();
+                    invalidLineNumbers.add(loadedData.get(i).getNumber());
+                }
             }
             if (score != -1) {
-                lines.add(obj.getOrCreateScore(Conversions.lineToText(loadedData.get(i).getText())));
+                lines.add(obj.getOrCreateScore(loadedData.get(i).getText()));
                 lines.get(i-minusOneScoreCount).setScore(score);
             } else {
                 minusOneScoreCount++;
             }
         }
 
-        scoreboard.addObjective(obj);
+        if (!scoreboard.getObjective("EasyScoreboard").isPresent()) {
+            scoreboard.addObjective(obj);
+        }
         scoreboard.updateDisplaySlot(obj, DisplaySlots.SIDEBAR);
 
         return scoreboard;
@@ -254,7 +290,7 @@ public class Main {
         if (newText.equals("")) {
             newText = " ";
         }
-        try {
+        //try {
             if (line < 16 && line >= 0) {
                 if (Replacements.removePlaceholders(newText).length() < 30) {
                     scoreboardText.get(line).setText(newText);
@@ -271,9 +307,9 @@ public class Main {
                     commandSource.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
 
         bufferable = Checks.checkIfBufferable(scoreboardText);
         usedPlayerCount = Checks.checkIfUsedPlayerCount(scoreboardText);
@@ -295,9 +331,6 @@ public class Main {
 
     //Sets the scoreboard
     public void setScoreboard(Player player) {
-        if(Sponge.getServer().getOnlinePlayers().size() == 1) {
-            bufferedScoreboard = makeScoreboard(player);
-        }
         if(shouldShow(player)) {
             if (bufferable) {
                 player.setScoreboard(bufferedScoreboard);

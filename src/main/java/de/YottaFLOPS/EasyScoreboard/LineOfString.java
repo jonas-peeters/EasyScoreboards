@@ -1,10 +1,11 @@
 package de.YottaFLOPS.EasyScoreboard;
 
-public class Line {
+public class LineOfString {
+
     private String number;
     private String text;
 
-    public Line(String number, String text) {
+    public LineOfString(String number, String text) {
         this.number = number;
         this.text = text;
     }
@@ -19,5 +20,9 @@ public class Line {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

@@ -38,16 +38,19 @@ class ShowAll implements CommandExecutor {
         }
 
         Runnables.stopTPS();
-        Runnables.stopMTime();
-        Runnables.stopSTime();
+//        Runnables.stopMTime();
+//        Runnables.stopSTime();
         if (Checks.checkIfUsedTPS(Main.scoreboardText)) {
             Runnables.startTPS(plugin);
         }
-        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
-            Runnables.startMTime(plugin);
-        }
-        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
-            Runnables.startSTime(plugin);
+//        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
+//            Runnables.startMTime(plugin);
+//        }
+//        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
+//            Runnables.startSTime(plugin);
+//        }
+        if (Checks.checkIfUsedPlaceholders(Main.scoreboardText)) {
+            Runnables.startPlaceholderTask(plugin);
         }
 
         return CommandResult.success();

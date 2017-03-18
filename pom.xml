@@ -25,10 +25,10 @@
             <id>sponge</id>
             <url>http://repo.spongepowered.org/maven</url>
         </repository>
-        <!--<repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>-->
+        </repository>
     </repositories>
 
     <dependencies>
@@ -43,11 +43,11 @@
             <artifactId>commons-io</artifactId>
             <version>1.4</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>com.github.rojo8399</groupId>
             <artifactId>PlaceholderAPI</artifactId>
-            <version>master-2ff3e2df39-1</version>
-        </dependency>-->
+            <version>f239cc14c4</version>
+        </dependency>
     </dependencies>
 </project>
 

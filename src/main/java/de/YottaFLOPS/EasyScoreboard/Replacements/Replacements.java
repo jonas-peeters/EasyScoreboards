@@ -18,7 +18,7 @@ public class Replacements {
                 data = data.replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
             } else {
                 data = data.replace("%ONLINECOUNT%", "-");
-                Main.logger.warn("Line \"" + data + "\" is to long");
+                Main.logger.warn("LineOfString \"" + data + "\" is to long");
             }
         }
         if (data.contains("%PLAYERBALANCE%")) {
@@ -29,7 +29,7 @@ public class Replacements {
                     data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)));
                 } else {
                     data = data.replace("%PLAYERBALANCE%", "--");
-                    Main.logger.warn("Line \"" + data + "\" is to long at player " + player.getName());
+                    Main.logger.warn("LineOfString \"" + data + "\" is to long at player " + player.getName());
                 }
             }
         }
@@ -42,7 +42,7 @@ public class Replacements {
                     data = data.replace("%PLAYERBALANCEWRAP%", Conversions.intToMoney(Main.getPlayerBalance(player)));
                 } else {
                     data = data.replace("%PLAYERBALANCEWRAP%", "--");
-                    Main.logger.warn("Line \"" + data + "\" is to long at player " + player.getName());
+                    Main.logger.warn("LineOfString \"" + data + "\" is to long at player " + player.getName());
                 }
             }
         }
@@ -55,7 +55,7 @@ public class Replacements {
                     data = data.replace("%PLAYERNAME%", player.getName());
                 } else {
                     data = data.replace("%PLAYERNAME%", "--");
-                    Main.logger.warn("Line \"" + data + "\" is to long");
+                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
                 }
             }
         }
@@ -67,7 +67,7 @@ public class Replacements {
                     data = data.replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0));
                 } else {
                     data = data.replace("%TPS%", "");
-                    Main.logger.warn("Line \"" + data + "\" is to long");
+                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
                 }
             }
         }
@@ -79,7 +79,7 @@ public class Replacements {
                     data = data.replace("%COUNTDOWN%", secondsToTime(countdownTimeUse));
                 } else {
                     data = data.replace("%COUNTDOWN%", "--");
-                    Main.logger.warn("Line \"" + data + "\" is to long");
+                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
                 }
             }
         }
@@ -91,7 +91,7 @@ public class Replacements {
                     data = data.replace("%MTIME%", Time.getMTime());
                 } else {
                     data = data.replace("%MTIME%", "--");
-                    Main.logger.warn("Line \"" + data + "\" is to long");
+                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
                 }
             }
         }
@@ -104,7 +104,7 @@ public class Replacements {
                     data = data.replace("%STIME%", Time.getSTime());
                 } else {
                     data = data.replace("%STIME%", "--");
-                    Main.logger.warn("Line \"" + data + "\" is to long");
+                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
                 }
             }
         }

@@ -8,8 +8,9 @@ public class Runnables {
 
     private static Task TPSTask1;
     private static Task TPSTask2;
-    private static Task STime;
-    private static Task MTime;
+//    private static Task STime;
+//    private static Task MTime;
+    private static Task PlaceholderAPI;
     public static double lastTPS = 20.0;
     private static double tps = 0.0;
 
@@ -45,35 +46,51 @@ public class Runnables {
         }
     }
 
-    //Starting the runnable to update the minecraft time
-    public static void startMTime(Main plugin) {
-        MTime = Sponge.getScheduler().createTaskBuilder().execute(() -> {
+//    //Starting the runnable to update the minecraft time
+//    public static void startMTime(Main plugin) {
+//        MTime = Sponge.getScheduler().createTaskBuilder().execute(() -> {
+//            if (Sponge.getServer().getOnlinePlayers().size() != 0) {
+//                plugin.updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
+//            }
+//        }).intervalTicks(167).delayTicks(167).submit(plugin);
+//    }
+//
+//    //Stopping the runnable to update the minecraft time
+//    public static void stopMTime() {
+//        if(MTime != null) {
+//            MTime.cancel();
+//        }
+//    }
+//
+//    //Starting the runnable to update the real time
+//    public static void startSTime(Main plugin) {
+//        STime = Sponge.getScheduler().createTaskBuilder().execute(() -> {
+//            if (Sponge.getServer().getOnlinePlayers().size() != 0) {
+//                plugin.updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
+//            }
+//        }).intervalTicks(1200).delayTicks(167).submit(plugin);
+//    }
+//
+//    //Stopping the runnable to update the real time
+//    public static void stopSTime() {
+//        if(STime != null) {
+//            STime.cancel();
+//        }
+//    }
+
+    //Starting the runnable to update the placeholder api placeholders
+    public static void startPlaceholderTask(Main plugin) {
+        PlaceholderAPI = Sponge.getScheduler().createTaskBuilder().execute(() -> {
             if (Sponge.getServer().getOnlinePlayers().size() != 0) {
                 plugin.updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
             }
-        }).intervalTicks(167).delayTicks(167).submit(plugin);
+        }).intervalTicks(Main.updateTicks).delayTicks(Main.updateTicks).submit(plugin);
     }
 
-    //Stopping the runnable to update the minecraft time
-    public static void stopMTime() {
-        if(MTime != null) {
-            MTime.cancel();
-        }
-    }
-
-    //Starting the runnable to update the real time
-    public static void startSTime(Main plugin) {
-        STime = Sponge.getScheduler().createTaskBuilder().execute(() -> {
-            if (Sponge.getServer().getOnlinePlayers().size() != 0) {
-                plugin.updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
-            }
-        }).intervalTicks(1200).delayTicks(167).submit(plugin);
-    }
-
-    //Stopping the runnable to update the real time
-    public static void stopSTime() {
-        if(STime != null) {
-            STime.cancel();
+    //Stopping the runnable to update the placeholder api placeholders
+    public static void stopPlaceholderTask() {
+        if(PlaceholderAPI != null) {
+            PlaceholderAPI.cancel();
         }
     }
 }

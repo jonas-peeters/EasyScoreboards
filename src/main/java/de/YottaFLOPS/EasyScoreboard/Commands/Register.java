@@ -75,7 +75,7 @@ public class Register {
         //        .permission("easyscoreboard.set")
         //        .description(Text.of("Change the scoreboard text"))
         //        .arguments(
-        //                GenericArguments.onlyOne(GenericArguments.integer(Text.of("Line"))),
+        //                GenericArguments.onlyOne(GenericArguments.integer(Text.of("LineOfString"))),
         //                GenericArguments.onlyOne(GenericArguments.string(Text.of("New Text"))))
         //        .executor(new SetLine(main))
         //        .build());

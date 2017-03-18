@@ -25,8 +25,8 @@ class SetLine implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
 
-        if(args.<Integer>getOne("Line").isPresent()) {
-            int line = args.<Integer>getOne("Line").get();
+        if(args.<Integer>getOne("LineOfString").isPresent()) {
+            int line = args.<Integer>getOne("LineOfString").get();
             if (args.<String>getOne("New Text").isPresent()) {
                 String newText = args.<String>getOne("New Text").get();
                 plugin.setLine(newText, line, commandSource);
@@ -43,16 +43,20 @@ class SetLine implements CommandExecutor {
         }
 
         Runnables.stopTPS();
-        Runnables.stopMTime();
-        Runnables.stopSTime();
+//        Runnables.stopMTime();
+//        Runnables.stopSTime();
+        Runnables.stopPlaceholderTask();
         if (Checks.checkIfUsedTPS(Main.scoreboardText)) {
             Runnables.startTPS(plugin);
         }
-        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
-            Runnables.startMTime(plugin);
-        }
-        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
-            Runnables.startSTime(plugin);
+//        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
+//            Runnables.startMTime(plugin);
+//        }
+//        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
+//            Runnables.startSTime(plugin);
+//        }
+        if (Checks.checkIfUsedPlaceholders(Main.scoreboardText)) {
+            Runnables.startPlaceholderTask(plugin);
         }
 
         return CommandResult.success();

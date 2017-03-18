@@ -37,8 +37,9 @@ class HideAll implements CommandExecutor {
         }
 
         Runnables.stopTPS();
-        Runnables.stopMTime();
-        Runnables.stopSTime();
+//        Runnables.stopMTime();
+//        Runnables.stopSTime();
+        Runnables.stopPlaceholderTask();
 
         return CommandResult.success();
     }

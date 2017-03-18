@@ -9,6 +9,7 @@ A Sponge plugin to create dynamic scoreboards
 5. See changes immediately
 6. Include countdowns in scoreboard, chat, XP-Bar and titles
 7. Single players can hide their scoreboard
+8. Support for the PlaceholderAPI
 
 
 If you have ideas for more features please open an issue here:
@@ -17,10 +18,18 @@ If this is not possible just write it into the comments below or send me a PM he
 https://forums.spongepowered.org/users/yottaflops/
 
 ## Setup
-1. Place the plugin file in the mods folder of you Sponge server
+1. Place the plugin file in the mods folder of your sponge server
 2. Start the server
 3. Edit the config file (config/de_yottaflops_easyscoreboard.conf)
 4. Reload the scoreboard (/sponge plugins reload)
+
+### Optional: Setup for the PlaceholderAPI
+1. Get the latest release: https://ore.spongepowered.org/rojo8399/PlaceholderAPI/versions
+2. Move the plugin into the mods folder of your sponge server
+3. Add placeholders to the scoreboard by editing the config file. 
+[Here](https://github.com/rojo8399/PlaceholderAPI/wiki/Placeholders) is a list of built-in placeholders. (You can also 
+add plugins that add even more placeholders to the API.)
+4. Restart the server
 
 ##Links (Download)
 **Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest**
@@ -146,7 +155,6 @@ These will be replaced with the equivalent color.
 ![Styles](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true)
 
 ### Other
-
     Using placeholders that require a custom scoreboard for every player
     while using some that require a lot of updating should be done with 
     care on large servers because this will be very CPU intensive.
@@ -171,6 +179,9 @@ who sees the scoreboard
 `%MTIME%` is the current time Minecraft. Updates every 8.35 seconds aka every 10 Minecraft-Minutes.
 
 `%STIME%` is the time the server has. Updates every 60 seconds.
+
+On top of these integrated placeholders you can install and use every placeholder from the PlaceholderAPI by rojo8399.
+You can find a download [here](https://ore.spongepowered.org/rojo8399/PlaceholderAPI).
 
 ![Placeholders](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true)
 
