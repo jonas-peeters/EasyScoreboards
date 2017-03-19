@@ -4,8 +4,6 @@ import de.YottaFLOPS.EasyScoreboard.Replacements.Colors;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Styles;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColor;
-import org.spongepowered.api.text.format.TextStyle;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -106,31 +104,5 @@ public class Conversions {
         } else {
             return String.valueOf((double) Math.round(m/100000000)/10) + "b";
         }
-    }
-
-    public static String matchColor(TextColor color) {
-        switch (color.getName()) {
-            case "BLACK":
-                return "&0";
-            case "GREEN":
-                return "&a";
-        }
-        return "&f";
-    }
-
-    public static String matchStyle(TextStyle style) {
-        if (style.isBold().isPresent() && style.isBold().get()) {
-            return "&l";
-        } else if (style.isObfuscated().isPresent() && style.isObfuscated().get()) {
-            return "&k";
-        } else if (style.isItalic().isPresent() && style.isItalic().get()) {
-            return "&o";
-        } else if (style.hasStrikethrough().isPresent() && style.hasStrikethrough().get()) {
-            return "&m";
-        } else if (style.hasUnderline().isPresent() && style.hasUnderline().get()) {
-            return "&n";
-        }
-
-        return "";
     }
 }

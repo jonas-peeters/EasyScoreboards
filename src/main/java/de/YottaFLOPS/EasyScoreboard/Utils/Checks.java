@@ -61,29 +61,29 @@ public class Checks {
         return false;
     }
 
-    public static boolean checkIfUsedMTime(List<LineOfString> scoreboardText) {
-        for(LineOfString line : scoreboardText) {
-            if (line.getNumber().contains("%MTIME%")) {
-                return true;
-            }
-            if (line.getText().contains("%MTIME%")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean checkIfUsedSTime(List<LineOfString> scoreboardText) {
-        for(LineOfString line : scoreboardText) {
-            if (line.getNumber().contains("%STIME%")) {
-                return true;
-            }
-            if (line.getText().contains("%STIME%")) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public static boolean checkIfUsedMTime(List<LineOfString> scoreboardText) {
+//        for(LineOfString line : scoreboardText) {
+//            if (line.getNumber().contains("%MTIME%")) {
+//                return true;
+//            }
+//            if (line.getText().contains("%MTIME%")) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public static boolean checkIfUsedSTime(List<LineOfString> scoreboardText) {
+//        for(LineOfString line : scoreboardText) {
+//            if (line.getNumber().contains("%STIME%")) {
+//                return true;
+//            }
+//            if (line.getText().contains("%STIME%")) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean checkIfUsedPlaceholders(List<LineOfString> scoreboardText) {
         for(LineOfString line : scoreboardText) {

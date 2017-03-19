@@ -43,12 +43,12 @@ import java.util.Optional;
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
         name = "Easy Scoreboards",
-        version = "2.1.0",
+        version = "2.1.1",
         description = "A plugin to easily create scoreboards for lobbys")
 public class Main {
 
     public static List<LineOfString> scoreboardText = new ArrayList<>();
-    private List<String> invalidLineNumbers = new ArrayList<>();
+    private final List<String> invalidLineNumbers = new ArrayList<>();
     public boolean bufferable = true;
     public boolean usedPlayerCount = false;
     private Scoreboard bufferedScoreboard;
@@ -194,15 +194,19 @@ public class Main {
                     line.setNumber(placeholderService.replacePlaceholders(player, line.getNumber()).toPlain());
 
                     List<Text> parts = new ArrayList<>();
-
                     for (Text text : line.getText().getChildren()) {
                         parts.add(Text.of(text.getColor(), text.getStyle(),
                                 placeholderService.replacePlaceholders(player, text.toPlain())));
 
                     }
-
                     line.setText(Text.join(parts));
                 }
+            }
+        }
+
+        for (TextLine line : loadedData) {
+            if (line.getText().toPlain().length() > 38) {
+                line.setText(Text.of("Line to long error (max: 38)"));
             }
         }
 
@@ -236,9 +240,7 @@ public class Main {
                     }
                 }
                 if (equalExist) {
-                    List<Text> parts = loadedData.get(i).getText().getChildren();
-                    parts.add(Text.of(" "));
-                    loadedData.get(i).setText(Text.join(parts));
+                    loadedData.get(i).setText(Text.join(loadedData.get(i).getText(), Text.of(" ")));
                 }
             }
 
@@ -355,7 +357,7 @@ public class Main {
         return true;
     }
 
-    public static boolean placeholderapiEnabled() {
+    private static boolean placeholderapiEnabled() {
         return Sponge.getPluginManager().getPlugin("placeholderapi").isPresent();
     }
 }

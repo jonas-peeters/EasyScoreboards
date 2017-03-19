@@ -2,7 +2,7 @@ package de.YottaFLOPS.EasyScoreboard;
 
 import org.spongepowered.api.text.Text;
 
-public class TextLine {
+class TextLine {
 
     private String number;
     private Text text;

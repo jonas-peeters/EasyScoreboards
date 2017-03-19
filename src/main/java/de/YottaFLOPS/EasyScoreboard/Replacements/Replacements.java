@@ -14,23 +14,13 @@ public class Replacements {
     public static String replacePlaceholders(Player player, String string, Boolean asNumber) {
         String data = string;
         if (data.contains("%ONLINECOUNT%")) {
-            if (removePlaceholders(data.replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()))).length() < 30) {
-                data = data.replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
-            } else {
-                data = data.replace("%ONLINECOUNT%", "-");
-                Main.logger.warn("LineOfString \"" + data + "\" is to long");
-            }
+            data = data.replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
         }
         if (data.contains("%PLAYERBALANCE%")) {
             if (asNumber) {
                 data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player).intValue()));
             } else {
-                if (removePlaceholders(data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)))).length() < 30) {
-                    data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)));
-                } else {
-                    data = data.replace("%PLAYERBALANCE%", "--");
-                    Main.logger.warn("LineOfString \"" + data + "\" is to long at player " + player.getName());
-                }
+                data = data.replace("%PLAYERBALANCE%", String.valueOf(Main.getPlayerBalance(player)));
             }
         }
         if (data.contains("%PLAYERBALANCEWRAP%")) {
@@ -38,12 +28,7 @@ public class Replacements {
                 data = data.replace("%PLAYERBALANCEWRAP%", "0");
                 Main.logger.warn("You can not use %PLAYERBALANCEWRAP% as number");
             } else {
-                if (removePlaceholders(data.replace("%PLAYERBALANCEWRAP%", Conversions.intToMoney(Main.getPlayerBalance(player)))).length() < 30) {
-                    data = data.replace("%PLAYERBALANCEWRAP%", Conversions.intToMoney(Main.getPlayerBalance(player)));
-                } else {
-                    data = data.replace("%PLAYERBALANCEWRAP%", "--");
-                    Main.logger.warn("LineOfString \"" + data + "\" is to long at player " + player.getName());
-                }
+                data = data.replace("%PLAYERBALANCEWRAP%", Conversions.intToMoney(Main.getPlayerBalance(player)));
             }
         }
         if (data.contains("%PLAYERNAME%")) {
@@ -51,48 +36,28 @@ public class Replacements {
                 data = data.replace("%PLAYERNAME%", "0");
                 Main.logger.warn("You can not use %PLAYERNAME% as number");
             } else {
-                if (removePlaceholders(data.replace("%PLAYERNAME%", player.getName())).length() < 30) {
-                    data = data.replace("%PLAYERNAME%", player.getName());
-                } else {
-                    data = data.replace("%PLAYERNAME%", "--");
-                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
-                }
+                data = data.replace("%PLAYERNAME%", player.getName());
             }
         }
         if (data.contains("%TPS%")) {
             if (asNumber) {
                 data = data.replace("%TPS%", String.valueOf(Math.round(Runnables.lastTPS)));
             } else {
-                if (removePlaceholders(data.replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0))).length() < 30) {
-                    data = data.replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0));
-                } else {
-                    data = data.replace("%TPS%", "");
-                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
-                }
+                data = data.replace("%TPS%", String.valueOf(Math.round(100.0 * Runnables.lastTPS) / 100.0));
             }
         }
         if (data.contains("%COUNTDOWN%")) {
             if (asNumber) {
                 data = data.replace("%COUNTDOWN%", String.valueOf(countdownTimeUse));
             } else {
-                if (removePlaceholders(data.replace("%COUNTDOWN%", secondsToTime(countdownTimeUse))).length() < 30) {
-                    data = data.replace("%COUNTDOWN%", secondsToTime(countdownTimeUse));
-                } else {
-                    data = data.replace("%COUNTDOWN%", "--");
-                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
-                }
+                data = data.replace("%COUNTDOWN%", secondsToTime(countdownTimeUse));
             }
         }
         if (data.contains("%MTIME%")) {
             if (asNumber) {
                 data = data.replace("%MTIME%", Time.getMTimeAsInt());
             } else {
-                if (removePlaceholders(data.replace("%MTIME%", Time.getMTime())).length() < 30) {
-                    data = data.replace("%MTIME%", Time.getMTime());
-                } else {
-                    data = data.replace("%MTIME%", "--");
-                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
-                }
+                data = data.replace("%MTIME%", Time.getMTime());
             }
         }
         if (data.contains("%STIME%")) {
@@ -100,20 +65,7 @@ public class Replacements {
                 data = data.replace("%PLAYERNAME%", "0");
                 Main.logger.warn("You can not use %STIME% as number");
             } else {
-                if (removePlaceholders(data.replace("%STIME%", Time.getSTime())).length() < 30) {
-                    data = data.replace("%STIME%", Time.getSTime());
-                } else {
-                    data = data.replace("%STIME%", "--");
-                    Main.logger.warn("LineOfString \"" + data + "\" is to long");
-                }
-            }
-        }
-
-        if (removePlaceholders(data).length() > 29) {
-            if (asNumber) {
-                return "0";
-            } else {
-                return "";
+                data = data.replace("%STIME%", Time.getSTime());
             }
         }
 
