@@ -1,8 +1,8 @@
 package de.YottaFLOPS.EasyScoreboard.Commands;
 
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.Utils.Checks;
-import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
+import de.YottaFLOPS.EasyScoreboard.Util.Checks;
+import de.YottaFLOPS.EasyScoreboard.Util.Runnables;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;

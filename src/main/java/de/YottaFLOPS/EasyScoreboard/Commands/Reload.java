@@ -1,7 +1,7 @@
 package de.YottaFLOPS.EasyScoreboard.Commands;
 
-import de.YottaFLOPS.EasyScoreboard.Util.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
+import de.YottaFLOPS.EasyScoreboard.Util.Config;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -15,29 +15,25 @@ import org.spongepowered.api.text.format.TextColors;
 
 import java.util.ArrayList;
 
-class ClearAll implements CommandExecutor {
+class Reload implements CommandExecutor {
 
     private final Main plugin;
 
-    ClearAll(Main instance) {
+    public Reload(Main instance) {
         plugin = instance;
     }
 
     @SuppressWarnings("NullableProblems")
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
-        Main.scoreboardText = new ArrayList<>();
+
+        try {
+            plugin.reload();
+        } catch (Exception ignored) {}
+
         if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
-            commandSource.sendMessage(Text.of(TextColors.GRAY, "Cleared scoreboard"));
+            commandSource.sendMessage(Text.of(TextColors.GRAY, "EasyScoreboard reloaded config successfully"));
         }
-        for (Player p : Sponge.getServer().getOnlinePlayers()) {
-            p.setScoreboard(plugin.makeScoreboard(p));
-        }
-
-        Config.save();
-
-        plugin.usedPlayerCount = false;
-        plugin.bufferable = true;
 
         return CommandResult.success();
     }

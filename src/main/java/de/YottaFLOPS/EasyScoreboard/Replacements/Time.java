@@ -1,6 +1,6 @@
 package de.YottaFLOPS.EasyScoreboard.Replacements;
 
-import de.YottaFLOPS.EasyScoreboard.Utils.Conversions;
+import de.YottaFLOPS.EasyScoreboard.Util.Conversions;
 import org.spongepowered.api.Sponge;
 
 import java.text.DateFormat;

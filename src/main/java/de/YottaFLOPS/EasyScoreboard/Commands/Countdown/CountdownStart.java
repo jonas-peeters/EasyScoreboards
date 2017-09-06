@@ -140,7 +140,9 @@ public class CountdownStart implements CommandExecutor {
 
                 Main.countdownTimeUse = Main.countdownTime;
 
-                plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
+                if (Sponge.getServer().getOnlinePlayers().size() > 0) {
+                    plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
+                }
 
                 Main.countdownTask.cancel();
             }

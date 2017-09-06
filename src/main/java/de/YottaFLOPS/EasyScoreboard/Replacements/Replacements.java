@@ -1,12 +1,12 @@
 package de.YottaFLOPS.EasyScoreboard.Replacements;
 
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.Utils.Conversions;
-import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
+import de.YottaFLOPS.EasyScoreboard.Util.Conversions;
+import de.YottaFLOPS.EasyScoreboard.Util.Runnables;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
-import static de.YottaFLOPS.EasyScoreboard.Utils.Conversions.secondsToTime;
+import static de.YottaFLOPS.EasyScoreboard.Util.Conversions.secondsToTime;
 import static de.YottaFLOPS.EasyScoreboard.Main.countdownTimeUse;
 
 public class Replacements {

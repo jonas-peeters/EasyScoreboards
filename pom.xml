@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.github.rojo8399</groupId>
             <artifactId>PlaceholderAPI</artifactId>
-            <version>f239cc14c4</version>
+            <version>v4.1</version>
         </dependency>
     </dependencies>
 </project>

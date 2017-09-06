@@ -1,6 +1,6 @@
 package de.YottaFLOPS.EasyScoreboard.Commands;
 
-import de.YottaFLOPS.EasyScoreboard.Utils.Config;
+import de.YottaFLOPS.EasyScoreboard.Util.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -16,7 +16,7 @@ class Show implements CommandExecutor {
 
     private final Main plugin;
 
-    public Show(Main instance) {
+    Show(Main instance) {
         plugin = instance;
     }
 

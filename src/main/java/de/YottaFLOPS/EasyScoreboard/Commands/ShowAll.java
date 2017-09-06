@@ -1,9 +1,9 @@
 package de.YottaFLOPS.EasyScoreboard.Commands;
 
-import de.YottaFLOPS.EasyScoreboard.Utils.Checks;
-import de.YottaFLOPS.EasyScoreboard.Utils.Config;
+import de.YottaFLOPS.EasyScoreboard.Util.Checks;
+import de.YottaFLOPS.EasyScoreboard.Util.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
+import de.YottaFLOPS.EasyScoreboard.Util.Runnables;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -19,7 +19,7 @@ class ShowAll implements CommandExecutor {
 
     private final Main plugin;
 
-    public ShowAll(Main instance) {
+    ShowAll(Main instance) {
         plugin = instance;
     }
 

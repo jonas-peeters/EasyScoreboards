@@ -1,4 +1,4 @@
-package de.YottaFLOPS.EasyScoreboard.Utils;
+package de.YottaFLOPS.EasyScoreboard.Util;
 
 import com.google.common.reflect.TypeToken;
 import de.YottaFLOPS.EasyScoreboard.LineOfString;

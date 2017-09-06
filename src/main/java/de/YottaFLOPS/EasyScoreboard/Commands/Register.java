@@ -71,19 +71,16 @@ public class Register {
                 .executor(new CountdownTitle())
                 .build());
 
-        //subcommands.put(Collections.singletonList("set"), CommandSpec.builder()
-        //        .permission("easyscoreboard.set")
-        //        .description(Text.of("Change the scoreboard text"))
-        //        .arguments(
-        //                GenericArguments.onlyOne(GenericArguments.integer(Text.of("LineOfString"))),
-        //                GenericArguments.onlyOne(GenericArguments.string(Text.of("New Text"))))
-        //        .executor(new SetLine(main))
-        //        .build());
-
         subcommands.put(Collections.singletonList("clear"), CommandSpec.builder()
                 .permission("easyscoreboard.clear")
                 .description(Text.of("Clear the complete scoreboard"))
                 .executor(new ClearAll(main))
+                .build());
+
+        subcommands.put(Collections.singletonList("Reload"), CommandSpec.builder()
+                .permission("easyscoreboard.Reload")
+                .description(Text.of("Reload esb config"))
+                .executor(new Reload(main))
                 .build());
 
         subcommands.put(Collections.singletonList("countdown"), CommandSpec.builder()

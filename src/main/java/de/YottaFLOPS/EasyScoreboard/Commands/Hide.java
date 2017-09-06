@@ -1,7 +1,7 @@
 package de.YottaFLOPS.EasyScoreboard.Commands;
 
 import de.YottaFLOPS.EasyScoreboard.Main;
-import de.YottaFLOPS.EasyScoreboard.Utils.Config;
+import de.YottaFLOPS.EasyScoreboard.Util.Config;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -16,7 +16,7 @@ class Hide implements CommandExecutor {
 
     private final Main plugin;
 
-    public Hide(Main instance) {
+    Hide(Main instance) {
         plugin = instance;
     }
 

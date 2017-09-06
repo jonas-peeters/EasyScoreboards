@@ -1,4 +1,4 @@
-package de.YottaFLOPS.EasyScoreboard.Utils;
+package de.YottaFLOPS.EasyScoreboard.Util;
 
 import de.YottaFLOPS.EasyScoreboard.Replacements.Colors;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;

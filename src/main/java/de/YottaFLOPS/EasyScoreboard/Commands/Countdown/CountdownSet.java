@@ -1,6 +1,6 @@
 package de.YottaFLOPS.EasyScoreboard.Commands.Countdown;
 
-import de.YottaFLOPS.EasyScoreboard.Utils.Config;
+import de.YottaFLOPS.EasyScoreboard.Util.Config;
 import de.YottaFLOPS.EasyScoreboard.Main;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;

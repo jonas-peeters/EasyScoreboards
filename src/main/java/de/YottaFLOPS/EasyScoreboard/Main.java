@@ -3,11 +3,12 @@ package de.YottaFLOPS.EasyScoreboard;
 import com.google.inject.Inject;
 import de.YottaFLOPS.EasyScoreboard.Commands.Register;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
-import de.YottaFLOPS.EasyScoreboard.Utils.Checks;
-import de.YottaFLOPS.EasyScoreboard.Utils.Config;
-import de.YottaFLOPS.EasyScoreboard.Utils.Conversions;
-import de.YottaFLOPS.EasyScoreboard.Utils.Runnables;
+import de.YottaFLOPS.EasyScoreboard.Util.Checks;
+import de.YottaFLOPS.EasyScoreboard.Util.Config;
+import de.YottaFLOPS.EasyScoreboard.Util.Conversions;
+import de.YottaFLOPS.EasyScoreboard.Util.Runnables;
 import me.rojo8399.placeholderapi.PlaceholderService;
+import me.rojo8399.placeholderapi.impl.configs.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -42,9 +43,10 @@ import java.util.Optional;
 
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
-        name = "Easy Scoreboards",
-        version = "2.1.1",
-        description = "A plugin to easily create scoreboards for lobbys")
+        name = "EasyScoreboards",
+        version = "2.2",
+        description = "A plugin to easily create scoreboards for lobbys",
+        authors = "YottaFLOPS")
 public class Main {
 
     public static List<LineOfString> scoreboardText = new ArrayList<>();
@@ -116,12 +118,9 @@ public class Main {
     //Used for the playercount (to know when it is updated)
     @Listener
     public void onPlayerLeave(ClientConnectionEvent.Disconnect event) {
-        Task.Builder taskBuilder = Sponge.getScheduler().createTaskBuilder();
-        taskBuilder.execute(() -> {
-            for(Player player : Sponge.getServer().getOnlinePlayers()) {
-                setScoreboard(player);
-            }
-        }).delayTicks(10).submit(this);
+        if (usedPlayerCount && Sponge.getServer().getOnlinePlayers().size() > 0) {
+            updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
+        }
     }
 
     //Sets the economy plugin provider
@@ -145,29 +144,10 @@ public class Main {
     //Reload the config and restart the runnables if needed
     @Listener
     public void onReloadEvent(GameReloadEvent event) {
-        Config.init();
-        Config.load();
-
-        if (Sponge.getServer().getOnlinePlayers().size() != 0) {
-            updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
-        }
-
-        Runnables.stopTPS();
-        //Runnables.stopMTime();
-        //Runnables.stopSTime();
-        Runnables.stopPlaceholderTask();
-        if (Checks.checkIfUsedTPS(scoreboardText)) {
-            Runnables.startTPS(this);
-        }
-//        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
-//            Runnables.startMTime(this);
-//        }
-//        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
-//            Runnables.startSTime(this);
-//        }
-        if (Checks.checkIfUsedPlaceholders(scoreboardText)) {
-            Runnables.startPlaceholderTask(this);
-        }
+        reload();
+        event.getCause().first(Player.class).ifPresent((p) -> {
+            p.sendMessage(Text.of(TextColors.GRAY, "EasyScoreboard reloaded config successfully"));
+        });
     }
 
     //Generating the scoreboard
@@ -191,12 +171,12 @@ public class Main {
             if (service.isPresent()) {
                 PlaceholderService placeholderService = service.get();
                 for (TextLine line : loadedData) {
-                    line.setNumber(placeholderService.replacePlaceholders(player, line.getNumber()).toPlain());
+                    line.setNumber(placeholderService.replacePlaceholders(line.getNumber(), player).toPlain());
 
                     List<Text> parts = new ArrayList<>();
                     for (Text text : line.getText().getChildren()) {
                         parts.add(Text.of(text.getColor(), text.getStyle(),
-                                placeholderService.replacePlaceholders(player, text.toPlain())));
+                                placeholderService.replacePlaceholders(text.toPlain(), player)));
 
                     }
                     line.setText(Text.join(parts));
@@ -271,6 +251,25 @@ public class Main {
         scoreboard.updateDisplaySlot(obj, DisplaySlots.SIDEBAR);
 
         return scoreboard;
+    }
+
+    //Used to reload the config
+    public void reload() {
+        Config.init();
+        Config.load();
+
+        if (Sponge.getServer().getOnlinePlayers().size() != 0) {
+            updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
+        }
+
+        Runnables.stopTPS();
+        Runnables.stopPlaceholderTask();
+        if (Checks.checkIfUsedTPS(scoreboardText)) {
+            Runnables.startTPS(this);
+        }
+        if (Checks.checkIfUsedPlaceholders(scoreboardText)) {
+            Runnables.startPlaceholderTask(this);
+        }
     }
 
     //Return the money the players has

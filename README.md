@@ -14,6 +14,7 @@ A Sponge plugin to create dynamic scoreboards
 
 If you have ideas for more features please open an issue here:
 https://github.com/byYottaFLOPS/EasyScoreboards/issues
+
 If this is not possible just write it into the comments below or send me a PM here: 
 https://forums.spongepowered.org/users/yottaflops/
 
@@ -93,7 +94,8 @@ Github page: https://github.com/byYottaFLOPS/EasyScoreboards
 
 ### Other
 
-To reload the config file, just use the Plugin reload command from Sponge: `/sponge plugins reload`. 
+To reload the config file, just use the Plugin reload command from Sponge to reload all plugins `/sponge plugins reload`
+ or to reload just esb `/esb reload`.
 If you made any changes to the config file these will be applied instantly.
 
 ## Permissions
@@ -191,6 +193,6 @@ You can find a download [here](https://ore.spongepowered.org/rojo8399/Placeholde
 ## Bugs & Feature Requests
 There are no bugs.
 
-But in case you found one or you have a new stunning feature that must be included, please open an issue 
+But in case you found one or you have a new feature that must be included, please open an issue 
 [here](https://github.com/byYottaFLOPS/EasyScoreboards/issues), just write it into the comments below or send me a PM
 [here](https://forums.spongepowered.org/users/yottaflops/)
