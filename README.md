@@ -32,7 +32,7 @@ https://forums.spongepowered.org/users/yottaflops/
 add plugins that add even more placeholders to the API.)
 4. Restart the server
 
-##Links (Download)
+## Links (Download)
 **Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest**
 
 Guide: http://byyottaflops.github.io/EasyScoreboards/
