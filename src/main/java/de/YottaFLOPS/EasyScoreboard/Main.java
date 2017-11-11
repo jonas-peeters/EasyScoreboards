@@ -171,12 +171,12 @@ public class Main {
             if (service.isPresent()) {
                 PlaceholderService placeholderService = service.get();
                 for (TextLine line : loadedData) {
-                    line.setNumber(placeholderService.replacePlaceholders(line.getNumber(), player).toPlain());
+                    line.setNumber(placeholderService.replacePlaceholders(line.getNumber(), player, null).toPlain()); // observer = null
 
                     List<Text> parts = new ArrayList<>();
                     for (Text text : line.getText().getChildren()) {
                         parts.add(Text.of(text.getColor(), text.getStyle(),
-                                placeholderService.replacePlaceholders(text.toPlain(), player)));
+                                placeholderService.replacePlaceholders(text.toPlain(), player, null))); // observer = null
 
                     }
                     line.setText(Text.join(parts));
