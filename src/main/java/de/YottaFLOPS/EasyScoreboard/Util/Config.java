@@ -1,7 +1,6 @@
 package de.YottaFLOPS.EasyScoreboard.Util;
 
 import com.google.common.reflect.TypeToken;
-import de.YottaFLOPS.EasyScoreboard.LineOfString;
 import de.YottaFLOPS.EasyScoreboard.Main;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;

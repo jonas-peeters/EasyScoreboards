@@ -1,7 +1,5 @@
 package de.YottaFLOPS.EasyScoreboard.Util;
 
-import de.YottaFLOPS.EasyScoreboard.LineOfString;
-
 import java.util.List;
 
 public class Checks {

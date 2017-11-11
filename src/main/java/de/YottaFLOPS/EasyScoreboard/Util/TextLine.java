@@ -1,11 +1,13 @@
-package de.YottaFLOPS.EasyScoreboard;
+package de.YottaFLOPS.EasyScoreboard.Util;
 
-public class LineOfString {
+import org.spongepowered.api.text.Text;
+
+public class TextLine {
 
     private String number;
-    private String text;
+    private Text text;
 
-    public LineOfString(String number, String text) {
+    public TextLine(String number, Text text) {
         this.number = number;
         this.text = text;
     }
@@ -14,11 +16,11 @@ public class LineOfString {
         return number;
     }
 
-    public String getText() {
+    public Text getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public void setText(Text text) {
         this.text = text;
     }
 

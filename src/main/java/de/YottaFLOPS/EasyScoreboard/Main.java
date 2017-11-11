@@ -3,12 +3,8 @@ package de.YottaFLOPS.EasyScoreboard;
 import com.google.inject.Inject;
 import de.YottaFLOPS.EasyScoreboard.Commands.Register;
 import de.YottaFLOPS.EasyScoreboard.Replacements.Replacements;
-import de.YottaFLOPS.EasyScoreboard.Util.Checks;
-import de.YottaFLOPS.EasyScoreboard.Util.Config;
-import de.YottaFLOPS.EasyScoreboard.Util.Conversions;
-import de.YottaFLOPS.EasyScoreboard.Util.Runnables;
+import de.YottaFLOPS.EasyScoreboard.Util.*;
 import me.rojo8399.placeholderapi.PlaceholderService;
-import me.rojo8399.placeholderapi.impl.configs.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -27,13 +23,16 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
+import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
+import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMode;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ import java.util.Optional;
         id = "de_yottaflops_easyscoreboard",
         name = "EasyScoreboards",
         version = "2.2",
-        description = "A plugin to easily create scoreboards for lobbys",
+        description = "A plugin to easily create scoreboards for lobbys, etc.",
         authors = "YottaFLOPS")
 public class Main {
 
@@ -154,56 +153,18 @@ public class Main {
     public Scoreboard makeScoreboard(Player player) {
 
         Scoreboard scoreboard = Scoreboard.builder().build();
-
         List<Score> lines = new ArrayList<>();
         Objective obj;
-
-        List<TextLine> loadedData = new ArrayList<>();
-
-        for (LineOfString line : scoreboardText) {
-            loadedData.add(new TextLine(Replacements.replacePlaceholders(player, line.getNumber(), true),
-                    Conversions.lineToText(Replacements.replacePlaceholders(player, line.getText(), false))));
-        }
-
-        if (placeholderapiEnabled()) {
-            Optional<PlaceholderService> service = Sponge.getGame().getServiceManager().provide(PlaceholderService.class);
-
-            if (service.isPresent()) {
-                PlaceholderService placeholderService = service.get();
-                for (TextLine line : loadedData) {
-                    line.setNumber(placeholderService.replacePlaceholders(line.getNumber(), player).toPlain());
-
-                    List<Text> parts = new ArrayList<>();
-                    for (Text text : line.getText().getChildren()) {
-                        parts.add(Text.of(text.getColor(), text.getStyle(),
-                                placeholderService.replacePlaceholders(text.toPlain(), player)));
-
-                    }
-                    line.setText(Text.join(parts));
-                }
-            }
-        }
-
+        List<TextLine> loadedData = loadData(player);
         for (TextLine line : loadedData) {
             if (line.getText().toPlain().length() > 38) {
                 line.setText(Text.of("Line to long error (max: 38)"));
             }
         }
 
-        Text title = Text.of(" ");
-        for (TextLine line : loadedData) {
-            try {
-                if (Integer.parseInt(line.getNumber()) == -1) {
-                    title = line.getText();
-                    break;
-                }
-            } catch (Exception e) {
-                //Catching exceptions
-            }
-        }
-
+        Text title = getTitle(loadedData);
         obj = Objective.builder()
-                .name("EasyScoreboard")
+                .name("ESB")
                 .criterion(Criteria.DUMMY)
                 .displayName(title)
                 .build();
@@ -223,7 +184,6 @@ public class Main {
                     loadedData.get(i).setText(Text.join(loadedData.get(i).getText(), Text.of(" ")));
                 }
             }
-
 
             int score = 0;
             try {
@@ -245,13 +205,41 @@ public class Main {
             }
         }
 
-        if (!scoreboard.getObjective("EasyScoreboard").isPresent()) {
+        if (!scoreboard.getObjective("ESB").isPresent()) {
             scoreboard.addObjective(obj);
         }
         scoreboard.updateDisplaySlot(obj, DisplaySlots.SIDEBAR);
 
+        //Objective tabObjective = makeTabObjective(player);
+        //scoreboard.addObjective(tabObjective);
+        //scoreboard.updateDisplaySlot(tabObjective, DisplaySlots.LIST);
+
         return scoreboard;
     }
+
+    /* WIP Tab Scoreboard
+    private Objective makeTabObjective(Player player) {
+        List<TextLine> loadedData = loadData(player);
+        for (TextLine line : loadedData) {
+            if (line.getText().toPlain().length() > 38) {
+                line.setText(Text.of("Line to long error (max: 38)"));
+            }
+        }
+        Text title = getTitle(loadedData);
+
+        Objective objective = Objective.builder()
+                .name("ESBTab")
+                .criterion(Criteria.DUMMY)
+                .displayName(title)
+                .build();
+
+        List<Score> lines = new ArrayList<>();
+
+        lines.add(objective.getOrCreateScore(Text.of("Test")));
+        lines.get(0).setScore(2);
+
+        return objective;
+    }*/
 
     //Used to reload the config
     public void reload() {
@@ -356,7 +344,51 @@ public class Main {
         return true;
     }
 
+    //Check if the PlaceholderAPI is installed
     private static boolean placeholderapiEnabled() {
         return Sponge.getPluginManager().getPlugin("placeholderapi").isPresent();
+    }
+
+    private List<TextLine> loadData(Player player) {
+        List<TextLine> loadedData = new ArrayList<>();
+
+        for (LineOfString line : scoreboardText) {
+            loadedData.add(new TextLine(Replacements.replacePlaceholders(player, line.getNumber(), true),
+                    Conversions.lineToText(Replacements.replacePlaceholders(player, line.getText(), false))));
+        }
+
+        if (placeholderapiEnabled()) {
+            Optional<PlaceholderService> service = Sponge.getGame().getServiceManager().provide(PlaceholderService.class);
+
+            if (service.isPresent()) {
+                PlaceholderService placeholderService = service.get();
+                for (TextLine line : loadedData) {
+                    line.setNumber(placeholderService.replacePlaceholders(line.getNumber(), player).toPlain());
+
+                    List<Text> parts = new ArrayList<>();
+                    for (Text text : line.getText().getChildren()) {
+                        parts.add(Text.of(text.getColor(), text.getStyle(),
+                                placeholderService.replacePlaceholders(text.toPlain(), player)));
+
+                    }
+                    line.setText(Text.join(parts));
+                }
+            }
+        }
+
+        return loadedData;
+    }
+
+    private Text getTitle(List<TextLine> lines) {
+        for (TextLine line : lines) {
+            try {
+                if (Integer.parseInt(line.getNumber()) == -1) {
+                    return line.getText();
+                }
+            } catch (Exception e) {
+                //Catching exceptions
+            }
+        }
+        return Text.of(" ");
     }
 }
