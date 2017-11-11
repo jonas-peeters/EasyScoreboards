@@ -6,7 +6,7 @@
 
     <groupId>de.YottaFLOPS</groupId>
     <artifactId>EasyScoreboard</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>2.3</version>
     <build>
         <plugins>
             <plugin>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.github.rojo8399</groupId>
             <artifactId>PlaceholderAPI</artifactId>
-            <version>v4.1</version>
+            <version>749c188</version> <!-- v4.2 -->
         </dependency>
     </dependencies>
 </project>
