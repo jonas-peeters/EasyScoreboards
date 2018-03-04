@@ -23,27 +23,21 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
-import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
-import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMode;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
         name = "EasyScoreboards",
-        version = "2.2",
+        version = "2.3",
         description = "A plugin to easily create scoreboards for lobbys, etc.",
         authors = "YottaFLOPS")
 public class Main {
@@ -66,6 +60,7 @@ public class Main {
     public static int updateTicks = 40;
     public static final List<String> dontShowFor = new ArrayList<>();
     public static Path normalConfig;
+    Random random;
 
     //Inits the commands and the logger
     //Starts the config handling
@@ -80,17 +75,14 @@ public class Main {
         Config.init();
         Config.load();
         Config.save();
+
+        random = new Random();
+
         bufferable = Checks.checkIfBufferable(scoreboardText);
         usedPlayerCount = Checks.checkIfUsedPlayerCount(scoreboardText);
         if(Checks.checkIfUsedTPS(scoreboardText)) {
             Runnables.startTPS(this);
         }
-//        if(Checks.checkIfUsedMTime(scoreboardText)) {
-//            Runnables.startMTime(this);
-//        }
-//        if(Checks.checkIfUsedSTime(scoreboardText)) {
-//            Runnables.startSTime(this);
-//        }
         if (Checks.checkIfUsedPlaceholders(scoreboardText)) {
             Runnables.startPlaceholderTask(this);
         }
@@ -151,7 +143,6 @@ public class Main {
 
     //Generating the scoreboard
     public Scoreboard makeScoreboard(Player player) {
-
         Scoreboard scoreboard = Scoreboard.builder().build();
         List<Score> lines = new ArrayList<>();
         Objective obj;
@@ -163,14 +154,16 @@ public class Main {
         }
 
         Text title = getTitle(loadedData);
+
+        Optional<Objective> originalObjective = Optional.empty();
+
         obj = Objective.builder()
-                .name("ESB")
+                .name("ESB" + random.nextInt(999999999))
                 .criterion(Criteria.DUMMY)
                 .displayName(title)
                 .build();
 
         int minusOneScoreCount = 0;
-
         for (int i = 0; i < loadedData.size(); i++) {
             boolean equalExist = true;
             while (equalExist) {
@@ -198,16 +191,17 @@ public class Main {
                 }
             }
             if (score != -1) {
-                lines.add(obj.getOrCreateScore(loadedData.get(i).getText()));
-                lines.get(i-minusOneScoreCount).setScore(score);
+                obj.getOrCreateScore(loadedData.get(i).getText()).setScore(score);
             } else {
                 minusOneScoreCount++;
             }
         }
 
-        if (!scoreboard.getObjective("ESB").isPresent()) {
-            scoreboard.addObjective(obj);
+
+        for (Objective objective : player.getScoreboard().getObjectives()) {
+            player.getScoreboard().removeObjective(objective);
         }
+        scoreboard.addObjective(obj);
         scoreboard.updateDisplaySlot(obj, DisplaySlots.SIDEBAR);
 
         //Objective tabObjective = makeTabObjective(player);
@@ -324,7 +318,10 @@ public class Main {
             if (bufferable) {
                 player.setScoreboard(bufferedScoreboard);
             } else {
-                player.setScoreboard(makeScoreboard(player));
+                logger.info("Building scoreboard");
+                player.setScoreboard(Scoreboard.builder().build());
+                Task.Builder taskBuilder = Sponge.getScheduler().createTaskBuilder();
+                taskBuilder.execute(() -> player.setScoreboard(makeScoreboard(player))).delayTicks(40).submit(this);
             }
         } else {
             player.setScoreboard(Scoreboard.builder().build());
