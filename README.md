@@ -1,10 +1,10 @@
 # Easy Scoreboards
 A Sponge plugin to create dynamic scoreboards
 
-[![Build Status](https://travis-ci.org/byYottaFLOPS/EasyScoreboards.svg?branch=master)](https://travis-ci.org/byYottaFLOPS/EasyScoreboards)
-![Downloads on Github](https://img.shields.io/github/downloads/byYottaFLOPS/EasyScoreboards/total.svg)
-[![Current Issues](https://img.shields.io/github/issues/byYottaFLOPS/EasyScoreboards.svg)](https://github.com/byYottaFLOPS/EasyScoreboards/issues)
-![License](https://img.shields.io/github/license/byYottaFLOPS/EasyScoreboards.svg)
+[![Build Status](https://img.shields.io/travis/byYottaFLOPS/EasyScoreboards.svg?style=for-the-badge)](https://travis-ci.org/byYottaFLOPS/EasyScoreboards)
+[![Downloads on Github](https://img.shields.io/github/downloads/byYottaFLOPS/EasyScoreboards/total.svg?style=for-the-badge)](https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest)
+[![Current Issues](https://img.shields.io/github/issues/byYottaFLOPS/EasyScoreboards.svg?style=for-the-badge)](https://github.com/byYottaFLOPS/EasyScoreboards/issues)
+![License](https://img.shields.io/github/license/byYottaFLOPS/EasyScoreboards.svg?style=for-the-badge)
 
 ## Features
 1. Easy setup
