@@ -6,10 +6,10 @@ public class Checks {
     //Checks if Bufferable
     public static boolean checkIfBufferable(List<LineOfString> scoreboardText) {
         for(LineOfString line : scoreboardText) {
-            if (line.getNumber().contains("PLAYER")) {
+            if (line.getNumber().contains("%")) {
                 return false;
             }
-            if (line.getText().contains("PLAYER")) {
+            if (line.getText().contains("%")) {
                 return false;
             }
         }

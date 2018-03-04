@@ -319,9 +319,7 @@ public class Main {
                 player.setScoreboard(bufferedScoreboard);
             } else {
                 logger.info("Building scoreboard");
-                player.setScoreboard(Scoreboard.builder().build());
-                Task.Builder taskBuilder = Sponge.getScheduler().createTaskBuilder();
-                taskBuilder.execute(() -> player.setScoreboard(makeScoreboard(player))).delayTicks(40).submit(this);
+                player.setScoreboard(makeScoreboard(player));
             }
         } else {
             player.setScoreboard(Scoreboard.builder().build());
