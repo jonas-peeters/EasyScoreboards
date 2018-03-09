@@ -318,7 +318,6 @@ public class Main {
             if (bufferable) {
                 player.setScoreboard(bufferedScoreboard);
             } else {
-                logger.info("Building scoreboard");
                 player.setScoreboard(makeScoreboard(player));
             }
         } else {
