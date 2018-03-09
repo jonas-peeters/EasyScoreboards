@@ -25,8 +25,8 @@ class Show implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
         if (src instanceof Player) {
-            Main.dontShowFor.remove(src.getName());
-            Config.save();
+            plugin.config.dontShowFor.remove(src.getName());
+            plugin.config.save();
             plugin.setScoreboard((Player) src);
             src.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Showing scoreboard"));
         }

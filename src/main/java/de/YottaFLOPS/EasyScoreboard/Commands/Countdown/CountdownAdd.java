@@ -24,7 +24,7 @@ public class CountdownAdd implements CommandExecutor {
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
 
         if(commandContext.<Integer>getOne("seconds").isPresent()) {
-            Main.countdownTimeUse += commandContext.<Integer>getOne("seconds").get();
+            plugin.config.countdownTimeUse += commandContext.<Integer>getOne("seconds").get();
 
             if (Sponge.getServer().getOnlinePlayers().size() > 0) {
                 plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);

@@ -27,8 +27,8 @@ class ShowAll implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        Main.showAll = true;
-        Config.save();
+        plugin.config.showAll = true;
+        plugin.config.save();
 
         if(src instanceof Player) {
             plugin.updateAllScoreboards((Player) src);
@@ -38,18 +38,10 @@ class ShowAll implements CommandExecutor {
         }
 
         Runnables.stopTPS();
-//        Runnables.stopMTime();
-//        Runnables.stopSTime();
-        if (Checks.checkIfUsedTPS(Main.scoreboardText)) {
+        if (Checks.checkIfUsedTPS(plugin.config.scoreboardText)) {
             Runnables.startTPS(plugin);
         }
-//        if (Checks.checkIfUsedMTime(Main.scoreboardText)) {
-//            Runnables.startMTime(plugin);
-//        }
-//        if (Checks.checkIfUsedSTime(Main.scoreboardText)) {
-//            Runnables.startSTime(plugin);
-//        }
-        if (Checks.checkIfUsedPlaceholders(Main.scoreboardText)) {
+        if (Checks.checkIfUsedPlaceholders(plugin.config.scoreboardText)) {
             Runnables.startPlaceholderTask(plugin);
         }
 

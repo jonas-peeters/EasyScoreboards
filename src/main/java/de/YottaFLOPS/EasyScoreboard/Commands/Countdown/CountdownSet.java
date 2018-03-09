@@ -26,23 +26,23 @@ public class CountdownSet implements CommandExecutor {
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
         if(commandContext.<Integer>getOne("Seconds").isPresent()) {
             if(commandContext.<String>getOne("Command").isPresent()) {
-                Main.countdownTime = commandContext.<Integer>getOne("Seconds").get();
-                Main.countdownTimeUse = commandContext.<Integer>getOne("Seconds").get();
-                Main.countdownCommand = commandContext.<String>getOne("Command").get().replaceAll("\"","'");
+                plugin.config.countdownTime = commandContext.<Integer>getOne("Seconds").get();
+                plugin.config.countdownTimeUse = commandContext.<Integer>getOne("Seconds").get();
+                plugin.config.countdownCommand = commandContext.<String>getOne("Command").get().replaceAll("\"","'");
                 if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
                     commandSource.sendMessage(Text.of(TextColors.GRAY, "New Countdown Settings:"));
-                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Time:            " + Main.countdownTime + " seconds"));
-                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Command:         " + Main.countdownCommand));
-                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Chat-Countdown:  " + Main.countdownChat));
-                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     XP-Countdown:    " + Main.countdownXP));
-                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Title-Countdown: " + Main.countdownTitle));
+                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Time:            " + plugin.config.countdownTime + " seconds"));
+                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Command:         " + plugin.config.countdownCommand));
+                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Chat-Countdown:  " + plugin.config.countdownChat));
+                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     XP-Countdown:    " + plugin.config.countdownXP));
+                    commandSource.sendMessage(Text.of(TextColors.GRAY, "     Title-Countdown: " + plugin.config.countdownTitle));
                 }
                 if (Sponge.getServer().getOnlinePlayers().size() > 0) {
                     Player player = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
                     plugin.updateAllScoreboards(player);
                 }
 
-                Config.save();
+                plugin.config.save();
 
             } else {
                 if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {

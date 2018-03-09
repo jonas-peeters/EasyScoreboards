@@ -8,10 +8,9 @@ import me.rojo8399.placeholderapi.PlaceholderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.tab.TabListEntry;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.economy.EconomyTransactionEvent;
 import org.spongepowered.api.event.game.GameReloadEvent;
@@ -20,11 +19,11 @@ import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.event.service.ChangeServiceProviderEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
+import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayModes;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.text.Text;
@@ -42,48 +41,30 @@ import java.util.*;
         authors = "YottaFLOPS")
 public class Main {
 
-    public static List<LineOfString> scoreboardText = new ArrayList<>();
     private final List<String> invalidLineNumbers = new ArrayList<>();
-    public boolean bufferable = true;
-    public boolean usedPlayerCount = false;
     private Scoreboard bufferedScoreboard;
     public static Logger logger;
     private static EconomyService economyService;
-    public static int countdownTime = 60;
-    public static int countdownTimeUse = 0;
-    public static String countdownCommand = "";
-    public static Task countdownTask;
-    public static boolean countdownChat;
-    public static boolean countdownXP;
-    public static boolean countdownTitle;
-    public static boolean showAll = true;
-    public static int updateTicks = 40;
-    public static final List<String> dontShowFor = new ArrayList<>();
-    public static Path normalConfig;
-    Random random;
+    private Random random;
+    public Task countdownTask;
+
+
+    public Config config;
 
     //Inits the commands and the logger
     //Starts the config handling
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         logger = LoggerFactory.getLogger("EasyScoreboards");
-
-        normalConfig = defaultConfig;
-
         Register.registerCommands(this);
 
-        Config.init();
-        Config.load();
-        Config.save();
-
+        config = new Config(defaultConfig);
         random = new Random();
 
-        bufferable = Checks.checkIfBufferable(scoreboardText);
-        usedPlayerCount = Checks.checkIfUsedPlayerCount(scoreboardText);
-        if(Checks.checkIfUsedTPS(scoreboardText)) {
+        if(Checks.checkIfUsedTPS(config.scoreboardText)) {
             Runnables.startTPS(this);
         }
-        if (Checks.checkIfUsedPlaceholders(scoreboardText)) {
+        if (Checks.checkIfUsedPlaceholders(config.scoreboardText)) {
             Runnables.startPlaceholderTask(this);
         }
 
@@ -101,7 +82,7 @@ public class Main {
 
         setScoreboard(event.getTargetEntity());
 
-        if(usedPlayerCount) {
+        if(config.usedPlaceholders) {
             updateAllScoreboards(event.getTargetEntity());
         }
     }
@@ -109,7 +90,7 @@ public class Main {
     //Used for the playercount (to know when it is updated)
     @Listener
     public void onPlayerLeave(ClientConnectionEvent.Disconnect event) {
-        if (usedPlayerCount && Sponge.getServer().getOnlinePlayers().size() > 0) {
+        if (config.usedPlaceholders && Sponge.getServer().getOnlinePlayers().size() > 0) {
             updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
         }
     }
@@ -125,8 +106,8 @@ public class Main {
     //Is called on change of a players balance -> rewrite the scoreboard
     @Listener
     public void onTransaction(EconomyTransactionEvent event) {
-        if(!bufferable) {
-            if(Checks.checkIfUsedPlayerBalance(scoreboardText)) {
+        if(!config.usedPlaceholders) {
+            if(Checks.checkIfUsedPlayerBalance(config.scoreboardText)) {
                 Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
             }
         }
@@ -143,8 +124,7 @@ public class Main {
 
     //Generating the scoreboard
     public Scoreboard makeScoreboard(Player player) {
-        Scoreboard scoreboard = Scoreboard.builder().build();
-        List<Score> lines = new ArrayList<>();
+        Scoreboard scoreboard = player.getScoreboard();
         Objective obj;
         List<TextLine> loadedData = loadData(player);
         for (TextLine line : loadedData) {
@@ -155,15 +135,12 @@ public class Main {
 
         Text title = getTitle(loadedData);
 
-        Optional<Objective> originalObjective = Optional.empty();
-
         obj = Objective.builder()
                 .name("ESB" + random.nextInt(999999999))
                 .criterion(Criteria.DUMMY)
                 .displayName(title)
                 .build();
 
-        int minusOneScoreCount = 0;
         for (int i = 0; i < loadedData.size(); i++) {
             boolean equalExist = true;
             while (equalExist) {
@@ -192,8 +169,6 @@ public class Main {
             }
             if (score != -1) {
                 obj.getOrCreateScore(loadedData.get(i).getText()).setScore(score);
-            } else {
-                minusOneScoreCount++;
             }
         }
 
@@ -204,14 +179,15 @@ public class Main {
         scoreboard.addObjective(obj);
         scoreboard.updateDisplaySlot(obj, DisplaySlots.SIDEBAR);
 
-        //Objective tabObjective = makeTabObjective(player);
-        //scoreboard.addObjective(tabObjective);
-        //scoreboard.updateDisplaySlot(tabObjective, DisplaySlots.LIST);
+
+        Objective tabObjective = makeTabObjective(player);
+        scoreboard.addObjective(tabObjective);
+        scoreboard.updateDisplaySlot(tabObjective, DisplaySlots.LIST);
 
         return scoreboard;
     }
 
-    /* WIP Tab Scoreboard
+    //WIP Tab Scoreboard
     private Objective makeTabObjective(Player player) {
         List<TextLine> loadedData = loadData(player);
         for (TextLine line : loadedData) {
@@ -225,20 +201,18 @@ public class Main {
                 .name("ESBTab")
                 .criterion(Criteria.DUMMY)
                 .displayName(title)
+                .objectiveDisplayMode(ObjectiveDisplayModes.INTEGER)
                 .build();
 
-        List<Score> lines = new ArrayList<>();
-
-        lines.add(objective.getOrCreateScore(Text.of("Test")));
-        lines.get(0).setScore(2);
+        objective.getOrCreateScore(Text.of("Gigameter")).setScore(2);
 
         return objective;
-    }*/
+    }
 
     //Used to reload the config
     public void reload() {
-        Config.init();
-        Config.load();
+        config.load();
+        config.save();
 
         if (Sponge.getServer().getOnlinePlayers().size() != 0) {
             updateAllScoreboards(Sponge.getServer().getOnlinePlayers().iterator().next());
@@ -246,10 +220,10 @@ public class Main {
 
         Runnables.stopTPS();
         Runnables.stopPlaceholderTask();
-        if (Checks.checkIfUsedTPS(scoreboardText)) {
+        if (Checks.checkIfUsedTPS(config.scoreboardText)) {
             Runnables.startTPS(this);
         }
-        if (Checks.checkIfUsedPlaceholders(scoreboardText)) {
+        if (Checks.checkIfUsedPlaceholders(config.scoreboardText)) {
             Runnables.startPlaceholderTask(this);
         }
     }
@@ -268,45 +242,9 @@ public class Main {
         return BigDecimal.ZERO;
     }
 
-    //Is used by all the commands which change the text of the lines
-    public void setLine(String newText, int line, CommandSource commandSource) {
-        if (newText.equals("")) {
-            newText = " ";
-        }
-        //try {
-            if (line < 16 && line >= 0) {
-                if (Replacements.removePlaceholders(newText).length() < 30) {
-                    scoreboardText.get(line).setText(newText);
-                    if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
-                        commandSource.sendMessage(Text.of(TextColors.GRAY, "Setting line " + line + " to: " + newText));
-                    }
-                } else {
-                    if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
-                        commandSource.sendMessage(Text.of(TextColors.RED, "The length of one line is limited to 30 characters!"));
-                    }
-                }
-            } else {
-                if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
-                    commandSource.sendMessage(Text.of(TextColors.RED, "You may only use lines between 0 and 15!"));
-                }
-            }
-        //} catch (Exception e) {
-        //    e.printStackTrace();
-        //}
-
-        bufferable = Checks.checkIfBufferable(scoreboardText);
-        usedPlayerCount = Checks.checkIfUsedPlayerCount(scoreboardText);
-
-        if (Sponge.getServer().getOnlinePlayers().size() > 0) {
-            updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
-        }
-
-        Config.save();
-    }
-
     //Prepares Scoreboard
     public void updateAllScoreboards(Player player) {
-        if (bufferable) {
+        if (config.usedPlaceholders) {
             bufferedScoreboard = makeScoreboard(player);
         }
         Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
@@ -315,7 +253,7 @@ public class Main {
     //Sets the scoreboard
     public void setScoreboard(Player player) {
         if(shouldShow(player)) {
-            if (bufferable) {
+            if (config.usedPlaceholders) {
                 player.setScoreboard(bufferedScoreboard);
             } else {
                 player.setScoreboard(makeScoreboard(player));
@@ -323,14 +261,43 @@ public class Main {
         } else {
             player.setScoreboard(Scoreboard.builder().build());
         }
+        if (config.removeOtherTabEntries) {
+            for (TabListEntry entry : player.getTabList().getEntries()) {
+                player.getTabList().removeEntry(entry.getProfile().getUniqueId());
+            }
+        }
+        if (config.usedTabHeaderOrFooter) {
+            Text header = replacePlaceholdersIn(config.tabHeader, player);
+            Text footer = replacePlaceholdersIn(config.tabFooter, player);
+            player.getTabList().setHeaderAndFooter(header, footer);
+        }
+    }
+
+    private Text replacePlaceholdersIn(String in, Player player) {
+        Text text = Conversions.lineToText(Replacements.replacePlaceholders(player, in, false, config));
+
+        if (placeholderapiEnabled()) {
+            Optional<PlaceholderService> service = Sponge.getGame().getServiceManager().provide(PlaceholderService.class);
+            if (service.isPresent()) {
+                PlaceholderService placeholderService = service.get();
+
+                List<Text> parts = new ArrayList<>();
+                for (Text child : text.getChildren()) {
+                    parts.add(Text.of(child.getColor(), child.getStyle(), placeholderService.replacePlaceholders(child.toPlain(), player, null)));
+                }
+                return Text.join(parts);
+            }
+        }
+
+        return text;
     }
 
     //Check if scoreboard should be shown to that player
     private boolean shouldShow(Player player) {
-        if(!showAll) {
+        if(!config.showAll) {
             return false;
         }
-        for(String s : dontShowFor) {
+        for(String s : config.dontShowFor) {
             if(player.getName().equals(s)) {
                 return false;
             }
@@ -346,9 +313,9 @@ public class Main {
     private List<TextLine> loadData(Player player) {
         List<TextLine> loadedData = new ArrayList<>();
 
-        for (LineOfString line : scoreboardText) {
-            loadedData.add(new TextLine(Replacements.replacePlaceholders(player, line.getNumber(), true),
-                    Conversions.lineToText(Replacements.replacePlaceholders(player, line.getText(), false))));
+        for (LineOfString line : config.scoreboardText) {
+            loadedData.add(new TextLine(Replacements.replacePlaceholders(player, line.getNumber(), true, config),
+                    Conversions.lineToText(Replacements.replacePlaceholders(player, line.getText(), false, config))));
         }
 
         if (placeholderapiEnabled()) {

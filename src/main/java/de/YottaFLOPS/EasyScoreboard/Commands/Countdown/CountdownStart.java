@@ -30,7 +30,7 @@ public class CountdownStart implements CommandExecutor {
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
 
         try {
-            Main.countdownTask.cancel();
+            plugin.countdownTask.cancel();
         } catch (Exception ignored) {}
 
         CommandManager commandManager = Sponge.getCommandManager();
@@ -39,88 +39,88 @@ public class CountdownStart implements CommandExecutor {
         if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
             commandSource.sendMessage(Text.of(TextColors.GRAY, "Started countdown"));
         }
-        Main.countdownTask = taskBuilder.execute(() -> {
-            Main.countdownTimeUse--;
-            if (Main.countdownTimeUse != 0) {
-                if(Main.countdownChat) {
-                    if (Main.countdownTimeUse > 3600) {
-                        if (Main.countdownTimeUse % 3600 == 0) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse / 3600 + " hours left", TextColors.GREEN);
+        plugin.countdownTask = taskBuilder.execute(() -> {
+            plugin.config.countdownTimeUse--;
+            if (plugin.config.countdownTimeUse != 0) {
+                if(plugin.config.countdownChat) {
+                    if (plugin.config.countdownTimeUse > 3600) {
+                        if (plugin.config.countdownTimeUse % 3600 == 0) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse / 3600 + " hours left", TextColors.GREEN);
                         }
-                    } else if (Main.countdownTimeUse > 600) {
-                        if (Main.countdownTimeUse % 600 == 0) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse / 60 + " minutes left", TextColors.GREEN);
+                    } else if (plugin.config.countdownTimeUse > 600) {
+                        if (plugin.config.countdownTimeUse % 600 == 0) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse / 60 + " minutes left", TextColors.GREEN);
                         }
-                    } else if (Main.countdownTimeUse > 60) {
-                        if (Main.countdownTimeUse % 60 == 0) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse / 60 + " minutes left", TextColors.GREEN);
+                    } else if (plugin.config.countdownTimeUse > 60) {
+                        if (plugin.config.countdownTimeUse % 60 == 0) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse / 60 + " minutes left", TextColors.GREEN);
                         }
                     } else {
-                        if (Main.countdownTimeUse == 5) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse + " seconds left", TextColors.YELLOW);
-                        } else if (Main.countdownTimeUse == 4) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse + " seconds left", TextColors.YELLOW);
-                        } else if (Main.countdownTimeUse == 3) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse + " seconds left", TextColors.GOLD);
-                        } else if (Main.countdownTimeUse == 2) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse + " seconds left", TextColors.GOLD);
-                        } else if (Main.countdownTimeUse == 1) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse + " second left", TextColors.RED);
-                        } else if (Main.countdownTimeUse % 10 == 0) {
-                            sendMessageToAllPlayers(Main.countdownTimeUse + " seconds left", TextColors.GREEN);
+                        if (plugin.config.countdownTimeUse == 5) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse + " seconds left", TextColors.YELLOW);
+                        } else if (plugin.config.countdownTimeUse == 4) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse + " seconds left", TextColors.YELLOW);
+                        } else if (plugin.config.countdownTimeUse == 3) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse + " seconds left", TextColors.GOLD);
+                        } else if (plugin.config.countdownTimeUse == 2) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse + " seconds left", TextColors.GOLD);
+                        } else if (plugin.config.countdownTimeUse == 1) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse + " second left", TextColors.RED);
+                        } else if (plugin.config.countdownTimeUse % 10 == 0) {
+                            sendMessageToAllPlayers(plugin.config.countdownTimeUse + " seconds left", TextColors.GREEN);
                         }
                     }
                 }
-                if(Main.countdownTitle) {
-                    if (Main.countdownTimeUse > 3600) {
-                        if (Main.countdownTimeUse % 3600 == 0) {
+                if(plugin.config.countdownTitle) {
+                    if (plugin.config.countdownTimeUse > 3600) {
+                        if (plugin.config.countdownTimeUse % 3600 == 0) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, Main.countdownTimeUse / 3600 + " hours left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, plugin.config.countdownTimeUse / 3600 + " hours left")));
                             }
                         }
-                    } else if (Main.countdownTimeUse > 600) {
-                        if (Main.countdownTimeUse % 600 == 0) {
+                    } else if (plugin.config.countdownTimeUse > 600) {
+                        if (plugin.config.countdownTimeUse % 600 == 0) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, Main.countdownTimeUse / 60 + " minutes left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, plugin.config.countdownTimeUse / 60 + " minutes left")));
                             }
                         }
-                    } else if (Main.countdownTimeUse > 60) {
-                        if (Main.countdownTimeUse % 60 == 0) {
+                    } else if (plugin.config.countdownTimeUse > 60) {
+                        if (plugin.config.countdownTimeUse % 60 == 0) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, Main.countdownTimeUse / 60 + " minutes left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, plugin.config.countdownTimeUse / 60 + " minutes left")));
                             }
                         }
                     } else {
-                        if (Main.countdownTimeUse == 5) {
+                        if (plugin.config.countdownTimeUse == 5) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.YELLOW, Main.countdownTimeUse + " seconds left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.YELLOW, plugin.config.countdownTimeUse + " seconds left")));
                             }
-                        } else if (Main.countdownTimeUse == 4) {
+                        } else if (plugin.config.countdownTimeUse == 4) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.YELLOW, Main.countdownTimeUse + " seconds left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.YELLOW, plugin.config.countdownTimeUse + " seconds left")));
                             }
-                        } else if (Main.countdownTimeUse == 3) {
+                        } else if (plugin.config.countdownTimeUse == 3) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.GOLD, Main.countdownTimeUse + " seconds left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.GOLD, plugin.config.countdownTimeUse + " seconds left")));
                             }
-                        } else if (Main.countdownTimeUse == 2) {
+                        } else if (plugin.config.countdownTimeUse == 2) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.GOLD, Main.countdownTimeUse + " seconds left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.GOLD, plugin.config.countdownTimeUse + " seconds left")));
                             }
-                        } else if (Main.countdownTimeUse == 1) {
+                        } else if (plugin.config.countdownTimeUse == 1) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.RED, Main.countdownTimeUse + " second left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.RED, plugin.config.countdownTimeUse + " second left")));
                             }
-                        } else if (Main.countdownTimeUse % 10 == 0) {
+                        } else if (plugin.config.countdownTimeUse % 10 == 0) {
                             for (Player player : Sponge.getServer().getOnlinePlayers()) {
-                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, Main.countdownTimeUse + " seconds left")));
+                                player.sendTitle(Title.of(Text.of(TextColors.GREEN, plugin.config.countdownTimeUse + " seconds left")));
                             }
                         }
                     }
                 }
-                if(Main.countdownXP) {
+                if(plugin.config.countdownXP) {
                     for(Player p : Sponge.getServer().getOnlinePlayers()) {
-                        p.offer(Keys.EXPERIENCE_LEVEL, Main.countdownTimeUse);
+                        p.offer(Keys.EXPERIENCE_LEVEL, plugin.config.countdownTimeUse);
                     }
                 }
                 if (Sponge.getServer().getOnlinePlayers().size() > 0) {
@@ -128,23 +128,23 @@ public class CountdownStart implements CommandExecutor {
                 }
 
             } else {
-                if (!Main.countdownCommand.equals("")) {
-                    commandManager.process(server, Main.countdownCommand.replaceAll("'", "\""));
+                if (!plugin.config.countdownCommand.equals("")) {
+                    commandManager.process(server, plugin.config.countdownCommand.replaceAll("'", "\""));
                 }
 
-                if(Main.countdownXP) {
+                if(plugin.config.countdownXP) {
                     for(Player p : Sponge.getServer().getOnlinePlayers()) {
                         p.offer(Keys.EXPERIENCE_LEVEL, 0);
                     }
                 }
 
-                Main.countdownTimeUse = Main.countdownTime;
+                plugin.config.countdownTimeUse = plugin.config.countdownTime;
 
                 if (Sponge.getServer().getOnlinePlayers().size() > 0) {
                     plugin.updateAllScoreboards((Player) Sponge.getServer().getOnlinePlayers().toArray()[0]);
                 }
 
-                Main.countdownTask.cancel();
+                plugin.countdownTask.cancel();
             }
 
         }).delayTicks(0).intervalTicks(20).submit(plugin);

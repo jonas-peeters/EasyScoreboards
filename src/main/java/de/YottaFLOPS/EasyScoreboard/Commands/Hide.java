@@ -25,8 +25,8 @@ class Hide implements CommandExecutor {
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
 
         if (commandSource instanceof Player) {
-            Main.dontShowFor.add(commandSource.getName());
-            Config.save();
+            plugin.config.dontShowFor.add(commandSource.getName());
+            plugin.config.save();
             plugin.setScoreboard((Player) commandSource);
             commandSource.sendMessage(Text.of(TextColors.GRAY, TextStyles.ITALIC, "Hiding scoreboard"));
         }

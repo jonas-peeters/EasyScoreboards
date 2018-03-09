@@ -26,7 +26,7 @@ class ClearAll implements CommandExecutor {
     @SuppressWarnings("NullableProblems")
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext args) throws CommandException {
-        Main.scoreboardText = new ArrayList<>();
+        plugin.config.scoreboardText = new ArrayList<>();
         if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
             commandSource.sendMessage(Text.of(TextColors.GRAY, "Cleared scoreboard"));
         }
@@ -34,10 +34,9 @@ class ClearAll implements CommandExecutor {
             p.setScoreboard(plugin.makeScoreboard(p));
         }
 
-        Config.save();
+        plugin.config.save();
 
-        plugin.usedPlayerCount = false;
-        plugin.bufferable = true;
+        plugin.config.usedPlaceholders = true;
 
         return CommandResult.success();
     }

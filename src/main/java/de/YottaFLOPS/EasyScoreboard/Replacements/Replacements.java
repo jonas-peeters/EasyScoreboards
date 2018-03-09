@@ -1,17 +1,17 @@
 package de.YottaFLOPS.EasyScoreboard.Replacements;
 
 import de.YottaFLOPS.EasyScoreboard.Main;
+import de.YottaFLOPS.EasyScoreboard.Util.Config;
 import de.YottaFLOPS.EasyScoreboard.Util.Conversions;
 import de.YottaFLOPS.EasyScoreboard.Util.Runnables;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
 import static de.YottaFLOPS.EasyScoreboard.Util.Conversions.secondsToTime;
-import static de.YottaFLOPS.EasyScoreboard.Main.countdownTimeUse;
 
 public class Replacements {
 
-    public static String replacePlaceholders(Player player, String string, Boolean asNumber) {
+    public static String replacePlaceholders(Player player, String string, Boolean asNumber, Config config) {
         String data = string;
         if (data.contains("%ONLINECOUNT%")) {
             data = data.replace("%ONLINECOUNT%", String.valueOf(Sponge.getServer().getOnlinePlayers().size()));
@@ -48,9 +48,9 @@ public class Replacements {
         }
         if (data.contains("%COUNTDOWN%")) {
             if (asNumber) {
-                data = data.replace("%COUNTDOWN%", String.valueOf(countdownTimeUse));
+                data = data.replace("%COUNTDOWN%", String.valueOf(config.countdownTimeUse));
             } else {
-                data = data.replace("%COUNTDOWN%", secondsToTime(countdownTimeUse));
+                data = data.replace("%COUNTDOWN%", secondsToTime(config.countdownTimeUse));
             }
         }
         if (data.contains("%MTIME%")) {

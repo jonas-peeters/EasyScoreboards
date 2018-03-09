@@ -41,34 +41,34 @@ public class Register {
         subcommandsCountdown.put(Collections.singletonList("stop"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.stop")
                 .description(Text.of("Stops the countdown"))
-                .executor(new CountdownStop())
+                .executor(new CountdownStop(main))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("reset"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.reset")
                 .description(Text.of("Resets the countdown"))
-                .executor(new CountdownReset())
+                .executor(new CountdownReset(main))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("xp"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.xp")
                 .description(Text.of("Set if there should be a XP countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
-                .executor(new CountdownXP())
+                .executor(new CountdownXP(main))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("chat"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.chat")
                 .description(Text.of("Set if there should be a chat countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
-                .executor(new CountdownChat())
+                .executor(new CountdownChat(main))
                 .build());
 
         subcommandsCountdown.put(Collections.singletonList("title"), CommandSpec.builder()
                 .permission("easyscoreboard.countdown.title")
                 .description(Text.of("Set if there should be a title countdown"))
                 .arguments(GenericArguments.onlyOne(GenericArguments.bool(Text.of("true/false"))))
-                .executor(new CountdownTitle())
+                .executor(new CountdownTitle(main))
                 .build());
 
         subcommands.put(Collections.singletonList("clear"), CommandSpec.builder()

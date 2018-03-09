@@ -15,6 +15,7 @@ A Sponge plugin to create dynamic scoreboards
 6. Include countdowns in scoreboard, chat, XP-Bar and titles
 7. Single players can hide their scoreboard
 8. Support for the PlaceholderAPI
+9. Setting text in the tab bar
 
 
 If you have ideas for more features please open an issue here:

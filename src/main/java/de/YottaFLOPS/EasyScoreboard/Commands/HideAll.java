@@ -26,8 +26,8 @@ class HideAll implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        Main.showAll = false;
-        Config.save();
+        plugin.config.showAll = false;
+        plugin.config.save();
 
         if(src instanceof Player) {
             plugin.updateAllScoreboards((Player) src);

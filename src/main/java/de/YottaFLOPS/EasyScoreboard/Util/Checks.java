@@ -3,19 +3,6 @@ package de.YottaFLOPS.EasyScoreboard.Util;
 import java.util.List;
 
 public class Checks {
-    //Checks if Bufferable
-    public static boolean checkIfBufferable(List<LineOfString> scoreboardText) {
-        for(LineOfString line : scoreboardText) {
-            if (line.getNumber().contains("%")) {
-                return false;
-            }
-            if (line.getText().contains("%")) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static boolean checkIfUsedPlayerCount(List<LineOfString> scoreboardText) {
         for(LineOfString line : scoreboardText) {
             if (line.getNumber().contains("%ONLINECOUNT%")) {
@@ -58,30 +45,6 @@ public class Checks {
         }
         return false;
     }
-
-//    public static boolean checkIfUsedMTime(List<LineOfString> scoreboardText) {
-//        for(LineOfString line : scoreboardText) {
-//            if (line.getNumber().contains("%MTIME%")) {
-//                return true;
-//            }
-//            if (line.getText().contains("%MTIME%")) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public static boolean checkIfUsedSTime(List<LineOfString> scoreboardText) {
-//        for(LineOfString line : scoreboardText) {
-//            if (line.getNumber().contains("%STIME%")) {
-//                return true;
-//            }
-//            if (line.getText().contains("%STIME%")) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     public static boolean checkIfUsedPlaceholders(List<LineOfString> scoreboardText) {
         for(LineOfString line : scoreboardText) {

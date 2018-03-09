@@ -13,13 +13,15 @@ import org.spongepowered.api.text.format.TextColors;
 
 public class CountdownReset implements CommandExecutor {
 
-    public CountdownReset() {}
+    private final Main plugin;
+
+    public CountdownReset(Main instance) { plugin = instance; }
 
     @SuppressWarnings("NullableProblems")
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
 
-        Main.countdownTimeUse = Main.countdownTime;
+        plugin.config.countdownTimeUse = plugin.config.countdownTime;
         if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
             commandSource.sendMessage(Text.of(TextColors.GRAY, "Resetting countdown"));
         }

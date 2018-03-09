@@ -13,13 +13,15 @@ import org.spongepowered.api.text.format.TextColors;
 
 public class CountdownStop implements CommandExecutor {
 
-    public CountdownStop() {}
+    private final Main plugin;
+
+    public CountdownStop(Main instance) { plugin = instance; }
 
     @SuppressWarnings("NullableProblems")
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
 
-        Main.countdownTask.cancel();
+        plugin.countdownTask.cancel();
         if (commandSource instanceof Player || commandSource instanceof ConsoleSource) {
             commandSource.sendMessage(Text.of(TextColors.GRAY, "The countdown has been stopped"));
         }
