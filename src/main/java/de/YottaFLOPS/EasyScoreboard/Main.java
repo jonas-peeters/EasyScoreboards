@@ -30,6 +30,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -234,12 +235,12 @@ public class Main {
             Optional<UniqueAccount> uOpt = economyService.getOrCreateAccount(player.getUniqueId());
             if (uOpt.isPresent()) {
                 UniqueAccount acc = uOpt.get();
-                return acc.getBalance(economyService.getDefaultCurrency());
+                return acc.getBalance(economyService.getDefaultCurrency()).setScale(2, RoundingMode.HALF_UP);
             }
         } catch (Exception ignored) {
             logger.error("An economy plugin is requested but couldn't be found");
         }
-        return BigDecimal.ZERO.setScale(2);
+        return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
     }
 
     //Prepares Scoreboard
