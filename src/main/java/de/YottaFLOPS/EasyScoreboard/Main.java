@@ -36,7 +36,7 @@ import java.util.*;
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
         name = "EasyScoreboards",
-        version = "2.3",
+        version = "2.3.1",
         description = "A plugin to easily create scoreboards for lobbys, etc.",
         authors = "YottaFLOPS")
 public class Main {
@@ -239,7 +239,7 @@ public class Main {
         } catch (Exception ignored) {
             logger.error("An economy plugin is requested but couldn't be found");
         }
-        return BigDecimal.ZERO;
+        return BigDecimal.ZERO.setScale(2);
     }
 
     //Prepares Scoreboard
