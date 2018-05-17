@@ -36,7 +36,7 @@ import java.util.*;
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
         name = "EasyScoreboards",
-        version = "2.3",
+        version = "2.3.1",
         description = "A plugin to easily create scoreboards for lobbys, etc.",
         authors = "YottaFLOPS")
 public class Main {
