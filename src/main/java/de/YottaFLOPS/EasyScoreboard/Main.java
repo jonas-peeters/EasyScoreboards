@@ -239,7 +239,7 @@ public class Main {
         } catch (Exception ignored) {
             logger.error("An economy plugin is requested but couldn't be found");
         }
-        return BigDecimal.ZERO;
+        return BigDecimal.ZERO.setScale(2);
     }
 
     //Prepares Scoreboard
