@@ -1,10 +1,10 @@
 # Easy Scoreboards
 A Sponge plugin to create dynamic scoreboards
 
-[![Build Status](https://img.shields.io/travis/byYottaFLOPS/EasyScoreboards.svg?style=for-the-badge)](https://travis-ci.org/byYottaFLOPS/EasyScoreboards)
-[![Downloads on Github](https://img.shields.io/github/downloads/byYottaFLOPS/EasyScoreboards/total.svg?style=for-the-badge)](https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest)
-[![Current Issues](https://img.shields.io/github/issues/byYottaFLOPS/EasyScoreboards.svg?style=for-the-badge)](https://github.com/byYottaFLOPS/EasyScoreboards/issues)
-![License](https://img.shields.io/github/license/byYottaFLOPS/EasyScoreboards.svg?style=for-the-badge)
+[![Build Status](https://img.shields.io/travis/jonas-peeters/EasyScoreboards.svg?style=for-the-badge)](https://travis-ci.org/jonas-peeters/EasyScoreboards)
+[![Downloads on Github](https://img.shields.io/github/downloads/jonas-peeters/EasyScoreboards/total.svg?style=for-the-badge)](https://github.com/jonas-peeters/EasyScoreboards/releases/latest)
+[![Current Issues](https://img.shields.io/github/issues/jonas-peeters/EasyScoreboards.svg?style=for-the-badge)](https://github.com/jonas-peeters/EasyScoreboards/issues)
+![License](https://img.shields.io/github/license/jonas-peeters/EasyScoreboards.svg?style=for-the-badge)
 
 ## Features
 1. Easy setup
@@ -19,7 +19,7 @@ A Sponge plugin to create dynamic scoreboards
 
 
 If you have ideas for more features please open an issue here:
-https://github.com/byYottaFLOPS/EasyScoreboards/issues
+https://github.com/jonas-peeters/EasyScoreboards/issues
 
 If this is not possible just write it into the comments below or send me a PM here: 
 https://forums.spongepowered.org/users/yottaflops/
@@ -41,9 +41,9 @@ add plugins that add even more placeholders to the API.)
 ## Links (Download)
 **Latest Release (Download): https://github.com/byYottaFLOPS/EasyScoreboards/releases/latest**
 
-Guide: http://byyottaflops.github.io/EasyScoreboards/
+Guide: http://jonas-peeters.github.io/EasyScoreboards/
 
-Github page: https://github.com/byYottaFLOPS/EasyScoreboards
+Github page: https://github.com/jonas-peeters/EasyScoreboards
 
 ## Commands
 
@@ -151,7 +151,7 @@ To use multiple colors and/or styles separate the parts of the text with semicol
 
 These will be replaced with the equivalent color.
 
-![Colors](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot4_colors.png?raw=true)
+![Colors](https://github.com/jonas-peeters/EasyScoreboards/blob/master/screenshots/screenshot4_colors.png?raw=true)
 
 ### Styles
 * `BOLD` or `&l`
@@ -160,7 +160,7 @@ These will be replaced with the equivalent color.
 * `STRIKETHROUGH` or `&m`
 * `UNDERLINE` or `&n`
 
-![Styles](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true)
+![Styles](https://github.com/jonas-peeters/EasyScoreboards/blob/master/screenshots/screenshot3_styles.png?raw=true)
 
 ### Other
     Using placeholders that require a custom scoreboard for every player
@@ -191,14 +191,14 @@ who sees the scoreboard
 On top of these integrated placeholders you can install and use every placeholder from the PlaceholderAPI by rojo8399.
 You can find a download [here](https://ore.spongepowered.org/rojo8399/PlaceholderAPI).
 
-![Placeholders](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true)
+![Placeholders](https://github.com/jonas-peeters/EasyScoreboards/blob/master/screenshots/screenshot5_placeholders.png?raw=true)
 
 ## Example
-![Example](https://github.com/byYottaFLOPS/EasyScoreboards/blob/master/screenshots/screenshot2.png?raw=true)
+![Example](https://github.com/jonas-peeters/EasyScoreboards/blob/master/screenshots/screenshot2.png?raw=true)
 
 ## Bugs & Feature Requests
 There are no bugs.
 
 But in case you found one or you have a new feature that must be included, please open an issue 
-[here](https://github.com/byYottaFLOPS/EasyScoreboards/issues), just write it into the comments below or send me a PM
+[here](https://github.com/jonas-peeters/EasyScoreboards/issues), just write it into the comments below or send me a PM
 [here](https://forums.spongepowered.org/users/yottaflops/)
