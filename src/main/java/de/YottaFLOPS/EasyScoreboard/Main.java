@@ -37,7 +37,7 @@ import java.util.*;
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
         name = "EasyScoreboards",
-        version = "2.5.1",
+        version = "2.5.2",
         description = "A plugin to easily create scoreboards for lobbys, etc.",
         authors = "YottaFLOPS")
 public class Main {
@@ -245,16 +245,14 @@ public class Main {
 
     //Prepares Scoreboard
     public void updateAllScoreboards(Player player) {
-        if (config.usedPlaceholders) {
-            bufferedScoreboard = makeScoreboard(player);
-        }
+        bufferedScoreboard = makeScoreboard(player);
         Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
     }
 
     //Sets the scoreboard
     public void setScoreboard(Player player) {
         if(shouldShow(player)) {
-            if (config.usedPlaceholders) {
+            if (!config.usedPlaceholders) {
                 player.setScoreboard(bufferedScoreboard);
             } else {
                 player.setScoreboard(makeScoreboard(player));
