@@ -7,9 +7,9 @@ assignees: ''
 
 ---
 
-**EasyScoreboards version:** ---
-**Sponge version:** ---
-**Minecraft version:** ---
+**EasyScoreboards version:** 
+**Sponge version:** 
+**Minecraft version:** 
 
 **Describe the bug**
 A clear and concise description of what the bug is.
