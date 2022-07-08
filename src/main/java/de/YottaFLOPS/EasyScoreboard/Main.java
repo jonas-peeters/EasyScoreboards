@@ -37,7 +37,7 @@ import java.util.*;
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
         name = "EasyScoreboards",
-        version = "2.5.2",
+        version = "2.5.3",
         description = "A plugin to easily create scoreboards for lobbys, etc.",
         authors = "YottaFLOPS")
 public class Main {
@@ -107,7 +107,7 @@ public class Main {
     //Is called on change of a players balance -> rewrite the scoreboard
     @Listener
     public void onTransaction(EconomyTransactionEvent event) {
-        if(!config.usedPlaceholders) {
+        if(config.usedPlaceholders) {
             if(Checks.checkIfUsedPlayerBalance(config.scoreboardText)) {
                 Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
             }
@@ -137,7 +137,7 @@ public class Main {
         Text title = getTitle(loadedData);
 
         obj = Objective.builder()
-                .name("ESB" + random.nextInt(999999999))
+                .name("ESB" + player.getName() + random.nextInt(999999999))
                 .criterion(Criteria.DUMMY)
                 .displayName(title)
                 .build();
@@ -224,7 +224,7 @@ public class Main {
         if (Checks.checkIfUsedTPS(config.scoreboardText)) {
             Runnables.startTPS(this);
         }
-        if (Checks.checkIfUsedPlaceholders(config.scoreboardText)) {
+        if (config.usedPlaceholders) {
             Runnables.startPlaceholderTask(this);
         }
     }
@@ -245,7 +245,9 @@ public class Main {
 
     //Prepares Scoreboard
     public void updateAllScoreboards(Player player) {
-        bufferedScoreboard = makeScoreboard(player);
+        if (!config.usedPlaceholders) {
+            bufferedScoreboard = makeScoreboard(player);
+        }
         Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
     }
 

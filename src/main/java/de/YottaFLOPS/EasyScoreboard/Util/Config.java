@@ -43,6 +43,7 @@ public class Config {
     }
 
     public void load() {
+        logger.info("Loading config");
         try {
             ConfigurationNode node = configLoader.load();
 
@@ -54,7 +55,13 @@ public class Config {
                 String text = out.split(",")[1].split("=")[1].replaceAll("}", "");
                 scoreboardText.add(new LineOfString(number, text));
             }
+            logger.info("Found " + scoreboardText.size() + " scoreboard lines");
             usedPlaceholders = Checks.checkIfUsedPlaceholders(scoreboardText);
+            if (usedPlaceholders) {
+                logger.info("Detected use of placeholders");
+            } else {
+                logger.info("Detected no use of placeholders");
+            }
 
             updateTicks = node.getNode("scoreboard").getNode("placeholderUpdateTicks").getInt();
             if (updateTicks == 0) {
