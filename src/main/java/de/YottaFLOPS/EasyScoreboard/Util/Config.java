@@ -28,7 +28,7 @@ public class Config {
     public int countdownTimeUse = countdownTime;
     public final List<String> dontShowFor = new ArrayList<>();
     public List<LineOfString> scoreboardText = new ArrayList<>();
-    public int updateTicks = 40;
+    public int updateTicks = 200;
     public String tabHeader = "";
     public String tabFooter = "";
     public boolean removeOtherTabEntries = false;
@@ -53,6 +53,12 @@ public class Config {
                 String out = n.getValue().toString();
                 String number = out.split(",")[0].split("=")[1];
                 String text = out.split(",")[1].split("=")[1].replaceAll("}", "");
+                if (text.toLowerCase().contains("%player%") && text.length() - 8 > 38 - 16) {
+                    logger.warn("The line '" + text + "' might be to long for some player names");
+                }
+                if (text.toLowerCase().contains("%playername%") && text.length() - 12 > 38 - 16) {
+                    logger.warn("The line '" + text + "' might be to long for some player names");
+                }
                 scoreboardText.add(new LineOfString(number, text));
             }
             logger.info("Found " + scoreboardText.size() + " scoreboard lines");

@@ -29,15 +29,17 @@ import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Plugin(
         id = "de_yottaflops_easyscoreboard",
         name = "EasyScoreboards",
-        version = "2.5.3",
+        version = "2.5.4",
         description = "A plugin to easily create scoreboards for lobbys, etc.",
         authors = "YottaFLOPS")
 public class Main {
@@ -46,7 +48,6 @@ public class Main {
     private Scoreboard bufferedScoreboard;
     public static Logger logger;
     private static EconomyService economyService;
-    private Random random;
     public Task countdownTask;
 
 
@@ -60,9 +61,9 @@ public class Main {
         Register.registerCommands(this);
 
         config = new Config(defaultConfig);
-        random = new Random();
+        Random random = new Random();
 
-        if(Checks.checkIfUsedTPS(config.scoreboardText)) {
+        if (Checks.checkIfUsedTPS(config.scoreboardText)) {
             Runnables.startTPS(this);
         }
         if (Checks.checkIfUsedPlaceholders(config.scoreboardText)) {
@@ -83,7 +84,7 @@ public class Main {
 
         setScoreboard(event.getTargetEntity());
 
-        if(config.usedPlaceholders) {
+        if (config.usedPlaceholders) {
             updateAllScoreboards(event.getTargetEntity());
         }
     }
@@ -99,7 +100,7 @@ public class Main {
     //Sets the economy plugin provider
     @Listener
     public void onChangeServiceProvider(ChangeServiceProviderEvent event) {
-        if(event.getService().equals(EconomyService.class)) {
+        if (event.getService().equals(EconomyService.class)) {
             economyService = (EconomyService) event.getNewProviderRegistration().getProvider();
         }
     }
@@ -107,8 +108,8 @@ public class Main {
     //Is called on change of a players balance -> rewrite the scoreboard
     @Listener
     public void onTransaction(EconomyTransactionEvent event) {
-        if(config.usedPlaceholders) {
-            if(Checks.checkIfUsedPlayerBalance(config.scoreboardText)) {
+        if (config.usedPlaceholders) {
+            if (Checks.checkIfUsedPlayerBalance(config.scoreboardText)) {
                 Sponge.getServer().getOnlinePlayers().forEach(this::setScoreboard);
             }
         }
@@ -125,51 +126,50 @@ public class Main {
 
     //Generating the scoreboard
     public Scoreboard makeScoreboard(Player player) {
-        Scoreboard scoreboard = player.getScoreboard();
-        Objective obj;
-        List<TextLine> loadedData = loadData(player);
-        for (TextLine line : loadedData) {
-            if (line.getText().toPlain().length() > 38) {
-                line.setText(Text.of("Line to long error (max: 38)"));
-            }
-        }
+        List<TextLine> lines = loadData(player).stream()
+                .peek(line -> {
+                    if (line.getText().toPlain().length() > 38) {
+                        line.setText(Text.of("Line to long error (max: 38)"));
+                    }
+                })
+                .collect(Collectors.toList());
 
-        Text title = getTitle(loadedData);
+        Text title = getTitle(lines);
 
-        obj = Objective.builder()
-                .name("ESB" + player.getName() + random.nextInt(999999999))
+        Objective obj = Objective.builder()
+                .name(player.getName())
                 .criterion(Criteria.DUMMY)
                 .displayName(title)
                 .build();
 
-        for (int i = 0; i < loadedData.size(); i++) {
+        for (int i = 0; i < lines.size(); i++) {
             boolean equalExist = true;
             while (equalExist) {
                 equalExist = false;
-                for (int j = 0; j < loadedData.size(); j++) {
-                    if (i != j && Objects.equals(loadedData.get(i).getText(), loadedData.get(j).getText())) {
+                for (int j = 0; j < lines.size(); j++) {
+                    if (i != j && Objects.equals(lines.get(i).getText(), lines.get(j).getText())) {
                         equalExist = true;
                     }
                 }
                 if (equalExist) {
-                    loadedData.get(i).setText(Text.join(loadedData.get(i).getText(), Text.of(" ")));
+                    lines.get(i).setText(Text.join(lines.get(i).getText(), Text.of(" ")));
                 }
             }
 
             int score = 0;
             try {
-                score = Integer.parseInt(loadedData.get(i).getNumber());
+                score = Integer.parseInt(lines.get(i).getNumber());
             } catch (NumberFormatException e) {
-                if (!invalidLineNumbers.contains(loadedData.get(i).getNumber())) {
-                    logger.error("Line " + loadedData.get(i).getNumber() + " is missing a valid score. If you think " +
+                if (!invalidLineNumbers.contains(lines.get(i).getNumber())) {
+                    logger.error("Line " + lines.get(i).getNumber() + " is missing a valid score. If you think " +
                             "this is not your fault please report the following lines to " +
                             "https://github.com/byYottaFLOPS/EasyScoreboards/issues");
                     e.printStackTrace();
-                    invalidLineNumbers.add(loadedData.get(i).getNumber());
+                    invalidLineNumbers.add(lines.get(i).getNumber());
                 }
             }
             if (score != -1) {
-                obj.getOrCreateScore(loadedData.get(i).getText()).setScore(score);
+                obj.getOrCreateScore(lines.get(i).getText()).setScore(score);
             }
         }
 
@@ -177,13 +177,11 @@ public class Main {
         for (Objective objective : player.getScoreboard().getObjectives()) {
             player.getScoreboard().removeObjective(objective);
         }
+
+        Scoreboard scoreboard = Scoreboard.builder().build();
+
         scoreboard.addObjective(obj);
         scoreboard.updateDisplaySlot(obj, DisplaySlots.SIDEBAR);
-
-
-        Objective tabObjective = makeTabObjective(player);
-        scoreboard.addObjective(tabObjective);
-        scoreboard.updateDisplaySlot(tabObjective, DisplaySlots.LIST);
 
         return scoreboard;
     }
@@ -198,16 +196,12 @@ public class Main {
         }
         Text title = getTitle(loadedData);
 
-        Objective objective = Objective.builder()
+        return Objective.builder()
                 .name("ESBTab")
                 .criterion(Criteria.DUMMY)
                 .displayName(title)
                 .objectiveDisplayMode(ObjectiveDisplayModes.INTEGER)
                 .build();
-
-        objective.getOrCreateScore(Text.of("Gigameter")).setScore(2);
-
-        return objective;
     }
 
     //Used to reload the config
@@ -253,7 +247,7 @@ public class Main {
 
     //Sets the scoreboard
     public void setScoreboard(Player player) {
-        if(shouldShow(player)) {
+        if (shouldShow(player)) {
             if (!config.usedPlaceholders) {
                 player.setScoreboard(bufferedScoreboard);
             } else {
@@ -278,13 +272,17 @@ public class Main {
         Text text = Conversions.lineToText(Replacements.replacePlaceholders(player, in, false, config));
 
         if (placeholderapiEnabled()) {
-            Optional<PlaceholderService> service = Sponge.getGame().getServiceManager().provide(PlaceholderService.class);
+            Optional<PlaceholderService> service = Sponge.getGame()
+                    .getServiceManager()
+                    .provide(PlaceholderService.class);
             if (service.isPresent()) {
                 PlaceholderService placeholderService = service.get();
 
                 List<Text> parts = new ArrayList<>();
                 for (Text child : text.getChildren()) {
-                    parts.add(Text.of(child.getColor(), child.getStyle(), placeholderService.replacePlaceholders(child.toPlain(), player, null)));
+                    parts.add(Text.of(child.getColor(),
+                            child.getStyle(),
+                            placeholderService.replacePlaceholders(child.toPlain(), player, null)));
                 }
                 return Text.join(parts);
             }
@@ -295,11 +293,11 @@ public class Main {
 
     //Check if scoreboard should be shown to that player
     private boolean shouldShow(Player player) {
-        if(!config.showAll) {
+        if (!config.showAll) {
             return false;
         }
-        for(String s : config.dontShowFor) {
-            if(player.getName().equals(s)) {
+        for (String s : config.dontShowFor) {
+            if (player.getName().equals(s)) {
                 return false;
             }
         }
@@ -312,20 +310,25 @@ public class Main {
     }
 
     private List<TextLine> loadData(Player player) {
-        List<TextLine> loadedData = new ArrayList<>();
-
-        for (LineOfString line : config.scoreboardText) {
-            loadedData.add(new TextLine(Replacements.replacePlaceholders(player, line.getNumber(), true, config),
-                    Conversions.lineToText(Replacements.replacePlaceholders(player, line.getText(), false, config))));
-        }
+        List<TextLine> loadedData = config.scoreboardText.stream()
+            .map(line ->
+                new TextLine(
+                    Replacements.replacePlaceholders(player, line.getNumber(), true, config),
+                    Conversions.lineToText(Replacements.replacePlaceholders(player, line.getText(), false, config))
+                )
+            )
+            .collect(Collectors.toList());
 
         if (placeholderapiEnabled()) {
-            Optional<PlaceholderService> service = Sponge.getGame().getServiceManager().provide(PlaceholderService.class);
+            Optional<PlaceholderService> service = Sponge.getGame()
+                    .getServiceManager()
+                    .provide(PlaceholderService.class);
 
             if (service.isPresent()) {
                 PlaceholderService placeholderService = service.get();
                 for (TextLine line : loadedData) {
-                    line.setNumber(placeholderService.replacePlaceholders(line.getNumber(), player, null).toPlain()); // observer = null
+                    line.setNumber(placeholderService.replacePlaceholders(line.getNumber(), player, null)
+                            .toPlain()); // observer = null
 
                     List<Text> parts = new ArrayList<>();
                     for (Text text : line.getText().getChildren()) {
@@ -347,8 +350,8 @@ public class Main {
                 if (Integer.parseInt(line.getNumber()) == -1) {
                     return line.getText();
                 }
-            } catch (Exception e) {
-                //Catching exceptions
+            } catch (NumberFormatException e) {
+                logger.error(line.getNumber() + " is not a valid integer");
             }
         }
         return Text.of(" ");
